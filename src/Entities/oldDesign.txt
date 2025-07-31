@@ -1,0 +1,703 @@
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
+        modelBuilder.Entity<AcademyClaseDetail>(entity =>
+        {
+            entity.HasKey(e => e.ClaseDetailsId);
+
+            entity.Property(e => e.ClaseDetailsId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.AcademyClaseMaster).WithMany(p => p.AcademyClaseDetails)
+                .HasForeignKey(d => d.AcademyClaseMasterId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_AcademyClaseDetails_AcademyClaseMaster");
+        });
+
+        modelBuilder.Entity<AcademyClaseMaster>(entity =>
+        {
+            entity.HasKey(e => e.ClaseMasterId).HasName("PK_Edu_AcademyClase");
+
+            entity.ToTable("AcademyClaseMaster");
+
+            entity.Property(e => e.ClaseMasterId).ValueGeneratedNever();
+            entity.Property(e => e.ClaseAddress).HasMaxLength(50);
+            entity.Property(e => e.ClaseNameL1).HasMaxLength(50);
+            entity.Property(e => e.ClaseNameL2).HasMaxLength(50);
+            entity.Property(e => e.ClaseOwnerName).HasMaxLength(50);
+            entity.Property(e => e.CommunicationsMobil).HasMaxLength(23);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.EmailClase).HasMaxLength(50);
+            entity.Property(e => e.EmailOwner).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.OwnerMobil).HasMaxLength(50);
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.AcademyClaseMasters)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_AcademyClase_BranchesData");
+
+            entity.HasOne(d => d.CityCode).WithMany(p => p.AcademyClaseMasters)
+                .HasForeignKey(d => d.CityCodeId)
+                .HasConstraintName("FK_Edu_AcademyClase_CityCode");
+
+            entity.HasOne(d => d.GovernorateCode).WithMany(p => p.AcademyClaseMasters)
+                .HasForeignKey(d => d.GovernorateCodeId)
+                .HasConstraintName("FK_Edu_AcademyClase_GovernorateCode");
+        });
+
+        modelBuilder.Entity<AcademyClaseType>(entity =>
+        {
+            entity.HasKey(e => e.ClassTypeId).HasName("PK_Edu_AcademyClassType");
+
+            entity.ToTable("AcademyClaseType");
+
+            entity.Property(e => e.ClassTypeNameId).HasMaxLength(50);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<AcademyData>(entity =>
+        {
+            entity.HasKey(e => e.AcademyId).HasName("PK_CompanyData");
+
+            entity.Property(e => e.AcademyId).ValueGeneratedNever();
+            entity.Property(e => e.AcademyAddress).HasMaxLength(100);
+            entity.Property(e => e.AcademyDataId).ValueGeneratedOnAdd();
+            entity.Property(e => e.AcademyEmail).HasMaxLength(50);
+            entity.Property(e => e.AcademyFacebook).HasMaxLength(512);
+            entity.Property(e => e.AcademyInstagram).HasMaxLength(512);
+            entity.Property(e => e.AcademyMobil).HasMaxLength(40);
+            entity.Property(e => e.AcademyNameL1).HasMaxLength(300);
+            entity.Property(e => e.AcademyNameL2).HasMaxLength(300);
+            entity.Property(e => e.AcademyPhone).HasMaxLength(10);
+            entity.Property(e => e.AcademySnapchat).HasMaxLength(512);
+            entity.Property(e => e.AcademyTiktok).HasMaxLength(512);
+            entity.Property(e => e.AcademyTwitter).HasMaxLength(512);
+            entity.Property(e => e.AcademyWebSite).HasMaxLength(512);
+            entity.Property(e => e.AcademyWhatsapp).HasMaxLength(11);
+            entity.Property(e => e.AcademyYoutube).HasMaxLength(512);
+            entity.Property(e => e.CommercialRegisterNumber).HasMaxLength(10);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.TaxRegistrationNumber).HasMaxLength(10);
+            entity.Property(e => e.TaxesErrand).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<AcademyJob>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_Edu_AcademyJobs");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.JobNo).ValueGeneratedOnAdd();
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.AcademyJobs)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_AcademyJobs_BranchesData");
+        });
+
+        modelBuilder.Entity<BrancheData>(entity =>
+        {
+            entity.HasKey(e => e.BranchId);
+
+            entity.Property(e => e.BranchId).ValueGeneratedNever();
+            entity.Property(e => e.BranchAddress).HasMaxLength(100);
+            entity.Property(e => e.BranchEmail).HasMaxLength(50);
+            entity.Property(e => e.BranchMobil).HasMaxLength(40);
+            entity.Property(e => e.BranchNameL1).HasMaxLength(150);
+            entity.Property(e => e.BranchNameL2).HasMaxLength(150);
+            entity.Property(e => e.BranchPhone).HasMaxLength(11);
+            entity.Property(e => e.BranchWhatsapp).HasMaxLength(11);
+            entity.Property(e => e.BranchesDataId).ValueGeneratedOnAdd();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.AcademyData).WithMany(p => p.BranchesData)
+                .HasForeignKey(d => d.AcademyDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_BranchesData_AcademyData");
+
+            entity.HasOne(d => d.CityCode).WithMany(p => p.BranchesData)
+                .HasForeignKey(d => d.CityCodeId)
+                .HasConstraintName("FK_BranchesData_CityCode");
+
+            entity.HasOne(d => d.CountryCode).WithMany(p => p.BranchesData)
+                .HasForeignKey(d => d.CountryCodeId)
+                .HasConstraintName("FK_BranchesData_CountryCode");
+
+            entity.HasOne(d => d.GovernorateCode).WithMany(p => p.BranchesData)
+                .HasForeignKey(d => d.GovernorateCodeId)
+                .HasConstraintName("FK_BranchesData_GovernorateCode");
+        });
+
+        modelBuilder.Entity<CityCode>(entity =>
+        {
+            entity.HasKey(e => e.CityId).HasName("PK_CityCode_1");
+
+            entity.ToTable("CityCode");
+
+            entity.Property(e => e.CityNameL1).HasMaxLength(75);
+            entity.Property(e => e.CityNameL2).HasMaxLength(75);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.GovernorateCode).WithMany(p => p.CityCodes)
+                .HasForeignKey(d => d.GovernorateCodeId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_CityCode_GovernorateCode");
+        });
+
+        modelBuilder.Entity<ComplaintsStatus>(entity =>
+        {
+            entity.HasKey(e => e.StatusesId).HasName("PK_Edu_ComplaintsStatuses");
+
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.StatusesNameL1).HasMaxLength(50);
+            entity.Property(e => e.StatusesNameL2).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<ComplaintsStudent>(entity =>
+        {
+            entity.HasKey(e => e.ComplaintsId).HasName("PK_Edu_AcademyComplaints");
+
+            entity.Property(e => e.ComplaintsId).ValueGeneratedNever();
+            entity.Property(e => e.ComplaintsNo).ValueGeneratedOnAdd();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.ComplaintsStudents)
+                .HasForeignKey(d => d.BranchesDataId)
+                .HasConstraintName("FK_AcademyComplaints_BranchesData");
+
+            entity.HasOne(d => d.ComplaintsStatuses).WithMany(p => p.ComplaintsStudents)
+                .HasForeignKey(d => d.ComplaintsStatusesId)
+                .HasConstraintName("FK_AcademyComplaints_Edu_ComplaintsStatuses");
+
+            entity.HasOne(d => d.ComplaintsType).WithMany(p => p.ComplaintsStudents)
+                .HasForeignKey(d => d.ComplaintsTypeId)
+                .HasConstraintName("FK_AcademyComplaints_Edu_ComplaintsType");
+
+            entity.HasOne(d => d.StudentsData).WithMany(p => p.ComplaintsStudents)
+                .HasForeignKey(d => d.StudentsDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_AcademyComplaints_StudentData");
+        });
+
+        modelBuilder.Entity<ComplaintsType>(entity =>
+        {
+            entity.HasKey(e => e.TypeId).HasName("PK_Edu_ComplaintsType");
+
+            entity.ToTable("ComplaintsType");
+
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.TypeNameL1).HasMaxLength(50);
+            entity.Property(e => e.TypeNameL2).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<CountryCode>(entity =>
+        {
+            entity.HasKey(e => e.CountryId);
+
+            entity.ToTable("CountryCode");
+
+            entity.Property(e => e.CountryNameL1).HasMaxLength(75);
+            entity.Property(e => e.CountryNameL2).HasMaxLength(75);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<DeviceCode>(entity =>
+        {
+            entity.HasKey(e => e.UserCode);
+
+            entity.HasIndex(e => e.DeviceCode1, "IX_DeviceCodes_DeviceCode").IsUnique();
+
+            entity.HasIndex(e => e.Expiration, "IX_DeviceCodes_Expiration");
+
+            entity.Property(e => e.UserCode).HasMaxLength(200);
+            entity.Property(e => e.ClientId)
+                .IsRequired()
+                .HasMaxLength(200);
+            entity.Property(e => e.Data).IsRequired();
+            entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.DeviceCode1)
+                .IsRequired()
+                .HasMaxLength(200)
+                .HasColumnName("DeviceCode");
+            entity.Property(e => e.SessionId).HasMaxLength(100);
+            entity.Property(e => e.SubjectId).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<EduContactResult>(entity =>
+        {
+            entity.HasKey(e => e.ResultId).HasName("PK_Edu_ContactResult_1");
+
+            entity.ToTable("Edu_ContactResult");
+
+            entity.Property(e => e.ResultId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DateResult).HasColumnType("datetime");
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.ResultUd).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<GovernorateCode>(entity =>
+        {
+            entity.HasKey(e => e.GovernorateId);
+
+            entity.ToTable("GovernorateCode");
+
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.GovernorateNameL1).HasMaxLength(75);
+            entity.Property(e => e.GovernorateNameL2).HasMaxLength(75);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.CountryCode).WithMany(p => p.GovernorateCodes)
+                .HasForeignKey(d => d.CountryCodeId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_GovernorateCode_CountryCode");
+        });
+
+        modelBuilder.Entity<PermissionUser>(entity =>
+        {
+            entity.HasKey(e => e.PermissionId).HasName("PK_UserPermission");
+
+            entity.ToTable("PermissionUser");
+
+            entity.Property(e => e.AspNetUsersId).HasMaxLength(450);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<ProgramsContentDetail>(entity =>
+        {
+            entity.HasKey(e => e.ProgramsContentDetailsId).HasName("PK_Edu_ProgramsContentDetails");
+
+            entity.Property(e => e.ProgramsContentDetailsId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.ProgramsContentMaster).WithMany(p => p.ProgramsContentDetails)
+                .HasForeignKey(d => d.ProgramsContentMasterId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ProgramsContentDetails_ProgramsContentMaster");
+        });
+
+        modelBuilder.Entity<ProgramsContentMaster>(entity =>
+        {
+            entity.HasKey(e => e.ProgramsContentMasterId).HasName("PK_Edu_ProgramsContent");
+
+            entity.ToTable("ProgramsContentMaster");
+
+            entity.Property(e => e.ProgramsContentMasterId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.SessionNo).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.ProgramsDetails).WithMany(p => p.ProgramsContentMasters)
+                .HasForeignKey(d => d.ProgramsDetailsId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ProgramsContentMaster_ProgramsDetails");
+        });
+
+        modelBuilder.Entity<ProgramsDetail>(entity =>
+        {
+            entity.HasKey(e => e.ProgramId).HasName("PK_Edu_ProgramsDetails");
+
+            entity.Property(e => e.ProgramId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.ProgramNo).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.ProjectsDetails).WithMany(p => p.ProgramsDetails)
+                .HasForeignKey(d => d.ProjectsDetailsId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ProgramsDetails_ProjectsDetails");
+        });
+
+        modelBuilder.Entity<ProjectsDetail>(entity =>
+        {
+            entity.HasKey(e => e.ProjectDetailsId).HasName("PK_Edu_ProjectsDetalis");
+
+            entity.Property(e => e.ProjectDetailsId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.ProjectDetalisNo).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.ProjectsMaster).WithMany(p => p.ProjectsDetails)
+                .HasForeignKey(d => d.ProjectsMasterId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ProjectsDetails_ProjectsMaster");
+        });
+
+        modelBuilder.Entity<ProjectsMaster>(entity =>
+        {
+            entity.HasKey(e => e.ProjectMasterId).HasName("PK_ProjectsData");
+
+            entity.ToTable("ProjectsMaster");
+
+            entity.Property(e => e.ProjectMasterId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.ProjectNo).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.AcademyData).WithMany(p => p.ProjectsMasters)
+                .HasForeignKey(d => d.AcademyDataId)
+                .HasConstraintName("FK_ProjectsMaster_AcademyData");
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.ProjectsMasters)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_ProjectsMaster_BranchesData");
+        });
+
+        modelBuilder.Entity<QuestionBankDetail>(entity =>
+        {
+            entity.HasKey(e => e.AnswerId);
+
+            entity.Property(e => e.AnswerId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.QuestionBankMaster).WithMany(p => p.QuestionBankDetails)
+                .HasForeignKey(d => d.QuestionBankMasterId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_QuestionBankDetails_QuestionBankMaster");
+        });
+
+        modelBuilder.Entity<QuestionBankMaster>(entity =>
+        {
+            entity.HasKey(e => e.QuestionId).HasName("PK_Edu_ProgramsQuestionBank");
+
+            entity.ToTable("QuestionBankMaster");
+
+            entity.Property(e => e.QuestionId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.ProgramsDetails).WithMany(p => p.QuestionBankMasters)
+                .HasForeignKey(d => d.ProgramsDetailsId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_QuestionBankMaster_ProgramsDetails");
+        });
+
+        modelBuilder.Entity<SkillDevelopment>(entity =>
+        {
+            entity.HasKey(e => e.SkillId).HasName("PK_Edu_SkillDevelopment");
+
+            entity.ToTable("SkillDevelopment");
+
+            entity.Property(e => e.SkillId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.SkillNo).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.SkillDevelopments)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_SkillDevelopment_BranchesData");
+        });
+
+        modelBuilder.Entity<StudentAttend>(entity =>
+        {
+            entity.HasKey(e => e.Attend).HasName("PK_Edu_StudentAttend");
+
+            entity.ToTable("StudentAttend");
+
+            entity.Property(e => e.Attend).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.StudentData).WithMany(p => p.StudentAttends)
+                .HasForeignKey(d => d.StudentDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_StudentAttend_StudentData");
+        });
+
+        modelBuilder.Entity<StudentContentDetail>(entity =>
+        {
+            entity.HasKey(e => e.ContentDetailsId).HasName("PK_Edu_StudentContentDetails");
+
+            entity.Property(e => e.ContentDetailsId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.ProgramsContentDetails).WithMany(p => p.StudentContentDetails)
+                .HasForeignKey(d => d.ProgramsContentDetailsId)
+                .HasConstraintName("FK_Edu_StudentContentDetails_ProgramsContentDetails");
+
+            entity.HasOne(d => d.StudentData).WithMany(p => p.StudentContentDetails)
+                .HasForeignKey(d => d.StudentDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_StudentContentDetails_StudentData");
+        });
+
+        modelBuilder.Entity<StudentData>(entity =>
+        {
+            entity.HasKey(e => e.StudentId).HasName("PK_Edu_StudentData");
+
+            entity.Property(e => e.StudentId).ValueGeneratedNever();
+            entity.Property(e => e.CertificateName).HasMaxLength(50);
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.EmailAcademy).HasMaxLength(50);
+            entity.Property(e => e.EmailPasswored).HasMaxLength(50);
+            entity.Property(e => e.Facebook).HasMaxLength(50);
+            entity.Property(e => e.GraduationStatus).HasMaxLength(50);
+            entity.Property(e => e.Language).HasMaxLength(50);
+            entity.Property(e => e.LinkedIn).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.RecommendJobProfile).HasMaxLength(50);
+            entity.Property(e => e.StudentAddress).HasMaxLength(100);
+            entity.Property(e => e.StudentCode).ValueGeneratedOnAdd();
+            entity.Property(e => e.StudentEmail).HasMaxLength(50);
+            entity.Property(e => e.StudentMobil).HasMaxLength(36);
+            entity.Property(e => e.StudentNameL1).HasMaxLength(150);
+            entity.Property(e => e.StudentNameL2).HasMaxLength(150);
+            entity.Property(e => e.StudentPhone).HasMaxLength(15);
+            entity.Property(e => e.StudentWhatsapp).HasMaxLength(12);
+            entity.Property(e => e.Track).HasMaxLength(50);
+            entity.Property(e => e.TrainingProvider).HasMaxLength(50);
+            entity.Property(e => e.TrainingTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.AcademyClaseDetails).WithMany(p => p.StudentData)
+                .HasForeignKey(d => d.AcademyClaseDetailsId)
+                .HasConstraintName("FK_Edu_StudentData_Edu_AcademyClaseDetails");
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.StudentData)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_StudentData_BranchesData");
+
+            entity.HasOne(d => d.CityCode).WithMany(p => p.StudentData)
+                .HasForeignKey(d => d.CityCodeId)
+                .HasConstraintName("FK_Edu_StudentData_CityCode");
+
+            entity.HasOne(d => d.GovernorateCode).WithMany(p => p.StudentDatumGovernorateCodes)
+                .HasForeignKey(d => d.GovernorateCodeId)
+                .HasConstraintName("FK_Edu_StudentData_GovernorateCode");
+
+            entity.HasOne(d => d.ProjectsDetails).WithMany(p => p.StudentData)
+                .HasForeignKey(d => d.ProjectsDetailsId)
+                .HasConstraintName("FK_Edu_StudentData_Edu_ProjectsDetails");
+
+            entity.HasOne(d => d.StudentGroup).WithMany(p => p.StudentData)
+                .HasForeignKey(d => d.StudentGroupId)
+                .HasConstraintName("FK_Edu_StudentData_Edu_StudentGroup");
+
+            entity.HasOne(d => d.TrainingGoverorate).WithMany(p => p.StudentDatumTrainingGoverorates)
+                .HasForeignKey(d => d.TrainingGoverorateId)
+                .HasConstraintName("FK_Edu_StudentData_GovernorateCode1");
+        });
+
+        modelBuilder.Entity<StudentEvaluation>(entity =>
+        {
+            entity.HasKey(e => e.EvaluationsId).HasName("PK_Edu_StudentEvaluations");
+
+            entity.Property(e => e.EvaluationsId).ValueGeneratedNever();
+            entity.Property(e => e.AbsenceRate).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.AttendanceRate).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.BrowsingRate).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.ContentRatio).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+
+            entity.HasOne(d => d.StudentData).WithMany(p => p.StudentEvaluations)
+                .HasForeignKey(d => d.StudentDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_StudentEvaluations_StudentData");
+        });
+
+        modelBuilder.Entity<StudentGroup>(entity =>
+        {
+            entity.HasKey(e => e.GroupId).HasName("PK_Edu_StudentGroup");
+
+            entity.ToTable("StudentGroup");
+
+            entity.Property(e => e.GroupId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.EndTime).HasColumnType("datetime");
+            entity.Property(e => e.GroupNameL1).HasMaxLength(50);
+            entity.Property(e => e.GroupNameL2).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.StartTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.AcademyClaseDetails).WithMany(p => p.StudentGroups)
+                .HasForeignKey(d => d.AcademyClaseDetailsId)
+                .HasConstraintName("FK_Edu_StudentGroup_AcademyClaseDetails");
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.StudentGroups)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_StudentGroup_BranchesData");
+        });
+
+        modelBuilder.Entity<TeacherData>(entity =>
+        {
+            entity.HasKey(e => e.TeacherId).HasName("PK_TeachersData");
+
+            entity.Property(e => e.TeacherId).ValueGeneratedNever();
+            entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.CreateUserId).HasMaxLength(50);
+            entity.Property(e => e.CreateUserName).HasMaxLength(50);
+            entity.Property(e => e.DeletedDate).HasColumnType("datetime");
+            entity.Property(e => e.Deletedby).HasMaxLength(50);
+            entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Modifiedby).HasMaxLength(50);
+            entity.Property(e => e.NationalId).HasMaxLength(14);
+            entity.Property(e => e.TeacherAddress).HasMaxLength(100);
+            entity.Property(e => e.TeacherEmail).HasMaxLength(50);
+            entity.Property(e => e.TeacherMobil).HasMaxLength(36);
+            entity.Property(e => e.TeacherNo).ValueGeneratedOnAdd();
+            entity.Property(e => e.TeacherPhone).HasMaxLength(15);
+            entity.Property(e => e.TeacherWhatsapp).HasMaxLength(12);
+
+            entity.HasOne(d => d.BranchesData).WithMany(p => p.TeacherData)
+                .HasForeignKey(d => d.BranchesDataId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Edu_TeacherData_BranchesData");
+
+            entity.HasOne(d => d.CityCode).WithMany(p => p.TeacherData)
+                .HasForeignKey(d => d.CityCodeId)
+                .HasConstraintName("FK_Edu_TeacherData_CityCode");
+
+            entity.HasOne(d => d.GovernorateCode).WithMany(p => p.TeacherData)
+                .HasForeignKey(d => d.GovernorateCodeId)
+                .HasConstraintName("FK_Edu_TeacherData_GovernorateCode");
+        });
+         base.OnModelCreating(modelBuilder);
+    }
