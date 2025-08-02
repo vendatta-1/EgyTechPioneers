@@ -9,6 +9,7 @@ namespace Dtos.BasicInformation
 {
     public class AcademyClaseDetailDto
     {
+        public Guid? Id { get; set; }
         public Guid? AcademyClaseMasterId { get; set; }
 
         public Guid? AcademyClaseTypeId { get; set; }

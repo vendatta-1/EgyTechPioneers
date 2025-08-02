@@ -1,3 +1,4 @@
+using Common.Data;
 using Common.Results;
 using Dtos.BasicInformation;
 using Entities.Models;
@@ -7,7 +8,7 @@ using Repositories.Interfaces;
 
 namespace Logic.Implementations.BasicInformation;
 
-public class AcademyClaseTypeLogic(IRepository<AcademyClaseType> repository) : IAcademyClaseType
+public class AcademyClaseTypeLogic(IRepository<AcademyClaseType> repository, IUnitOfWork unitOfWork) : IAcademyClaseType
 {
     private readonly IRepository<AcademyClaseType> _repository = repository;
 
@@ -32,7 +33,10 @@ public class AcademyClaseTypeLogic(IRepository<AcademyClaseType> repository) : I
         CancellationToken cancellationToken = default)
     {
         var entity = dto.Adapt<AcademyClaseType>();
+        
         var result = await _repository.InsertAsync(entity, cancellationToken);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<AcademyClaseTypeDto>())
             : Result.Failure<AcademyClaseTypeDto>(result.Error);
@@ -45,11 +49,24 @@ public class AcademyClaseTypeLogic(IRepository<AcademyClaseType> repository) : I
         if (!result.IsSuccess) return Result.Failure<bool>(result.Error);
 
         dto.Adapt(result.Value);
-        return await _repository.UpdateAsync(result.Value, cancellationToken);
+        var updateResult = await _repository.UpdateAsync(result.Value, cancellationToken);
+        if (updateResult.IsFailure)
+        {
+            return Result.Failure<bool>(updateResult.Error);
+        }
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        return Result.Success(updateResult.Value);
     }
 
     public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _repository.DeleteByIdAsync(id, cancellationToken);
+        var result = await _repository.DeleteByIdAsync(id, cancellationToken);
+        
+        if (result.IsFailure) return Result.Failure<bool>(result.Error);
+        
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        return Result.Success(result.Value);
     }
 }

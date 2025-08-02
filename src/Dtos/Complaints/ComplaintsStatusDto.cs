@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+ 
 
 namespace Dtos.Complaints
 {
     public class ComplaintsStatusDto
     {
+        public Guid? Id { get; set; }
         public Guid? CompanyDataId { get; set; }
 
         public Guid? BranchesDataId { get; set; }
 
+        [Required]
+        [StringLength(100, MinimumLength = 2)]
         public string StatusesNameL1 { get; set; } = null!;
 
+        [Required]
+        [StringLength(100, MinimumLength = 2)]
         public string StatusesNameL2 { get; set; } = null!;
     }
 }

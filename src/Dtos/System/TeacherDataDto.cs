@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dtos.System
 {
     public class TeacherDataDto
     {
-        public Guid? CompanyDataId { get; set; }
+        public Guid? Id { get; set; }
+        public Guid? AcademyDataId { get; set; }
 
         public Guid? BranchesDataId { get; set; }
 
@@ -19,29 +17,45 @@ namespace Dtos.System
 
         public Guid? CityCodeId { get; set; }
 
-        public string TeacherNameL1 { get; set; }
+        [Required(ErrorMessage = "Teacher name (L1) is required.")]
+        [StringLength(70, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 70 characters.")]
+        public string TeacherNameL1 { get; set; } = null!;
 
+        [StringLength(70, MinimumLength = 3, ErrorMessage = "Name (L2) must be between 3 and 70 characters.")]
         public string? TeacherNameL2 { get; set; }
 
-        public string TeacherAddress { get; set; }
+        [Required(ErrorMessage = "Address is required.")]
+        [StringLength(150, MinimumLength = 3, ErrorMessage = "Address must be between 3 and 150 characters.")]
+        public string TeacherAddress { get; set; } = null!;
 
-        public string NationalId { get; set; }
+        [Required(ErrorMessage = "National ID is required.")]
+        [RegularExpression(@"^\d{14}$", ErrorMessage = "National ID must be exactly 14 numeric digits.")]
+        public string NationalId { get; set; } = null!;
 
         public DateOnly? DateStart { get; set; }
 
-        public string TeacherMobile { get; set; }
+        [Phone(ErrorMessage = "Invalid mobile number format.")]
+        [StringLength(12, MinimumLength = 7, ErrorMessage = "Mobile number must be between 7 and 12 characters.")]
+        public string? TeacherMobile { get; set; }
 
-        public string TeacherPhone { get; set; }
+        [Phone(ErrorMessage = "Invalid phone number format.")]
+        [StringLength(12, MinimumLength = 7, ErrorMessage = "Phone number must be between 7 and 12 characters.")]
+        public string? TeacherPhone { get; set; }
 
-        public string TeacherWhatsapp { get; set; }
+        [Required(ErrorMessage = "WhatsApp number is required.")]
+        [RegularExpression(@"^\d{11,12}$", ErrorMessage = "WhatsApp number must be between 11 and 12 digits.")]
+        public string TeacherWhatsapp { get; set; } = null!;
 
-        public string TeacherEmail { get; set; }
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [StringLength(80, MinimumLength = 10, ErrorMessage = "Email must be between 10 and 80 characters.")]
+        public string TeacherEmail { get; set; } = null!;
 
         public IFormFile? Image { get; set; }
 
+        [StringLength(500, ErrorMessage = "Description can't exceed 500 characters.")]
         public string? Description { get; set; }
 
         public DateOnly? TeacherCancel { get; set; }
     }
-
 }

@@ -25,12 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Logic\Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Logic\Logic.csproj" />
+    <Folder Include="Controllers\Chat\" />
   </ItemGroup>
 
 </Project>

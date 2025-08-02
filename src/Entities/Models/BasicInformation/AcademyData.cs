@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using Common;
+using Entities.Models.System;
+
 namespace Entities.Models;
 
 public class AcademyData : Entity
@@ -55,7 +57,7 @@ public class AcademyData : Entity
     public string? AttachFiles { get; set; }
 
 
-    public virtual ICollection<BrancheData> BranchesData { get; set; } = new List<BrancheData>();
+    public virtual ICollection<BranchData> BranchesData { get; set; } = new List<BranchData>();
 
     public virtual ICollection<ProjectsMaster> ProjectsMasters { get; set; } = new List<ProjectsMaster>();
 }

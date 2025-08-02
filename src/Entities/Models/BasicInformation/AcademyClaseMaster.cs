@@ -43,7 +43,7 @@ public class AcademyClaseMaster : Entity
 
     public virtual ICollection<AcademyClaseDetail> AcademyClaseDetails { get; set; } = new List<AcademyClaseDetail>();
 
-    public virtual BrancheData BranchesData { get; set; }
+    public virtual BranchData BranchesData { get; set; }
 
     public virtual CityCode CityCode { get; set; }
 

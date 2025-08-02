@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
+using Entities.Models.Complaints;
+using Entities.Models.System;
+
 namespace Repositories.Data;
 
-public class EducationContext : DbContext, IUnitOfWork
+public class EducationContext(DbContextOptions<EducationContext> options) : DbContext(options), IUnitOfWork
 {
-    public EducationContext()
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-    }
-
-    public EducationContext(DbContextOptions<EducationContext> options)
-        : base(options)
-    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(EducationContext).Assembly);
     }
 
     public virtual DbSet<AcademyClaseDetail> AcademyClaseDetails { get; set; }
@@ -27,7 +27,7 @@ public class EducationContext : DbContext, IUnitOfWork
 
     public virtual DbSet<AcademyJob> AcademyJobs { get; set; }
 
-    public virtual DbSet<BrancheData> BranchesData { get; set; }
+    public virtual DbSet<BranchData> BranchesData { get; set; }
 
     public virtual DbSet<CityCode> CityCodes { get; set; }
 
@@ -71,7 +71,7 @@ public class EducationContext : DbContext, IUnitOfWork
 
     public virtual DbSet<StudentGroup> StudentGroups { get; set; }
 
-    public virtual DbSet<TeacherData> TeacherData { get; set; }
+    public virtual DbSet<TeacherData> TeacherData { get; set; } 
 
 
     

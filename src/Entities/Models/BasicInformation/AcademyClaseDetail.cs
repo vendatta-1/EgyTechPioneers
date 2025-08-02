@@ -2,6 +2,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using Entities.Models.System;
 
 namespace Entities.Models;
 

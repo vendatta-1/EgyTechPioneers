@@ -2,6 +2,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using Entities.Models.System;
 
 namespace Entities.Models;
 
@@ -16,15 +17,15 @@ public class GovernorateCode : Entity
 
     public virtual ICollection<AcademyClaseMaster> AcademyClaseMasters { get; set; } = new List<AcademyClaseMaster>();
 
-    public virtual ICollection<BrancheData> BranchesData { get; set; } = new List<BrancheData>();
+    public virtual ICollection<BranchData> BranchesData { get; set; } = new List<BranchData>();
 
     public virtual ICollection<CityCode> CityCodes { get; set; } = new List<CityCode>();
 
     public virtual CountryCode CountryCode { get; set; }
 
-    public virtual ICollection<StudentData> StudentDatumGovernorateCodes { get; set; } = new List<StudentData>();
+    public virtual ICollection<StudentData> StudentDataGovernorateCodes { get; set; } = new List<StudentData>();
 
-    public virtual ICollection<StudentData> StudentDatumTrainingGoverorates { get; set; } = new List<StudentData>();
+    public virtual ICollection<StudentData> StudentDataTrainingGovernorates { get; set; } = new List<StudentData>();
 
     public virtual ICollection<TeacherData> TeacherData { get; set; } = new List<TeacherData>();
 }

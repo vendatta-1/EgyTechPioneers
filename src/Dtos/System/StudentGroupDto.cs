@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,15 @@ namespace Dtos.System
 {
     public class StudentGroupDto
     {
+        public Guid? Id { get; set; }
         public Guid? AcademyDataId { get; set; }
 
         public Guid? BranchesDataId { get; set; }
 
-        public string GroupNameL1 { get; set; }
+        [StringLength(maximumLength: 70)]
+        public string GroupNameL1 { get; set; } = null!;
 
+        [StringLength(maximumLength: 70)]
         public string? GroupNameL2 { get; set; }
 
         public Guid? AcademyClaseDetailsId { get; set; }
@@ -74,6 +78,7 @@ namespace Dtos.System
 
         public Guid? AcademyCourseId { get; set; }
 
+        [StringLength(500, MinimumLength = 10)]
         public string? Description { get; set; }
     }
 

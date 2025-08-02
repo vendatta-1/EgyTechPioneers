@@ -12,4 +12,13 @@ public interface ITeacherData
     Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetNotActiveAsync(CancellationToken cancellationToken = default);
+
+    Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetByBranchAsync(Guid branchId,
+        CancellationToken cancellationToken = default);
+
+    Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetByGovernorateAsync(Guid governorateId,
+        CancellationToken cancellationToken = default);
+
+    Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetByCityAsync(Guid cityId,
+        CancellationToken cancellationToken = default);
 }

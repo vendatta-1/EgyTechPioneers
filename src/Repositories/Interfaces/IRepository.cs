@@ -58,5 +58,10 @@ namespace Repositories.Interfaces
 
         // Count
         Task<Result<int>> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+        
+        //Existence
+        
+        Task< bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+        
     }
 }

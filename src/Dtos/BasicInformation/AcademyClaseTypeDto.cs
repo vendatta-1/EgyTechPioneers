@@ -8,6 +8,7 @@ namespace Dtos.BasicInformation
 {
     public class AcademyClaseTypeDto
     {
+        public Guid? Id { get; set; }
         public string ClassTypeNameId { get; set; } = null!;
     }
 }

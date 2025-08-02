@@ -1,19 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dtos.Complaints
 {
     public class ComplaintsStudentDto
     {
+        public Guid? Id { get; set; }
+        public int? ComplaintsNo { get; set; }
         public Guid? AcademyDataId { get; set; }
 
         public Guid? BranchesDataId { get; set; }
-
-        public int ComplaintsNo { get; set; }
 
         public Guid? ComplaintsTypeId { get; set; }
 
@@ -23,9 +20,10 @@ namespace Dtos.Complaints
 
         public DateOnly? Date { get; set; }
 
-        public string Description { get; set; }
+        [Required]
+        [MinLength(10)]
+        public string Description { get; set; } = null!;
 
         public IFormFile? Files { get; set; }
     }
-
 }

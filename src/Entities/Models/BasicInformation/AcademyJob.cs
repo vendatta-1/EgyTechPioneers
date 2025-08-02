@@ -22,5 +22,5 @@ public  class AcademyJob : Entity
 
     public string JobLink { get; set; }
 
-    public virtual BrancheData BranchesData { get; set; }
+    public virtual BranchData BranchesData { get; set; }
 }

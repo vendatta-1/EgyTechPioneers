@@ -3,101 +3,160 @@ using Logic.Interfaces.Helpers;
 using Repositories.Interfaces;
 using Common.Results;
 using Dtos.BasicInformation;
-using Entities.Models; 
-using Mapster; 
-namespace Logic.Implementations.BasicInformation
+using Entities.Models;
+using Mapster;
+using Common.Data;
+
+namespace Logic.Implementations.BasicInformation;
+
+public class AcademyDataLogic(
+    IRepository<AcademyData> repository,
+    IFileService fileService,
+    IUnitOfWork unitOfWork,
+    IRepository<CountryCode> countries,
+    IRepository<GovernorateCode> governorates,
+    IRepository<CityCode> cities
+) : IAcademyData
 {
-    public class AcademyDataLogic(IRepository<AcademyData> repository, IFileService fileService) : IAcademyData
+    private readonly IRepository<AcademyData> _repository = repository;
+    private readonly IFileService _fileService = fileService;
+
+    public async Task<Result<AcademyDataDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        private readonly IRepository<AcademyData> _repository = repository;
-        private readonly IFileService _fileService = fileService;
+        var result = await _repository.GetByIdAsync(id, cancellationToken);
+        return result.IsSuccess
+            ? Result.Success(result.Value.Adapt<AcademyDataDto>())
+            : Result.Failure<AcademyDataDto>(result.Error);
+    }
 
-        public async Task<Result<AcademyDataDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<AcademyDataDto>>> GetAllAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _repository.GetAllAsync(cancellationToken);
+        return result.IsSuccess
+            ? Result.Success(result.Value.Adapt<IReadOnlyCollection<AcademyDataDto>>())
+            : Result.Failure<IReadOnlyCollection<AcademyDataDto>>(result.Error);
+    }
+
+    public async Task<Result<AcademyDataDto>> CreateAsync(AcademyDataDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        var validate = await ValidateRelationsAsync(dto, cancellationToken);
+        if (validate.IsFailure) return Result.Failure<AcademyDataDto>(validate.Error);
+
+        var entity = dto.Adapt<AcademyData>();
+        var result = await _repository.InsertAsync(entity, cancellationToken);
+        if (!result.IsSuccess) return Result.Failure<AcademyDataDto>(result.Error);
+
+        if (dto.Image is not null)
+            await _fileService.SaveAsync<AcademyData>(dto.Image, result.Value.Id);
+
+        if (dto.Attachments is not null)
+            await _fileService.SaveAsync<AcademyData>(dto.Attachments, result.Value.Id, ".attach");
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success(result.Value.Adapt<AcademyDataDto>());
+    }
+
+    public async Task<Result<bool>> UpdateAsync(Guid id, AcademyDataDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        var existing = await _repository.GetByIdAsync(id, cancellationToken);
+        if (!existing.IsSuccess) return Result.Failure<bool>(existing.Error);
+
+        var validate = await ValidateRelationsAsync(dto, cancellationToken);
+        if (validate.IsFailure) return Result.Failure<bool>(validate.Error);
+
+        dto.Adapt(existing.Value);
+
+        if (dto.Image is not null)
         {
-            var result = await _repository.GetByIdAsync(id, cancellationToken);
-            return result.IsSuccess
-                ? Result.Success(result.Value.Adapt<AcademyDataDto>())
-                : Result.Failure<AcademyDataDto>(result.Error);
+          var imagePath =  await _fileService.SaveAsync<AcademyData>(dto.Image, id);
+          existing.Value.ImageUrl =imagePath;
         }
 
-        public async Task<Result<IReadOnlyCollection<AcademyDataDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+        if (dto.Attachments is not null)
         {
-            var result = await _repository.GetAllAsync(cancellationToken);
-            return result.IsSuccess
-                ? Result.Success(result.Value.Adapt<IReadOnlyCollection<AcademyDataDto>>())
-                : Result.Failure<IReadOnlyCollection<AcademyDataDto>>(result.Error);
+           var path= await _fileService.SaveAsync<AcademyData>(dto.Attachments, id, ".attach");
+           existing.Value.AttachFiles = path;
         }
 
-        public async Task<Result<AcademyDataDto>> CreateAsync(AcademyDataDto dto, CancellationToken cancellationToken = default)
+        var updated = await _repository.UpdateAsync(existing.Value, cancellationToken);
+        if (updated.IsFailure) return Result.Failure<bool>(updated.Error);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result.Success(true);
+    }
+
+    public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        _fileService.Delete<AcademyData>(id);
+        _fileService.Delete<AcademyData>(id, ".attach");
+
+        var result = await _repository.DeleteByIdAsync(id, cancellationToken);
+
+        if (result.IsFailure) return Result.Failure<bool>(result.Error);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return Result.Success(result.Value);
+    }
+
+    public async Task<Result<(byte[]? file, string? contentType)>> GetImageAsync(Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var (stream, extension) = _fileService.Get<AcademyData>(id);
+        if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms, cancellationToken);
+        return Result.Success<(byte[]?, string?)>((ms.ToArray(), GetMimeType(extension)));
+    }
+
+    public async Task<Result<(byte[]? file, string? contentType)>> GetAttachmentsAsync(Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var (stream, extension) = _fileService.Get<AcademyData>(id, ".attach");
+        if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms, cancellationToken);
+        return Result.Success<(byte[]?, string?)>((ms.ToArray(), GetMimeType(extension)));
+    }
+
+    private static string? GetMimeType(string? extension)
+    {
+        return extension?.ToLowerInvariant() switch
         {
-            var entity = dto.Adapt<AcademyData>();
-            var result = await _repository.InsertAsync(entity, cancellationToken);
-            if (!result.IsSuccess)
-                return Result.Failure<AcademyDataDto>(result.Error);
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".gif" => "image/gif",
+            ".pdf" => "application/pdf",
+            ".doc" or ".docx" => "application/msword",
+            ".xls" or ".xlsx" => "application/vnd.ms-excel",
+            _ => "application/octet-stream"
+        };
+    }
 
-            if (dto.Image is not null)
-                await _fileService.SaveAsync<AcademyData>(dto.Image, result.Value.Id);
-
-            if (dto.Attachments is not null)
-                await _fileService.SaveAsync<AcademyData>(dto.Attachments, result.Value.Id, ".attach");
-
-            return Result.Success(result.Value.Adapt<AcademyDataDto>());
+    private async Task<Result<bool>> ValidateRelationsAsync(AcademyDataDto dto, CancellationToken ct)
+    {
+        if (dto.CountryCodeId is not null)
+        {
+            var exists = await countries.AnyAsync(x => x.Id == dto.CountryCodeId, ct);
+            if (!exists) return Result.Failure<bool>(Error.NotFound("Relation.CountryCode", "Country does not exist."));
         }
 
-        public async Task<Result<bool>> UpdateAsync(Guid id, AcademyDataDto dto, CancellationToken cancellationToken = default)
+        if (dto.GovernorateCodeId is not null)
         {
-            var result = await _repository.GetByIdAsync(id, cancellationToken);
-            if (!result.IsSuccess)
-                return Result.Failure<bool>(result.Error);
-
-            dto.Adapt(result.Value);
-
-            if (dto.Image is not null)
-                await _fileService.SaveAsync<AcademyData>(dto.Image, id);
-
-            if (dto.Attachments is not null)
-                await _fileService.SaveAsync<AcademyData>(dto.Attachments, id, ".attach");
-
-            return await _repository.UpdateAsync(result.Value, cancellationToken);
+            var exists = await governorates.AnyAsync(x => x.Id == dto.GovernorateCodeId, ct);
+            if (!exists)
+                return Result.Failure<bool>(Error.NotFound("Relation.Governorate", "Governorate does not exist."));
         }
 
-        public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        if (dto.CityCodeId is not null)
         {
-            _fileService.Delete<AcademyData>(id);
-            _fileService.Delete<AcademyData>(id, ".attach");
-            return await _repository.DeleteByIdAsync(id, cancellationToken);
+            var exists = await cities.AnyAsync(x => x.Id == dto.CityCodeId, ct);
+            if (!exists) return Result.Failure<bool>(Error.NotFound("Relation.City", "City does not exist."));
         }
 
-        public async Task<Result<(byte[]? file, string? contentType)>> GetImageAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            var (stream, extension) = _fileService.Get<AcademyData>(id);
-            if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
-            using var ms = new MemoryStream();
-            await stream.CopyToAsync(ms, cancellationToken);
-            return Result.Success<(byte[]?, string?)>((ms.ToArray(), GetMimeType(extension)));
-        }
-
-        public async Task<Result<(byte[]? file, string? contentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            var (stream, extension) = _fileService.Get<AcademyData>(id, ".attach");
-            if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
-            using var ms = new MemoryStream();
-            await stream.CopyToAsync(ms, cancellationToken);
-            return Result.Success<(byte[]?, string?)>((ms.ToArray(), GetMimeType(extension)));
-        }
-
-        private static string? GetMimeType(string? extension)
-        {
-            return extension?.ToLowerInvariant() switch
-            {
-                ".jpg" or ".jpeg" => "image/jpeg",
-                ".png" => "image/png",
-                ".gif" => "image/gif",
-                ".pdf" => "application/pdf",
-                ".doc" or ".docx" => "application/msword",
-                ".xls" or ".xlsx" => "application/vnd.ms-excel",
-                _ => "application/octet-stream"
-            };
-        }
+        return Result.Success(true);
     }
 }

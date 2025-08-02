@@ -6,6 +6,7 @@ namespace Dtos.BasicInformation
 {
     public class AcademyDataDto
     {
+        public Guid? Id { get; set; }
         [Required, StringLength(100)]
         public string AcademyNameL1 { get; set; }
 

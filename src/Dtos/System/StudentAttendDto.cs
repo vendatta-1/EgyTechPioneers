@@ -8,6 +8,7 @@ namespace Dtos.System
 {
     public class StudentAttendDto
     {
+        public Guid? Id { get; set; }
         public Guid? StudentDataId { get; set; }
 
         public DateOnly? DateAttend { get; set; }

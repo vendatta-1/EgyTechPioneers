@@ -3,6 +3,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using Entities.Models.System;
 
 namespace Entities.Models;
 
@@ -19,7 +20,7 @@ public class CityCode : Entity
    
     public virtual ICollection<AcademyClaseMaster> AcademyClaseMasters { get; set; } = new List<AcademyClaseMaster>();
 
-    public virtual ICollection<BrancheData> BranchesData { get; set; } = new List<BrancheData>();
+    public virtual ICollection<BranchData> BranchesData { get; set; } = new List<BranchData>();
 
     public virtual GovernorateCode GovernorateCode { get; set; }
 
