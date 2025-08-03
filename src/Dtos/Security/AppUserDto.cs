@@ -7,7 +7,7 @@ namespace Dtos.Security
     {
         public Guid? Id { get; set; }  
 
-        public Guid? CompanyDataId { get; set; }
+        public Guid? AcademyDataId { get; set; }
         public Guid? BranchesDataId { get; set; }
 
         [Required, MaxLength(60)]

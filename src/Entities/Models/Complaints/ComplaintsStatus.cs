@@ -6,7 +6,7 @@ namespace Entities.Models.Complaints;
 public class ComplaintsStatus : Entity
 {
  
-    public Guid? CompanyDataId { get; set; }
+    public Guid? AcademyDataId { get; set; }
 
     public Guid? BranchesDataId { get; set; }
 

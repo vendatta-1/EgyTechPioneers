@@ -3,11 +3,13 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models;
 
 public class AcademyClaseType : Entity
 { 
+    [MaxLength(70)]
     public string ClassTypeNameId { get; set; }
 
 }

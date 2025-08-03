@@ -2,6 +2,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Entities.Models.System;
 
 namespace Entities.Models;
@@ -13,7 +14,8 @@ public  class AcademyClaseDetail : Entity
 
     public Guid? AcademyClaseTypeId { get; set; }
 
-    public int? ClaseNumber { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int ClaseNumber { get; set; }
 
     public string? ImageUrl { get; set; }
 

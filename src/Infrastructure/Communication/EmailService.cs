@@ -1,8 +1,9 @@
+using Common.Results;
 using Infrastructure.Settings;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using Razor.Templating.Core;
 
 namespace Infrastructure.Communication;
 
@@ -15,7 +16,7 @@ public class EmailService : IEmailService
         _smtp = smtpOptions.Value;
     }
 
-    public async Task<bool> SendAsync(string toEmail, string subject, string body, CancellationToken cancellationToken = default)
+    public async Task<Result> SendAsync(string toEmail, string subject, string body, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -28,40 +29,56 @@ public class EmailService : IEmailService
             message.Body = builder.ToMessageBody();
 
             using var client = new SmtpClient();
-            await client.ConnectAsync(_smtp.Host, _smtp.Port, _smtp.UseSsl, cancellationToken);
+            await client.ConnectAsync(_smtp.Host, _smtp.Port, SecureSocketOptions.StartTls, cancellationToken);
             await client.AuthenticateAsync(_smtp.Username, _smtp.Password, cancellationToken);
             await client.SendAsync(message, cancellationToken);
             await client.DisconnectAsync(true, cancellationToken);
 
-            return true;
+            return Result.Success();
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            return Result.Failure(Error.Failure("Send.Failed", ex.Message));
         }
     }
 
-    public async Task<bool> SendEmailConfirmationAsync(string toEmail, string confirmationLink, CancellationToken cancellationToken = default)
+    public async Task<Result> SendEmailConfirmationAsync(string toEmail, string confirmationLink, CancellationToken cancellationToken = default)
     {
-        var body = await RazorTemplateEngine.RenderAsync("EmailTemplates/ConfirmEmail.cshtml", new { ConfirmationLink = confirmationLink });
+        var body = $"""
+            <h2>Confirm Your Email</h2>
+            <p>Click the link below to confirm your email:</p>
+            <a href="{confirmationLink}">Confirm Email</a>
+        """;
         return await SendAsync(toEmail, "Confirm Your Email", body, cancellationToken);
     }
 
-    public async Task<bool> SendPasswordResetAsync(string toEmail, string resetLink, CancellationToken cancellationToken = default)
+    public async Task<Result> SendPasswordResetAsync(string toEmail, string resetLink, CancellationToken cancellationToken = default)
     {
-        var body = await RazorTemplateEngine.RenderAsync("EmailTemplates/ResetPassword.cshtml", new { ResetLink = resetLink });
+        var body = $"""
+            <h2>Password Reset Request</h2>
+            <p>Click the link below to reset your password:</p>
+            <a href="{resetLink}">Reset Password</a>
+        """;
         return await SendAsync(toEmail, "Reset Your Password", body, cancellationToken);
     }
 
-    public async Task<bool> SendTwoFactorCodeAsync(string toEmail, string code, CancellationToken cancellationToken = default)
+    public async Task<Result> SendTwoFactorCodeAsync(string toEmail, string code, CancellationToken cancellationToken = default)
     {
-        var body = await RazorTemplateEngine.RenderAsync("EmailTemplates/TwoFactorCode.cshtml", new { Code = code });
+        var body = $"""
+            <h2>Two-Factor Authentication</h2>
+            <p>Your verification code is:</p>
+            <strong>{code}</strong>
+        """;
         return await SendAsync(toEmail, "Your Two-Factor Code", body, cancellationToken);
     }
 
-    public async Task<bool> SendWelcomeEmailAsync(string toEmail, CancellationToken cancellationToken = default)
+    public async Task<Result> SendWelcomeEmailAsync(string toEmail, CancellationToken cancellationToken = default)
     {
-        var body = await RazorTemplateEngine.RenderAsync("EmailTemplates/Welcome.cshtml", new { Email = toEmail });
+        var body = $"""
+            <h2>Welcome to Our Platform</h2>
+            <p>Thank you for joining us, {toEmail}!</p>
+            <p>We're excited to have you onboard.</p>
+        """;
         return await SendAsync(toEmail, "Welcome to Our Platform", body, cancellationToken);
     }
 }

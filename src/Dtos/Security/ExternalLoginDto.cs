@@ -9,6 +9,6 @@ public class ExternalLoginDto
 
     [Required]
     public string IdToken { get; set; } = null!;
-    
-    public string? AccessToken { get; set; } 
+
+    public string AccessToken { get; set; } = null!;
 }

@@ -19,6 +19,7 @@ public class StudentDataLogic(
     IRepository<BranchData> branchRepo,
     IRepository<CityCode> cityRepo,
     IRepository<GovernorateCode> governorateRepo,
+    IRepository<AcademyData> academyRepo,
     IUnitOfWork unitOfWork
 ) : IStudentData
 {
@@ -81,7 +82,7 @@ public class StudentDataLogic(
     public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await _repository.DeleteByIdAsync(id, cancellationToken);
-        if(result.IsSuccess)
+        if (result.IsSuccess)
             await unitOfWork.SaveChangesAsync(cancellationToken);
         return result.IsSuccess ? result.Value : Result.Failure<bool>(result.Error);
     }
@@ -155,6 +156,14 @@ public class StudentDataLogic(
             if (!exists)
                 return Result.Failure(Error.NotFound("TrainingGovernorate.NotFound",
                     "Training Governorate ID not found"));
+        }
+
+        if (dto.AcademyDataId is not null)
+        {
+            var exists = await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
+            if (!exists)
+                return Result.Failure(Error.NotFound("Academy.NotFound",
+                    $"Academy Data ID not found id: {dto.AcademyDataId}"));
         }
 
         return Result.Success();

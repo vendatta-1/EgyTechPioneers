@@ -1,5 +1,6 @@
 using Common.Data;
 using Entities.Models.Security;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ public static class RepositoryInjection
     {
         services.AddScoped<AuditSaveChangesInterceptor>();
 
-        services.AddScoped<IUnitOfWork, EducationContext>();
+     
 
         services.AddDbContext<EducationContext>((sp, opt) =>
         {
@@ -27,13 +28,15 @@ public static class RepositoryInjection
                 .AddInterceptors(interceptor);
         });
 
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<EducationContext>());
+
         services.AddDbContext<AuthDbContext>(opt =>
         {
             opt.UseSqlServer(configuration.GetConnectionString("education"));
         });
         services.AddDataProtection();
 
-        services.AddIdentityCore<AppUser>(opt =>
+        services.AddIdentity<AppUser, IdentityRole<Guid>>(opt =>
             {
                 opt.Password.RequiredLength = 6;
                 opt.Password.RequireNonAlphanumeric = true;
@@ -48,5 +51,26 @@ public static class RepositoryInjection
 
         services.AddScoped(typeof(IRepository<>), typeof(Implementations.Repository<>));
         return services;
+    }
+
+    public static WebApplication RoleSeed(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+        List<string> roles =
+        [
+            "Admin",
+            "Student",
+            "Instructor",
+            "SupportAgent",
+            "User"
+        ];
+        foreach (var role in roles)
+        {
+            if (!roleManager.RoleExistsAsync(role).Result)
+                roleManager.CreateAsync(new IdentityRole<Guid>(role)).Wait();
+        }
+       
+        return app;
     }
 }

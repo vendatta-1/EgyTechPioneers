@@ -1,4 +1,5 @@
 using Entities.Models;
+using Infrastructure.Communication;
 using Logic.Implementations.BasicInformation;
 using Logic.Implementations.Complaints;
 using Logic.Implementations.Helpers;
@@ -6,7 +7,10 @@ using Logic.Implementations.System;
 using Logic.Interfaces.BasicInformation;
 using Logic.Interfaces.Complaints;
 using Logic.Interfaces.Helpers;
+using Logic.Interfaces.Identity;
 using Logic.Interfaces.System;
+using Logic.Services.Communication;
+using Logic.Services.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -47,7 +51,8 @@ public static class LogiInjection
         services.AddScoped<IStudentEvaluation, StudentEvaluationLogic>();
         services.AddScoped<IStudentGroup, StudentGroupLogic>();
         services.AddScoped<ITeacherData, TeacherDataLogic>();
-        
+        services.AddScoped<ITwilioService, TwilioService>();
+        services.AddScoped<IAccountService, AccountService>();
         return services;
     }
     

@@ -52,7 +52,7 @@ public class ComplaintsStudentLogic(
         if (!result.IsSuccess) return Result.Failure<ComplaintsStudentDto>(result.Error);
 
         if (dto.Files is not null)
-            entity.FilesAttch = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files, result.Value.Id);
+            entity.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files, result.Value.Id);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -70,7 +70,7 @@ public class ComplaintsStudentLogic(
         dto.Adapt(existing.Value);
 
         if (dto.Files is not null)
-            existing.Value.FilesAttch = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files, id);
+            existing.Value.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files, id);
 
         var updated = await _repository.UpdateAsync(existing.Value, cancellationToken);
         if (updated.IsFailure) return Result.Failure<bool>(updated.Error);

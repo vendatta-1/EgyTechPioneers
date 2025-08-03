@@ -49,10 +49,10 @@ public class AcademyDataLogic(
         if (!result.IsSuccess) return Result.Failure<AcademyDataDto>(result.Error);
 
         if (dto.Image is not null)
-            await _fileService.SaveAsync<AcademyData>(dto.Image, result.Value.Id);
+            entity.ImageUrl = await _fileService.SaveAsync<AcademyData>(dto.Image, result.Value.Id);
 
         if (dto.Attachments is not null)
-            await _fileService.SaveAsync<AcademyData>(dto.Attachments, result.Value.Id, ".attach");
+           entity.AttachFiles= await _fileService.SaveAsync<AcademyData>(dto.Attachments, result.Value.Id, ".attach");
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(result.Value.Adapt<AcademyDataDto>());

@@ -6,7 +6,7 @@ namespace Entities.Models.System;
 
 public class TeacherData : Entity
 {
-    public Guid? CompanyDataId { get; set; }
+    public Guid? AcademyDataId { get; set; }
 
     public Guid? BranchesDataId { get; set; }
 

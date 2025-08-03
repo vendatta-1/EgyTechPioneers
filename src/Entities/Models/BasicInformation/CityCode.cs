@@ -3,6 +3,7 @@
 using Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Entities.Models.System;
 
 namespace Entities.Models;
@@ -13,8 +14,10 @@ public class CityCode : Entity
 
     public Guid? GovernorateCodeId { get; set; }
 
+    [MaxLength(100)]
     public string CityNameL1 { get; set; }
 
+    [MaxLength(100)]
     public string CityNameL2 { get; set; }
 
    

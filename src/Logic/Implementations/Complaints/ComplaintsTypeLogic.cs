@@ -12,18 +12,18 @@ namespace Logic.Implementations.Complaints;
 public class ComplaintsTypeLogic : IComplaintsType
 {
     private readonly IRepository<ComplaintsType> _repository;
-    private readonly IRepository<AcademyData> _companyRepository;
+    private readonly IRepository<AcademyData> _academyRepo;
     private readonly IRepository<BranchData> _branchRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public ComplaintsTypeLogic(
         IRepository<ComplaintsType> repository,
-        IRepository<AcademyData> companyRepository,
+        IRepository<AcademyData> academyRepo,
         IRepository<BranchData> branchRepository,
         IUnitOfWork unitOfWork)
     {
         _repository = repository;
-        _companyRepository = companyRepository;
+        _academyRepo = academyRepo;
         _branchRepository = branchRepository;
         _unitOfWork = unitOfWork;
     }
@@ -84,7 +84,7 @@ public class ComplaintsTypeLogic : IComplaintsType
 
     public async Task<Result<IReadOnlyCollection<ComplaintsTypeDto>>> GetByCompanyIdAsync(Guid companyId, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetFilteredAsync(x => x.CompanyDataId == companyId, cancellationToken);
+        var result = await _repository.GetFilteredAsync(x => x.AcademyDataId == companyId, cancellationToken);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<ComplaintsTypeDto>>())
             : Result.Failure<IReadOnlyCollection<ComplaintsTypeDto>>(result.Error);
@@ -106,10 +106,10 @@ public class ComplaintsTypeLogic : IComplaintsType
 
     private async Task<Result> ValidateRelationsAsync(ComplaintsTypeDto dto, CancellationToken cancellationToken)
     {
-        if (dto.CompanyDataId is not null)
+        if (dto.AcademyDataId is not null)
         {
-            var exists = await _companyRepository.AnyAsync(x => x.Id == dto.CompanyDataId, cancellationToken);
-            if (!exists) return Result.Failure(Error.NotFound("CompanyData.NotFound", $"Company ID {dto.CompanyDataId} not found"));
+            var exists = await _academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, cancellationToken);
+            if (!exists) return Result.Failure(Error.NotFound("CompanyData.NotFound", $"Company ID {dto.AcademyDataId} not found"));
         }
 
         if (dto.BranchesDataId is not null)

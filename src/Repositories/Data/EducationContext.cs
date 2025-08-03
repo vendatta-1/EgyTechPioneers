@@ -15,6 +15,7 @@ public class EducationContext(DbContextOptions<EducationContext> options) : DbCo
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EducationContext).Assembly);
+        
     }
 
     public virtual DbSet<AcademyClaseDetail> AcademyClaseDetails { get; set; }

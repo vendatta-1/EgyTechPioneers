@@ -40,7 +40,7 @@ public class MapsterConfig : IRegister
         config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
         config.NewConfig<ComplaintsStatus, ComplaintsStatusDto>().TwoWays();
         config.NewConfig<ComplaintsStudent, ComplaintsStudentDto>().Ignore(dest => dest.Files);
-        config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>().Ignore(dest => dest.FilesAttch);
+        config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>().Ignore(dest => dest.FilesAttach);
         config.NewConfig<ComplaintsType, ComplaintsTypeDto>().TwoWays();
         config.NewConfig<ProgramsContentDetail, ProgramsContentDetailDto>()
             .Ignore(dest => dest.SessionTasks)

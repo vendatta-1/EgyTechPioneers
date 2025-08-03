@@ -59,6 +59,8 @@ public class AcademyDataController(IAcademyData service) : ControllerBase
     }
 
     [HttpGet("{id:guid}/attachment")]
+    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [Produces("application/pdf")]
     public async Task<IActionResult> GetAttachment(Guid id, CancellationToken cancellationToken)
     {
         var result = await service.GetAttachmentsAsync(id, cancellationToken);

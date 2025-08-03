@@ -13,7 +13,7 @@ namespace Logic.Implementations.System;
 public class EduContactResultLogic(
     IRepository<EduContactResult> repository,
     IRepository<StudentData> studentRepository,
-    IRepository<AcademyData> companyRepository, 
+    IRepository<AcademyData> academyRepository, 
     IFileService fileService,
     IUnitOfWork unitOfWork
 ) : IEduContactResult
@@ -126,11 +126,11 @@ public class EduContactResultLogic(
 
     private async Task<Result> ValidateRelationsAsync(EduContactResultDto dto, CancellationToken ct)
     {
-        if (dto.CompanyDataId is not null)
+        if (dto.AcademyDataId is not null)
         {
-            var companyExists = await companyRepository.AnyAsync(x => x.Id == dto.CompanyDataId, ct);
+            var companyExists = await academyRepository.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!companyExists)
-                return Result.Failure(Error.NotFound("Company.NotFound", $"Company ID {dto.CompanyDataId} not found"));
+                return Result.Failure(Error.NotFound("Company.NotFound", $"Company ID {dto.AcademyDataId} not found"));
         }
 
         if (dto.StudentDataId is not null)

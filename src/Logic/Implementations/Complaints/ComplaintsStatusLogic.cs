@@ -11,7 +11,7 @@ namespace Logic.Implementations.Complaints;
 
 public class ComplaintsStatusLogic(
     IRepository<ComplaintsStatus> repository,
-    IRepository<AcademyData> companies,
+    IRepository<AcademyData> academyRepo,
     IRepository<BranchData> branches,
     IUnitOfWork unitOfWork) : IComplaintsStatus
 {
@@ -73,9 +73,9 @@ public class ComplaintsStatusLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(ComplaintsStatusDto dto, CancellationToken ct)
     {
-        if (dto.CompanyDataId is not null)
+        if (dto.AcademyDataId is not null)
         {
-            var exists = await companies.AnyAsync(x => x.Id == dto.CompanyDataId, ct);
+            var exists = await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!exists)
                 return Result.Failure<bool>(Error.NotFound("Relation.Company", "Company does not exist."));
         }

@@ -10,7 +10,7 @@ namespace Dtos.Security
         [Required, MaxLength(60)]
         public string LastName { get; set; } = null!;
 
-        public Guid? CompanyDataId { get; set; }
+        public Guid? AcademyDataId { get; set; }
         public Guid? BranchesDataId { get; set; }
 
         [Required, EmailAddress]
