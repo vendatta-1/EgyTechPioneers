@@ -49,10 +49,10 @@ public class AcademyDataLogic(
         if (!result.IsSuccess) return Result.Failure<AcademyDataDto>(result.Error);
 
         if (dto.Image is not null)
-            entity.ImageUrl = await _fileService.SaveAsync<AcademyData>(dto.Image, result.Value.Id);
+            entity.ImageUrl = await _fileService.SaveAsync<AcademyData>(dto.Image);
 
         if (dto.Attachments is not null)
-           entity.AttachFiles= await _fileService.SaveAsync<AcademyData>(dto.Attachments, result.Value.Id, ".attach");
+            entity.AttachFiles = await _fileService.SaveAsync<AcademyData>(dto.Attachments, ".attach");
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(result.Value.Adapt<AcademyDataDto>());
@@ -71,14 +71,14 @@ public class AcademyDataLogic(
 
         if (dto.Image is not null)
         {
-          var imagePath =  await _fileService.SaveAsync<AcademyData>(dto.Image, id);
-          existing.Value.ImageUrl =imagePath;
+            var imagePath = await _fileService.SaveAsync<AcademyData>(dto.Image);
+            existing.Value.ImageUrl = imagePath;
         }
 
         if (dto.Attachments is not null)
         {
-           var path= await _fileService.SaveAsync<AcademyData>(dto.Attachments, id, ".attach");
-           existing.Value.AttachFiles = path;
+            var path = await _fileService.SaveAsync<AcademyData>(dto.Attachments, ".attach");
+            existing.Value.AttachFiles = path;
         }
 
         var updated = await _repository.UpdateAsync(existing.Value, cancellationToken);
@@ -90,12 +90,15 @@ public class AcademyDataLogic(
 
     public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        _fileService.Delete<AcademyData>(id);
-        _fileService.Delete<AcademyData>(id, ".attach");
+        var entity = await _repository.GetByIdAsync(id, cancellationToken);
+        if (!entity.IsSuccess) return Result.Failure<bool>(entity.Error);
 
-        var result = await _repository.DeleteByIdAsync(id, cancellationToken);
+
+        var result = await _repository.DeleteAsync(entity.Value, cancellationToken);
 
         if (result.IsFailure) return Result.Failure<bool>(result.Error);
+        _fileService.Delete<AcademyData>(entity.Value.ImageUrl);
+        _fileService.Delete<AcademyData>(entity.Value.AttachFiles, ".attach");
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -105,17 +108,27 @@ public class AcademyDataLogic(
     public async Task<Result<(byte[]? file, string? contentType)>> GetImageAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
-        var (stream, extension) = _fileService.Get<AcademyData>(id);
+        var entity = await _repository.GetAsync(x => x.Id == id && x.ImageUrl != null, cancellationToken);
+        if (!entity.IsSuccess) return Result.Failure<(byte[]?, string?)>(entity.Error);
+
+        var (stream, extension) = _fileService.Get<AcademyData>(entity.Value.ImageUrl);
+
         if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
+
         using var ms = new MemoryStream();
+
         await stream.CopyToAsync(ms, cancellationToken);
+
         return Result.Success<(byte[]?, string?)>((ms.ToArray(), GetMimeType(extension)));
     }
 
     public async Task<Result<(byte[]? file, string? contentType)>> GetAttachmentsAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
-        var (stream, extension) = _fileService.Get<AcademyData>(id, ".attach");
+        var entity = await _repository.GetAsync(x => x.Id == id && x.AttachFiles != null, cancellationToken);
+        if (!entity.IsSuccess) return Result.Failure<(byte[]?, string?)>(entity.Error);
+
+        var (stream, extension) = _fileService.Get<AcademyData>(entity.Value.AttachFiles, ".attach");
         if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
         using var ms = new MemoryStream();
         await stream.CopyToAsync(ms, cancellationToken);

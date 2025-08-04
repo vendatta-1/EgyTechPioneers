@@ -50,7 +50,7 @@ public class SkillDevelopmentLogic(
         var entity = dto.Adapt<SkillDevelopment>();
 
         if (dto.FilesAttach is not null)
-            entity.FilesAttach = await fileService.SaveAsync<SkillDevelopment>(dto.FilesAttach, entity.Id);
+            entity.FilesAttach = await fileService.SaveAsync<SkillDevelopment>(dto.FilesAttach );
 
         var insertResult = await repository.InsertAsync(entity, cancellationToken);
         if (insertResult.IsFailure) return Result.Failure<SkillDevelopmentDto>(insertResult.Error);
@@ -71,7 +71,7 @@ public class SkillDevelopmentLogic(
         dto.Adapt(entity);
 
         if (dto.FilesAttach is not null)
-            entity.FilesAttach = await fileService.SaveAsync<SkillDevelopment>(dto.FilesAttach, id);
+            entity.FilesAttach = await fileService.SaveAsync<SkillDevelopment>(dto.FilesAttach);
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -88,7 +88,7 @@ public class SkillDevelopmentLogic(
 
         if (!string.IsNullOrWhiteSpace(entity.Value.FilesAttach))
         {
-            var deleted = fileService.Delete<SkillDevelopment>(id);
+            var deleted = fileService.Delete<SkillDevelopment>(entity.Value.FilesAttach);
             if (!deleted)
                 return Result.Failure<bool>(Error.Problem("Delete.Failed", $"Error while delete the file for entity: {id}"));
         }
@@ -99,7 +99,12 @@ public class SkillDevelopmentLogic(
 
     public async Task<Result<(byte[]? File, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var (stream, ext) = fileService.Get<SkillDevelopment>(id);
+        var entity = await repository.GetByIdAsync(id, cancellationToken);
+        if(entity.IsFailure)
+            return Result.Failure<(byte[]?, string?)>(entity.Error);
+        
+        var (stream, ext) = fileService.Get<SkillDevelopment>(entity.Value.FilesAttach);
+        
         if (stream is null)
             return Result.Failure<(byte[]?, string?)>(Error.NotFound("FileNotFound", $"There is no attachment for this item with ID: {id}"));
 

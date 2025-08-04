@@ -16,35 +16,38 @@ public class FileService : IFileService
 
     private string GetDirectoryPath<T>() => Path.Combine(_rootPath, GetEntityFolder<T>());
 
-    private string GetFilePath<T>(Guid entityId, string fakeExtension) =>
-        Path.Combine(GetDirectoryPath<T>(), $"{entityId}{fakeExtension}");
+    private string GetFilePath<T>(string fileId, string fakeExtension) =>
+        Path.Combine(GetDirectoryPath<T>(), $"{fileId}{fakeExtension}");
 
-    private string GetMetadataPath<T>(Guid entityId) =>
-        Path.Combine(GetDirectoryPath<T>(), $"{entityId}.meta");
+    private string GetMetadataPath<T>(string fileId) =>
+        Path.Combine(GetDirectoryPath<T>(), $"{fileId}.meta");
 
-    public async Task<string> SaveAsync<T>(IFormFile file, Guid entityId, string fakeExtension = ".dat")
+    public async Task<string> SaveAsync<T>(IFormFile file, string fakeExtension = ".dat")
     {
         if (file == null || file.Length == 0)
             throw new ArgumentException("Invalid file.");
 
+        string fileId = Guid.NewGuid().ToString("N");
         string directory = GetDirectoryPath<T>();
         Directory.CreateDirectory(directory);
 
-        string filePath = GetFilePath<T>(entityId, fakeExtension);
-
+        string filePath = GetFilePath<T>(fileId, fakeExtension);
         using var stream = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(stream);
 
-        string metadataPath = GetMetadataPath<T>(entityId);
+        string metadataPath = GetMetadataPath<T>(fileId);
         await File.WriteAllTextAsync(metadataPath, Path.GetExtension(file.FileName));
 
-        return filePath;
+        return fileId;
     }
 
-    public (FileStream? Stream, string? RealExtension) Get<T>(Guid entityId, string fakeExtension = ".dat")
+    public (FileStream? Stream, string? RealExtension) Get<T>(string? fileId, string fakeExtension = ".dat")
     {
-        string filePath = GetFilePath<T>(entityId, fakeExtension);
-        string metadataPath = GetMetadataPath<T>(entityId);
+        if(fileId is null)
+            return (null, null);
+        
+        string filePath = GetFilePath<T>(fileId, fakeExtension);
+        string metadataPath = GetMetadataPath<T>(fileId);
 
         if (!File.Exists(filePath)) return (null, null);
 
@@ -55,22 +58,31 @@ public class FileService : IFileService
         return (new FileStream(filePath, FileMode.Open, FileAccess.Read), realExtension);
     }
 
-    public byte[]? Read<T>(Guid entityId, string fakeExtension = ".dat")
+    public byte[]? Read<T>(string? fileId, string fakeExtension = ".dat")
     {
-        string filePath = GetFilePath<T>(entityId, fakeExtension);
+        if (fileId is null)
+            return (null);
+        string filePath = GetFilePath<T>(fileId, fakeExtension);
         return File.Exists(filePath) ? File.ReadAllBytes(filePath) : null;
     }
 
-    public bool Exists<T>(Guid entityId, string fakeExtension = ".dat")
+    public bool Exists<T>(string? fileId, string fakeExtension = ".dat")
     {
-        string filePath = GetFilePath<T>(entityId, fakeExtension);
+        if (fileId is null)
+            return (false);
+        
+        string filePath = GetFilePath<T>(fileId, fakeExtension);
         return File.Exists(filePath);
     }
 
-    public bool Delete<T>(Guid entityId, string fakeExtension = ".dat")
+    public bool Delete<T>(string? fileId, string fakeExtension = ".dat")
     {
-        string filePath = GetFilePath<T>(entityId, fakeExtension);
-        string metadataPath = GetMetadataPath<T>(entityId);
+        if (fileId is null)
+        {
+            return false;
+        }
+        string filePath = GetFilePath<T>(fileId, fakeExtension);
+        string metadataPath = GetMetadataPath<T>(fileId);
 
         if (!File.Exists(filePath)) return false;
 
@@ -80,15 +92,20 @@ public class FileService : IFileService
         return true;
     }
 
-    public string? GetAttachmentUrl<T>(Guid entityId, string endpointRoute, string fakeExtension = ".dat")
+    public string? GetAttachmentUrl<T>(string? fileId, string endpointRoute, string fakeExtension = ".dat")
     {
-        return Exists<T>(entityId, fakeExtension)
-            ? $"{endpointRoute}/{entityId}"
+        if (fileId is null)
+            return (null);
+        
+        return Exists<T>(fileId, fakeExtension)
+            ? $"{endpointRoute}/{fileId}"
             : null;
     }
 
-    public string GetPhysicalPath<T>(Guid entityId, string fakeExtension = ".dat")
+    public string? GetPhysicalPath<T>(string? fileId, string fakeExtension = ".dat")
     {
-        return GetFilePath<T>(entityId, fakeExtension);
+        if (fileId is null)
+            return (null);
+        return GetFilePath<T>(fileId, fakeExtension);
     }
 }

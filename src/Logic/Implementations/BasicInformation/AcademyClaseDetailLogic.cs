@@ -64,7 +64,7 @@ public class AcademyClaseDetailLogic(
 
         if (dto.Image is not null)
         {
-            var imagePath = await _fileService.SaveAsync<AcademyClaseDetail>(dto.Image, result.Value.Id);
+            var imagePath = await _fileService.SaveAsync<AcademyClaseDetail>(dto.Image);
             entity.ImageUrl = imagePath;
         }
 
@@ -94,7 +94,7 @@ public class AcademyClaseDetailLogic(
 
         if (dto.Image is not null)
         {
-           var imagePath = await _fileService.SaveAsync<AcademyClaseDetail>(dto.Image, entityResult.Value.Id);
+           var imagePath = await _fileService.SaveAsync<AcademyClaseDetail>(dto.Image);
            entityResult.Value.ImageUrl = imagePath;
         }
         
@@ -108,18 +108,28 @@ public class AcademyClaseDetailLogic(
 
     public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        _fileService.Delete<AcademyClaseDetail>(id);
-        var result = await _repository.DeleteByIdAsync(id, cancellationToken);
+     
+        var entity = await _repository.GetAsync(x=>x.Id == id, cancellationToken);
+        if (!entity.IsSuccess) return Result.Failure<bool>(entity.Error);
+        
+        var result = await _repository.DeleteAsync(entity.Value, cancellationToken);
 
         if (!result.IsSuccess) return Result.Failure<bool>(result.Error);
 
+        _fileService.Delete<AcademyClaseDetail>(entity.Value.ImageUrl);
+        
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(true);
     }
 
     public async Task<Result<(FileStream? Stream, string? ContentType)>> GetImageByIdAsync(Guid id)
     {
-        var (stream, ext) = _fileService.Get<AcademyClaseDetail>(id);
+        var entity = await _repository.GetAsync(x => x.Id == id && x.ImageUrl!=null, CancellationToken.None);
+        if(entity.IsFailure)
+            return Result.Failure<(FileStream?, string?)>(entity.Error);
+        
+        var (stream, ext) = _fileService.Get<AcademyClaseDetail>(entity.Value.ImageUrl);
+        
         var contentType = ext?.ToLower() switch
         {
             ".jpg" or ".jpeg" => "image/jpeg",

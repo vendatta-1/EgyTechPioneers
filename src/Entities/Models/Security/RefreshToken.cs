@@ -23,7 +23,10 @@ public class RefreshToken : Entity
     [ForeignKey(nameof(UserId))]
     public AppUser User { get; set; } = default!;
 
+    [NotMapped]
     public bool IsRevoked => RevokedAt.HasValue;
+    [NotMapped]
     public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
+    [NotMapped]
     public bool IsActive => !IsRevoked && !IsExpired;
 }

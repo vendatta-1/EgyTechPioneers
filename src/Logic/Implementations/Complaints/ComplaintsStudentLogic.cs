@@ -52,7 +52,7 @@ public class ComplaintsStudentLogic(
         if (!result.IsSuccess) return Result.Failure<ComplaintsStudentDto>(result.Error);
 
         if (dto.Files is not null)
-            entity.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files, result.Value.Id);
+            entity.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -70,7 +70,7 @@ public class ComplaintsStudentLogic(
         dto.Adapt(existing.Value);
 
         if (dto.Files is not null)
-            existing.Value.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files, id);
+            existing.Value.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.Files);
 
         var updated = await _repository.UpdateAsync(existing.Value, cancellationToken);
         if (updated.IsFailure) return Result.Failure<bool>(updated.Error);
@@ -119,7 +119,10 @@ public class ComplaintsStudentLogic(
 
     public async Task<Result<(byte[]? File, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var (stream, ext) = _fileService.Get<ComplaintsStudent>(id);
+        var result = await _repository.GetAsync(x=>x.Id == id && x.FilesAttach!=null, cancellationToken);
+        if(result.IsFailure)
+            return Result.Failure<(byte[]?, string?)>(result.Error);
+        var (stream, ext) = _fileService.Get<ComplaintsStudent>(result.Value.FilesAttach);
         if (stream is null) return Result.Failure<(byte[]?, string?)>(Error.NotFound("FileNotFound", $"there is non attachment for this complaints with id: {id}"));
 
         await using var ms = new MemoryStream();

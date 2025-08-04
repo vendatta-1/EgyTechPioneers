@@ -11,6 +11,7 @@ internal static class APIConfigurations
     public static IServiceCollection AddAcademy(this IServiceCollection services, IConfiguration configuration)
     {
         AddSwagger(services);
+        AddCors(services);
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.AddAuthentication(opt =>
         {

@@ -60,6 +60,7 @@ public class AuditSaveChangesInterceptor(ICurrentUserService currentUserService)
                 entry.Entity.Isdeleted = true;
                 entry.Entity.DeletedDate = now;
                 entry.Entity.Deletedby = userName;
+                entry.Entity.IsNotactive = true;
             }
         }
     }

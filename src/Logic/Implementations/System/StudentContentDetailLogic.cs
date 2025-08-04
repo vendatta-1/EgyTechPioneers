@@ -24,7 +24,8 @@ public class StudentContentDetailLogic(
             : Result.Failure<StudentContentDetailDto>(result.Error);
     }
 
-    public async Task<Result<IReadOnlyCollection<StudentContentDetailDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<StudentContentDetailDto>>> GetAllAsync(
+        CancellationToken cancellationToken = default)
     {
         var result = await repository.GetAllAsync(cancellationToken);
         return result.IsSuccess
@@ -32,7 +33,8 @@ public class StudentContentDetailLogic(
             : Result.Failure<IReadOnlyCollection<StudentContentDetailDto>>(result.Error);
     }
 
-    public async Task<Result<StudentContentDetailDto>> CreateAsync(StudentContentDetailDto dto, CancellationToken cancellationToken = default)
+    public async Task<Result<StudentContentDetailDto>> CreateAsync(StudentContentDetailDto dto,
+        CancellationToken cancellationToken = default)
     {
         var check = await ValidateRelationsAsync(dto, cancellationToken);
         if (check.IsFailure) return Result.Failure<StudentContentDetailDto>(check.Error);
@@ -40,13 +42,13 @@ public class StudentContentDetailLogic(
         var entity = dto.Adapt<StudentContentDetail>();
 
         if (dto.SessionTasks is not null)
-            entity.SessionTasks = await fileService.SaveAsync<StudentContentDetail>(dto.SessionTasks, entity.Id);
+            entity.SessionTasks = await fileService.SaveAsync<StudentContentDetail>(dto.SessionTasks);
 
         if (dto.SessionProject is not null)
-            entity.SessionProject = await fileService.SaveAsync<StudentContentDetail>(dto.SessionProject, entity.Id);
+            entity.SessionProject = await fileService.SaveAsync<StudentContentDetail>(dto.SessionProject);
 
         if (dto.SessionQuiz is not null)
-            entity.SessionQuiz = await fileService.SaveAsync<StudentContentDetail>(dto.SessionQuiz, entity.Id);
+            entity.SessionQuiz = await fileService.SaveAsync<StudentContentDetail>(dto.SessionQuiz);
 
         var insertResult = await repository.InsertAsync(entity, cancellationToken);
         if (insertResult.IsFailure) return Result.Failure<StudentContentDetailDto>(insertResult.Error);
@@ -55,7 +57,8 @@ public class StudentContentDetailLogic(
         return Result.Success(entity.Adapt<StudentContentDetailDto>());
     }
 
-    public async Task<Result<bool>> UpdateAsync(Guid id, StudentContentDetailDto dto, CancellationToken cancellationToken = default)
+    public async Task<Result<bool>> UpdateAsync(Guid id, StudentContentDetailDto dto,
+        CancellationToken cancellationToken = default)
     {
         var result = await repository.GetByIdAsync(id, cancellationToken);
         if (!result.IsSuccess) return Result.Failure<bool>(result.Error);
@@ -67,13 +70,13 @@ public class StudentContentDetailLogic(
         dto.Adapt(entity);
 
         if (dto.SessionTasks is not null)
-            entity.SessionTasks = await fileService.SaveAsync<StudentContentDetail>(dto.SessionTasks, entity.Id);
+            entity.SessionTasks = await fileService.SaveAsync<StudentContentDetail>(dto.SessionTasks);
 
         if (dto.SessionProject is not null)
-            entity.SessionProject = await fileService.SaveAsync<StudentContentDetail>(dto.SessionProject, entity.Id);
+            entity.SessionProject = await fileService.SaveAsync<StudentContentDetail>(dto.SessionProject);
 
         if (dto.SessionQuiz is not null)
-            entity.SessionQuiz = await fileService.SaveAsync<StudentContentDetail>(dto.SessionQuiz, entity.Id);
+            entity.SessionQuiz = await fileService.SaveAsync<StudentContentDetail>(dto.SessionQuiz);
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -84,31 +87,53 @@ public class StudentContentDetailLogic(
 
     public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        fileService.Delete<StudentContentDetail>(id);
-
+        var entity = await repository.GetByIdAsync(id, cancellationToken);
         var deleteResult = await repository.DeleteByIdAsync(id, cancellationToken);
+
         if (deleteResult.IsFailure) return Result.Failure<bool>(deleteResult.Error);
+
+        if (entity.Value.SessionProject is not null)
+            fileService.Delete<StudentContentDetail>(entity.Value.SessionProject);
+        
+        if (entity.Value.SessionQuiz is not null)
+            fileService.Delete<StudentContentDetail>(entity.Value.SessionQuiz);
+        
+        if (entity.Value.SessionTasks is not null)
+            fileService.Delete<StudentContentDetail>(entity.Value.SessionTasks);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(true);
     }
 
-    public async Task<Result<(FileStream?, string?)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFileResult(id, cancellationToken);
+    public async Task<Result<(FileStream?, string?)>> GetSessionTasksAsync(Guid id,
+        CancellationToken cancellationToken = default)
+        => await GetFileResult(id,nameof(StudentContentDetail.SessionTasks) ,cancellationToken);
 
-    public async Task<Result<(FileStream?, string?)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFileResult(id, cancellationToken);
+    public async Task<Result<(FileStream?, string?)>> GetSessionProjectAsync(Guid id,
+        CancellationToken cancellationToken = default)
+        => await GetFileResult(id, nameof(StudentContentDetail.SessionProject),cancellationToken);
 
-    public async Task<Result<(FileStream?, string?)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFileResult(id, cancellationToken);
+    public async Task<Result<(FileStream?, string?)>> GetSessionQuizAsync(Guid id,
+        CancellationToken cancellationToken = default)
+        => await GetFileResult(id,nameof(StudentContentDetail.SessionQuiz), cancellationToken);
 
-    private async Task<Result<(FileStream?, string?)>> GetFileResult(Guid id, CancellationToken cancellationToken)
+    private async Task<Result<(FileStream?, string?)>> GetFileResult(Guid id,string name, CancellationToken cancellationToken)
     {
-        var (stream, ext) = fileService.Get<StudentContentDetail>(id);
+        var result = await repository.GetByIdAsync(id, cancellationToken);
+        if (result.IsFailure)
+            return Result.Failure<(FileStream?, string?)>(result.Error);
+
+        var property = result.Value.GetType().GetProperty(name);
+        if (property == null)
+            return Result.Failure<(FileStream?, string?)>(Error.Failure("Property.NotFound", $"Property '{name}' not found on StudentContentDetail"));
+
+        var fileId = property.GetValue(result.Value) as string;
+        var (stream, ext) = fileService.Get<StudentContentDetail>(fileId);
+    
         if (stream is null)
             return Result.Failure<(FileStream?, string?)>(Error.NotFound("FileNotFound", $"No file found for ID: {id}"));
 
-        return await Task.FromResult(Result.Success((stream, GetMimeType(ext))));
+        return Result.Success((stream, GetMimeType(ext)));
     }
 
     private static string? GetMimeType(string? ext)
@@ -131,7 +156,9 @@ public class StudentContentDetailLogic(
         if (dto.ProgramsContentDetailsId is not null)
         {
             var exists = await programsContentDetailRepo.AnyAsync(x => x.Id == dto.ProgramsContentDetailsId, ct);
-            if (!exists) return Result.Failure(Error.NotFound("ProgramsContentDetail.NotFound", "ProgramsContentDetail ID not found"));
+            if (!exists)
+                return Result.Failure(Error.NotFound("ProgramsContentDetail.NotFound",
+                    "ProgramsContentDetail ID not found"));
         }
 
         if (dto.StudentDataId is not null)

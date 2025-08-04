@@ -5,6 +5,7 @@ using Logic.Interfaces.System;
 using Common.Results;
 using Dtos.System;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 
 namespace Logic.Implementations.System;
@@ -38,10 +39,10 @@ public class ProjectsMasterLogic(
         if (!insertResult.IsSuccess) return Result.Failure<ProjectsMasterDto>(insertResult.Error);
 
         if (dto.ProjectResources is not null)
-            entity.ProjectResources = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectResources, insertResult.Value.Id, "resource.dat");
+            entity.ProjectResources = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectResources,"resource.dat");
 
         if (dto.ProjectFile is not null)
-            entity.ProjectFile = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectFile, insertResult.Value.Id, "file.dat");
+            entity.ProjectFile = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectFile,  "file.dat");
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (!updateResult.IsSuccess) return Result.Failure<ProjectsMasterDto>(updateResult.Error);
@@ -59,10 +60,10 @@ public class ProjectsMasterLogic(
         dto.Adapt(entity);
 
         if (dto.ProjectResources is not null)
-            entity.ProjectResources = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectResources, id, "resource.dat");
+            entity.ProjectResources = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectResources,  "resource.dat");
 
         if (dto.ProjectFile is not null)
-            entity.ProjectFile = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectFile, id, "file.dat");
+            entity.ProjectFile = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectFile, "file.dat");
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (!updateResult.IsSuccess) return Result.Failure<bool>(updateResult.Error);
@@ -80,14 +81,14 @@ public class ProjectsMasterLogic(
 
         if (!string.IsNullOrWhiteSpace(entity.ProjectResources))
         {
-            var deleted = fileService.Delete<ProjectsMaster>(id, "resource.dat");
+            var deleted = fileService.Delete<ProjectsMaster>(entity.ProjectResources);
             if (!deleted)
                 return Result.Failure<bool>(Error.Problem("File.Delete", $"Failed to delete 'resource.dat' for project {id}"));
         }
 
         if (!string.IsNullOrWhiteSpace(entity.ProjectFile))
         {
-            var deleted = fileService.Delete<ProjectsMaster>(id, "file.dat");
+            var deleted = fileService.Delete<ProjectsMaster>( entity.ProjectFile);
             if (!deleted)
                 return Result.Failure<bool>(Error.Problem("File.Delete", $"Failed to delete 'file.dat' for project {id}"));
         }
@@ -101,7 +102,12 @@ public class ProjectsMasterLogic(
 
     public async Task<Result<(FileStream? File, string? ContentType)>> GetProjectFileAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var (stream, ext) = fileService.Get<ProjectsMaster>(id, "file.dat");
+        var result = await repository.GetAsync(x=>x.Id==id && EF.Property<string?>(x, nameof(ProjectsMaster.ProjectFile))!=null, cancellationToken);
+        if(result.IsFailure)
+            return Result.Failure<(FileStream?, string?)>(result.Error);
+        
+        var (stream, ext) = fileService.Get<ProjectsMaster>(result.Value.ProjectFile, "file.dat");
+        
         if (stream is null)
             return Result.Failure<(FileStream?, string?)>(Error.NotFound("File", $"Project file not found for ID: {id}"));
 
@@ -110,7 +116,12 @@ public class ProjectsMasterLogic(
 
     public async Task<Result<(FileStream? File, string? ContentType)>> GetProjectResourcesAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var (stream, ext) = fileService.Get<ProjectsMaster>(id, "resource.dat");
+        var result = await repository.GetAsync(x=>x.Id == id && EF.Property<string?>(x,nameof(ProjectsMaster.ProjectResources)) !=null, cancellationToken);
+        if (result.IsFailure)
+            return Result.Failure<(FileStream?, string?)>(result.Error);
+        
+        var (stream, ext) = fileService.Get<ProjectsMaster>(result.Value.ProjectResources, "resource.dat");
+        
         if (stream is null)
             return Result.Failure<(FileStream?, string?)>(Error.NotFound("Resource", $"Project resource not found for ID: {id}"));
 

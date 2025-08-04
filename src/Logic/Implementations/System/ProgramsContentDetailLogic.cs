@@ -5,6 +5,7 @@ using Entities.Models.System;
 using Logic.Interfaces.Helpers;
 using Logic.Interfaces.System;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 
 namespace Logic.Implementations.System;
@@ -39,16 +40,16 @@ public class ProgramsContentDetailLogic(
         var entity = dto.Adapt<ProgramsContentDetail>();
 
         if (dto.SessionTasks is not null)
-            entity.SessionTasks = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionTasks, entity.Id, "_tasks");
+            entity.SessionTasks = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionTasks,  "_tasks");
 
         if (dto.SessionProject is not null)
-            entity.SessionProject = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionProject, entity.Id, "_project");
+            entity.SessionProject = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionProject, "_project");
 
         if (dto.ScientificMaterial is not null)
-            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentDetail>(dto.ScientificMaterial, entity.Id, "_material");
+            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentDetail>(dto.ScientificMaterial,   "_material");
 
         if (dto.SessionQuiz is not null)
-            entity.SessionQuiz = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionQuiz, entity.Id, "_quiz");
+            entity.SessionQuiz = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionQuiz,   "_quiz");
 
         var result = await repository.InsertAsync(entity, cancellationToken);
         if (result.IsFailure) return Result.Failure<ProgramsContentDetailDto>(result.Error);
@@ -69,16 +70,16 @@ public class ProgramsContentDetailLogic(
         dto.Adapt(entity);
 
         if (dto.SessionTasks is not null)
-            entity.SessionTasks = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionTasks, id, "_tasks");
+            entity.SessionTasks = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionTasks,  "_tasks");
 
         if (dto.SessionProject is not null)
-            entity.SessionProject = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionProject, id, "_project");
+            entity.SessionProject = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionProject,  "_project");
 
         if (dto.ScientificMaterial is not null)
-            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentDetail>(dto.ScientificMaterial, id, "_material");
+            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentDetail>(dto.ScientificMaterial, "_material");
 
         if (dto.SessionQuiz is not null)
-            entity.SessionQuiz = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionQuiz, id, "_quiz");
+            entity.SessionQuiz = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionQuiz,  "_quiz");
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -97,16 +98,16 @@ public class ProgramsContentDetailLogic(
        
         var failedDeletes = new List<string>();
 
-        if (!string.IsNullOrWhiteSpace(entity.SessionTasks) && !fileService.Delete<ProgramsContentDetail>(id, "_tasks"))
+        if (!string.IsNullOrWhiteSpace(entity.SessionTasks) && !fileService.Delete<ProgramsContentDetail>(entity.SessionTasks, "_tasks"))
             failedDeletes.Add("_tasks");
 
-        if (!string.IsNullOrWhiteSpace(entity.SessionProject) && !fileService.Delete<ProgramsContentDetail>(id, "_project"))
+        if (!string.IsNullOrWhiteSpace(entity.SessionProject) && !fileService.Delete<ProgramsContentDetail>(entity.SessionProject, "_project"))
             failedDeletes.Add("_project");
 
-        if (!string.IsNullOrWhiteSpace(entity.ScientificMaterial) && !fileService.Delete<ProgramsContentDetail>(id, "_material"))
+        if (!string.IsNullOrWhiteSpace(entity.ScientificMaterial) && !fileService.Delete<ProgramsContentDetail>(entity.ScientificMaterial, "_material"))
             failedDeletes.Add("_material");
 
-        if (!string.IsNullOrWhiteSpace(entity.SessionQuiz) && !fileService.Delete<ProgramsContentDetail>(id, "_quiz"))
+        if (!string.IsNullOrWhiteSpace(entity.SessionQuiz) && !fileService.Delete<ProgramsContentDetail>(entity.SessionQuiz, "_quiz"))
             failedDeletes.Add("_quiz");
 
         if (failedDeletes.Count > 0)
@@ -123,20 +124,24 @@ public class ProgramsContentDetailLogic(
         return Result.Success(true);
     }
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, "_tasks");
+        => await GetFile(id, nameof(ProgramsContentDetail.SessionTasks));
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, "_project");
+        => await GetFile(id, nameof(ProgramsContentDetail.SessionProject));
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, "_material");
+        => await GetFile(id, nameof(ProgramsContentDetail.ScientificMaterial));
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, "_quiz");
+        => await GetFile(id, nameof(ProgramsContentDetail.SessionQuiz));
 
     private async Task<Result<(FileStream Stream, string? ContentType)>> GetFile(Guid id, string suffix)
     {
-        var (stream, ext) = fileService.Get<ProgramsContentDetail>(id, suffix);
+        var entity = await repository.GetAsync(x=>x.Id == id && EF.Property<string?>(x, suffix) !=null );
+        if(entity.IsFailure)
+            return Result.Failure<(FileStream, string?)>(entity.Error);
+        var filePath = entity.Value.GetType().GetProperty(suffix)?.Name;
+        var (stream, ext) = fileService.Get<ProgramsContentDetail>(filePath!, suffix);
         if (stream is null)
             return Result.Failure<(FileStream, string?)>(Error.NotFound("FileNotFound", $"No file found for ID: {id}"));
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Common;
 
 namespace Entities.Models.System;
@@ -16,9 +17,11 @@ public  class EduContactResult : Entity
     public Guid? ReasonsRejectionId { get; set; }
 
     public DateTime? DateResult { get; set; }
+    [MaxLength(500)]
 
     public string? Description { get; set; }
 
+    [MaxLength(250)]
     public string? Attachment { get; set; }
 
     

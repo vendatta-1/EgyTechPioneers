@@ -39,7 +39,7 @@ public class ProgramsContentMasterLogic(
         var entity = dto.Adapt<ProgramsContentMaster>();
 
         if (dto.ScientificMaterial is not null)
-            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentMaster>(dto.ScientificMaterial, entity.Id);
+            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentMaster>(dto.ScientificMaterial);
 
         var insertResult = await repository.InsertAsync(entity, cancellationToken);
         if (insertResult.IsFailure) return Result.Failure<ProgramsContentMasterDto>(insertResult.Error);
@@ -60,7 +60,7 @@ public class ProgramsContentMasterLogic(
         dto.Adapt(entity);
 
         if (dto.ScientificMaterial is not null)
-            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentMaster>(dto.ScientificMaterial, id);
+            entity.ScientificMaterial = await fileService.SaveAsync<ProgramsContentMaster>(dto.ScientificMaterial);
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -76,7 +76,7 @@ public class ProgramsContentMasterLogic(
         if (deleteResult.IsFailure) return Result.Failure<bool>(deleteResult.Error);
         if (string.IsNullOrWhiteSpace(entity.Value.ScientificMaterial))
         {
-             var deleted = fileService.Delete<ProgramsContentMaster>(id);
+             var deleted = fileService.Delete<ProgramsContentMaster>(entity.Value.ScientificMaterial);
              if (!deleted)
              {
                  return Result.Failure<bool>(Error.Problem("Delete.Failed", $"Error while delete the file for entity: {id}"));
@@ -88,7 +88,12 @@ public class ProgramsContentMasterLogic(
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var (stream, ext) = fileService.Get<ProgramsContentMaster>(id);
+        var entity = await repository.GetByIdAsync(id, cancellationToken);
+        if(entity.IsFailure)
+            return Result.Failure<(FileStream, string?)>(entity.Error);
+        
+        var (stream, ext) = fileService.Get<ProgramsContentMaster>(entity.Value.ScientificMaterial!);
+        
         if (stream is null)
             return Result.Failure<(FileStream, string?)>(Error.NotFound("FileNotFound", $"No material for session with ID: {id}"));
 

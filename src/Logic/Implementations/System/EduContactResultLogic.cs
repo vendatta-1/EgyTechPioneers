@@ -42,7 +42,7 @@ public class EduContactResultLogic(
         var entity = dto.Adapt<EduContactResult>();
         if (dto.Attachment is not null)
         {
-            var path = await fileService.SaveAsync<EduContactResult>(dto.Attachment, entity.Id);
+            var path = await fileService.SaveAsync<EduContactResult>(dto.Attachment);
             entity.Attachment = path;
         }
         var insertResult = await repository.InsertAsync(entity, cancellationToken);
@@ -65,7 +65,7 @@ public class EduContactResultLogic(
 
         if (dto.Attachment is not null)
         {
-            var path = await fileService.SaveAsync<EduContactResult>(dto.Attachment, id);
+            var path = await fileService.SaveAsync<EduContactResult>(dto.Attachment);
             entity.Attachment = path;
         }
 
@@ -84,7 +84,7 @@ public class EduContactResultLogic(
         {
             if (!string.IsNullOrWhiteSpace(entity.Value.Attachment))
             {
-                var deleted = fileService.Delete<EduContactResult>(id);
+                var deleted = fileService.Delete<EduContactResult>(entity.Value.Attachment);
                 if(!deleted)
                     return Result.Failure<bool>(Error.Problem("Delete.Failed",$"Delete file of entity with id {id} has been failed."));
             }
@@ -117,7 +117,12 @@ public class EduContactResultLogic(
 
     public async Task<Result<(FileStream? Stream, string? ContentType)>> GetAttachmentAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var (stream, ext) = await Task.FromResult(fileService.Get<EduContactResult>(id));
+        var entity = await repository.GetAsync(x=>x.Id == id && x.Attachment != null, cancellationToken);
+        if(entity.IsFailure)
+            return Result.Failure<(FileStream?, string?)>(entity.Error);
+        
+        var (stream, ext) = await Task.FromResult(fileService.Get<EduContactResult>(entity.Value.Attachment!));
+        
         if (stream is null)
             return Result.Failure<(FileStream?, string?)>(Error.NotFound("FileNotFound", $"No file for EduContactResult with ID {id}"));
 

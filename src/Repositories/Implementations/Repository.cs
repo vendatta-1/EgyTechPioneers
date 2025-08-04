@@ -88,7 +88,7 @@ namespace Repositories.Implementations
 
         public async Task<Result<T>> GetAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            var result = await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
+            var result = await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
             return result ?? Result.Failure<T>(Error.NotFound("NotFound", "Entity not found"));
         }
 

@@ -177,7 +177,12 @@ public class AccountService : IAccountService
     {
         try
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.RefreshTokens.Any(rt => rt.Token == refreshToken && rt.IsActive));
+            var user = _userManager.Users
+                .Include(u => u.RefreshTokens)
+                .SingleOrDefault(u => u.RefreshTokens.Any(rt =>
+                    rt.Token == refreshToken &&
+                    rt.RevokedAt == null &&
+                    rt.ExpiresAt > DateTime.UtcNow));
             if (user == null)
                 return Result.Failure<TokenResultDto>(Error.NotFound("Token.Invalid", "Invalid or expired refresh token"));
 
@@ -199,8 +204,12 @@ public class AccountService : IAccountService
     {
         try
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.RefreshTokens.Any(rt => rt.Token == refreshToken && rt.IsActive));
-            if (user == null)
+            var user = _userManager.Users
+                .Include(u => u.RefreshTokens)
+                .SingleOrDefault(u => u.RefreshTokens.Any(rt =>
+                    rt.Token == refreshToken &&
+                    rt.RevokedAt == null &&
+                    rt.ExpiresAt > DateTime.UtcNow));if (user == null)
                 return Result.Failure<bool>(Error.NotFound("Token.Invalid", "Invalid or expired refresh token"));
 
             var token = user.RefreshTokens.First(rt => rt.Token == refreshToken);
@@ -526,7 +535,7 @@ public class AccountService : IAccountService
             if (user == null)
                 return Result.Failure<bool>(Error.NotFound("User.NotFound", "User not found"));
 
-            await _fileService.SaveAsync<AppUser>(file, userId);
+            await _fileService.SaveAsync<AppUser>(file);
             return Result.Success(true);
         }
         catch (Exception ex)
@@ -544,7 +553,7 @@ public class AccountService : IAccountService
             if (user == null)
                 return Result.Failure<(FileStream?, string?)>(Error.NotFound("User.NotFound", "User not found"));
 
-            var (fileStream, realExtension) = _fileService.Get<AppUser>(userId);
+            var (fileStream, realExtension) = _fileService.Get<AppUser>(user.ProfilePicture);
             if (fileStream == null || realExtension == null)
                 return Result.Failure<(FileStream?, string?)>(Error.NotFound("File.NotFound", "Profile picture not found."));
 
