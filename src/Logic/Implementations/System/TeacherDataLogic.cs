@@ -39,7 +39,7 @@ public class TeacherDataLogic(
 
     public async Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetNotActiveAsync(CancellationToken ct = default)
     {
-        var result = await _repository.GetFilteredAsync(x => x.IsNotactive == true, ct);
+        var result = await _repository.GetFilteredAsync(x => x.IsNotActive == true, ct);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<TeacherDataDto>>())
             : Result.Failure<IReadOnlyCollection<TeacherDataDto>>(result.Error);

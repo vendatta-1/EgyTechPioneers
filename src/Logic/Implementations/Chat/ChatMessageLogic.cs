@@ -1,3 +1,4 @@
+using Common.Chat;
 using Common.Data;
 using Common.Results;
 using Dtos.Chat;
@@ -5,6 +6,7 @@ using Entities.Models.Chat;
 using Logic.Interfaces.Chat;
 using Logic.Interfaces.Helpers;
 using Mapster;
+using Microsoft.AspNetCore.Http;
 using Repositories.Interfaces;
 
 namespace Logic.Implementations.Chat;
@@ -24,18 +26,31 @@ public class ChatMessageLogic(
             ReceiverId = request.ReceiverId,
             ReceiverDisplayName = request.ReceiverDisplayName,
             Text = request.Text,
-            FilePath = request.FilePath,
             MessageType = request.MessageType,
             SentAt = DateTime.UtcNow,
             IsRead = false
         };
-
+        
         var insertResult = await repository.InsertAsync(entity, cancellationToken);
         if (insertResult.IsFailure)
             return Result.Failure<MessageResponseDto>(insertResult.Error);
 
-        var dto = entity.Adapt<MessageResponseDto>();
+        
+        if (request.File is not null && request.File.Length > 0)
+        {
+            using var memStream = new MemoryStream(request.File); 
+            var formFile = new FormFile(memStream,0,memStream.Length, "file", request.FileName);
+            
+            string fileId = await fileService.SaveAsync<ChatMessage>(formFile);
+            entity.FilePath = fileId;
+            if (request.MessageType == ChatMessageType.Text)
+                request.MessageType = ChatMessageType.File; 
+        } 
+        
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
+        var dto = entity.Adapt<MessageResponseDto>();
+
         return Result.Success(dto);
     }
 
@@ -80,7 +95,7 @@ public class ChatMessageLogic(
     public async Task<Result<bool>> MarkAsReadAsync(Guid messageId, CancellationToken cancellationToken)
     {
         var message = await repository.GetByIdAsync(messageId, cancellationToken);
-        if (message.IsFailure || message.Value == null)
+        if (message.IsFailure )
             return Result.Failure<bool>(Error.NotFound("Chat.Message", "Message not found"));
 
         message.Value.IsRead = true;
@@ -100,7 +115,7 @@ public class ChatMessageLogic(
     public async Task<Result<MessageResponseDto>> ReplyToMessageAsync(Guid messageId, SendMessageRequestDto request, CancellationToken cancellationToken)
     {
         var original = await repository.GetByIdAsync(messageId, cancellationToken);
-        if (original.IsFailure || original.Value == null)
+        if (original.IsFailure )
             return Result.Failure<MessageResponseDto>(Error.NotFound("Chat.Message", "Message not found"));
 
         var reply = new ChatMessage
@@ -110,10 +125,9 @@ public class ChatMessageLogic(
             ReceiverId = request.ReceiverId,
             ReceiverDisplayName = request.ReceiverDisplayName,
             Text = request.Text,
-            FilePath = request.FilePath,
             MessageType = request.MessageType,
             SentAt = DateTime.UtcNow,
-            IsRead = false,
+            IsRead = true,
             RepliedToMessageId = messageId
         };
 

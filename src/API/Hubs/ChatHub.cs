@@ -3,6 +3,7 @@ using Logic.Interfaces.Chat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Common.Constants;
 
 namespace API.Hubs;
  
@@ -33,20 +34,28 @@ public class ChatHub(IChatMessage chatService) : Hub
     public async Task SendMessageToSupport(SendMessageRequestDto request)
     {
         var result = await chatService.SendMessageAsync(request, CancellationToken.None);
-        if (result.IsFailure) return;
-      
-
+        if (result.IsFailure)
+        {
+            await Clients.Caller.SendAsync("ErrorMessage",result.Error.Description);
+        }
+        
         await Clients.Group("Support").SendAsync("ReceiveMessage", result.Value);
     }
 
     public async Task SendMessageToUser(SendMessageRequestDto request)
     {
+        if (request.ReceiverId == SystemConstants.SupportSystemId)
+        {
+            await Clients.Caller.SendAsync("ReceiveMessage", "The receiver can not be the support ");
+        }
         var result = await chatService.SendMessageAsync(request, CancellationToken.None);
+        
         if (result.IsFailure) return;
 
         await Clients.Group(request.ReceiverId.ToString()).SendAsync("ReceiveMessage", result.Value);
     }
 
+    [Authorize(Roles = "SupportAgent")]
     public async Task ReplyToMessage(Guid messageId, SendMessageRequestDto request)
     {
         var result = await chatService.ReplyToMessageAsync(messageId, request, default);

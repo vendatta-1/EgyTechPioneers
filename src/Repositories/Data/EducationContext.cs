@@ -1,7 +1,9 @@
-﻿ 
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Common;
 using Common.Data;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 using Entities.Models.Chat;
@@ -15,9 +17,40 @@ public class EducationContext(DbContextOptions<EducationContext> options) : DbCo
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EducationContext).Assembly);
-        
+
+        modelBuilder.Entity<ChatMessage>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<AcademyClaseDetail>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<AcademyClaseMaster>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<AcademyClaseType>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<AcademyData>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<AcademyJob>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<BranchData>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<CityCode>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ComplaintsStatus>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ComplaintsStudent>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ComplaintsType>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<CountryCode>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<EduContactResult>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<GovernorateCode>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<PermissionUser>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ProgramsContentDetail>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ProgramsContentMaster>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ProgramsDetail>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ProjectsDetail>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<ProjectsMaster>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<QuestionBankDetail>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<QuestionBankMaster>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<SkillDevelopment>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<StudentAttend>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<StudentContentDetail>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<StudentData>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<StudentEvaluation>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<StudentGroup>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.Entity<TeacherData>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
     }
+
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }
     public virtual DbSet<AcademyClaseDetail> AcademyClaseDetails { get; set; }
 
@@ -73,8 +106,5 @@ public class EducationContext(DbContextOptions<EducationContext> options) : DbCo
 
     public virtual DbSet<StudentGroup> StudentGroups { get; set; }
 
-    public virtual DbSet<TeacherData> TeacherData { get; set; } 
-
-
-    
+    public virtual DbSet<TeacherData> TeacherData { get; set; }
 }

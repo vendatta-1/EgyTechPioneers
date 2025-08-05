@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -11,21 +12,25 @@ namespace Common
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; init; }
-        public bool? IsNotactive { get; set; } = false;
+        public bool IsNotActive { get; set; } = false;
 
         public string? CreateUserId { get; set; }
 
+        [MaxLength(100)]
         public string? CreateUserName { get; set; }
 
         public DateTime? CreateDateTime { get; set; }
 
-        public string? Modifiedby { get; set; }
+        [MaxLength(100)]
+        public string? ModifiedBy { get; set; }
 
-        public DateTime? Modifieddate { get; set; }
+        
+        public DateTime? ModifiedDate { get; set; }
 
-        public bool? Isdeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
-        public string? Deletedby { get; set; }
+        [MaxLength(100)]
+        public string? DeletedBy { get; set; } = null;
 
         public DateTime? DeletedDate { get; set; }
     }

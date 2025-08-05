@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using API.Extensions;
 using Common.Constants;
+using Common.Services.Interfaces;
 
 namespace API.Controllers;
 
 [Route("api/chat")]
 [ApiController]
-public class ChatController(IChatMessage chatService) : ControllerBase
+public class ChatController(IChatMessage chatService, ICurrentUserService currentUser) : ControllerBase
 {
     [Authorize]
     [HttpPost("send")]
-    public async Task<IResult> SendMessage([FromBody] SendMessageRequestDto request, CancellationToken cancellationToken)
+    public async Task<IResult> SendMessage([FromForm] SendMessageRequestDto request, CancellationToken cancellationToken)
     {
         var result = await chatService.SendMessageAsync(request, cancellationToken);
         return result.Match(
@@ -24,6 +25,7 @@ public class ChatController(IChatMessage chatService) : ControllerBase
             ApiResults.Problem
         );
     }
+ 
 
     [Authorize]
     [HttpPost("reply/{messageId:guid}")]
@@ -40,11 +42,11 @@ public class ChatController(IChatMessage chatService) : ControllerBase
     [HttpGet("conversation")]
     public async Task<IResult> GetConversation(CancellationToken cancellationToken)
     {
-        var userId = GetUserId();
+        var userId = currentUser.UserId;
         if (userId is null)
             return Results.Unauthorized();
 
-        var result = await chatService.GetConversationAsync(userId.Value, SystemConstants.SupportSystemId, cancellationToken);
+        var result = await chatService.GetConversationAsync(Guid.Parse(userId), SystemConstants.SupportSystemId, cancellationToken);
         return result.Match(
             data => Results.Ok(data),
             ApiResults.Problem
@@ -55,11 +57,11 @@ public class ChatController(IChatMessage chatService) : ControllerBase
     [HttpGet("history")]
     public async Task<IResult> GetUserHistory(CancellationToken cancellationToken)
     {
-        var userId = GetUserId();
+        var userId = currentUser.UserId;
         if (userId is null)
             return Results.Unauthorized();
 
-        var result = await chatService.GetUserHistoryAsync(userId.Value, cancellationToken);
+        var result = await chatService.GetUserHistoryAsync(Guid.Parse(userId), cancellationToken);
         return result.Match(
             data => Results.Ok(data),
             ApiResults.Problem
@@ -95,7 +97,7 @@ public class ChatController(IChatMessage chatService) : ControllerBase
         );
     }
 
-    [Authorize(Roles = "Support")]
+    [Authorize(Roles = "SupportAgent")]
     [HttpGet("conversations/unread")]
     public async Task<IResult> GetUnreadConversations(CancellationToken cancellationToken)
     {
@@ -106,7 +108,7 @@ public class ChatController(IChatMessage chatService) : ControllerBase
         );
     }
 
-    [Authorize(Roles = "Support")]
+    [Authorize(Roles = "SupportAgent")]
     [HttpPost("read/{messageId:guid}")]
     public async Task<IResult> MarkAsRead(Guid messageId, CancellationToken cancellationToken)
     {
@@ -116,10 +118,5 @@ public class ChatController(IChatMessage chatService) : ControllerBase
             ApiResults.Problem
         );
     }
-
-    private Guid? GetUserId()
-    {
-        var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return Guid.TryParse(claim, out var id) ? id : null;
-    }
+   
 }

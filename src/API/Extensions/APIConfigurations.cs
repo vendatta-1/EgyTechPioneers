@@ -91,7 +91,13 @@ internal static class APIConfigurations
 
     private static IServiceCollection AddSignalR(IServiceCollection services)
     {
-        services.AddSignalR();
+        services.AddSignalR(opt =>
+        {
+            opt.ClientTimeoutInterval =  TimeSpan.FromSeconds(10);
+            opt.EnableDetailedErrors = true;
+            opt.HandshakeTimeout  = TimeSpan.FromSeconds(10);
+            opt.MaximumReceiveMessageSize = 1024 * 1024 * 10;
+        }).AddMessagePackProtocol();
         return services;
     }
     private static IServiceCollection AddCors(this IServiceCollection services)

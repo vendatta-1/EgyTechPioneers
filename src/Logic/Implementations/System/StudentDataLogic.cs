@@ -43,7 +43,7 @@ public class StudentDataLogic(
     public async Task<Result<IReadOnlyCollection<StudentDataDto>>> GetNotActiveAsync(
         CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetFilteredAsync(x => x.IsNotactive == true, cancellationToken);
+        var result = await _repository.GetFilteredAsync(x => x.IsNotActive == true, cancellationToken);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<StudentDataDto>>())
             : Result.Failure<IReadOnlyCollection<StudentDataDto>>(result.Error);

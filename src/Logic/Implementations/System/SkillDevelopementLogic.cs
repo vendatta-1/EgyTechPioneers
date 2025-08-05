@@ -36,7 +36,7 @@ public class SkillDevelopmentLogic(
 
     public async Task<Result<IReadOnlyCollection<SkillDevelopmentDto>>> GetNotActiveAsync(CancellationToken cancellationToken = default)
     {
-        var result = await repository.GetFilteredAsync(x => x.IsNotactive == true, cancellationToken);
+        var result = await repository.GetFilteredAsync(x => x.IsNotActive == true, cancellationToken);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<SkillDevelopmentDto>>())
             : Result.Failure<IReadOnlyCollection<SkillDevelopmentDto>>(result.Error);

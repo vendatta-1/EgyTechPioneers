@@ -44,23 +44,23 @@ public class AuditSaveChangesInterceptor(ICurrentUserService currentUserService)
                 entry.Entity.CreateDateTime = now;
                 entry.Entity.CreateUserId = userId;
                 entry.Entity.CreateUserName = userName;
-                entry.Entity.Isdeleted ??= false;
-                entry.Entity.IsNotactive ??= false;
+                entry.Entity.IsDeleted = false;
+                entry.Entity.IsNotActive = false;
             }
 
             if (entry.State == EntityState.Modified)
             {
-                entry.Entity.Modifieddate = now;
-                entry.Entity.Modifiedby = userName;
+                entry.Entity.ModifiedDate = now;
+                entry.Entity.ModifiedBy = userName;
             }
 
             if (entry.State == EntityState.Deleted)
             {
                 entry.State = EntityState.Modified;
-                entry.Entity.Isdeleted = true;
+                entry.Entity.IsDeleted = true;
                 entry.Entity.DeletedDate = now;
-                entry.Entity.Deletedby = userName;
-                entry.Entity.IsNotactive = true;
+                entry.Entity.DeletedBy = userName;
+                entry.Entity.IsNotActive = true;
             }
         }
     }

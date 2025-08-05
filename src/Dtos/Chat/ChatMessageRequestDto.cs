@@ -1,4 +1,5 @@
 using Common.Chat;
+using Microsoft.AspNetCore.Http;
 
 namespace Dtos.Chat;
 
@@ -31,12 +32,7 @@ public class SendMessageRequestDto
     /// The message text content
     /// </summary>
     public string? Text { get; set; }
-
-    /// <summary>
-    /// The file ID path if there is a file attached
-    /// </summary>
-    public string? FilePath { get; set; }
-
+    
     /// <summary>
     /// The type of the message
     /// </summary>
@@ -46,4 +42,11 @@ public class SendMessageRequestDto
     /// True if sender is a support agent
     /// </summary>
     public bool SenderIsAgent { get; set; }
+    
+    /// <summary>
+    /// Send byte files but with max size 10 Mg
+    /// </summary>
+    public byte[]? File { get; set; }
+    
+    public string? FileName { get; set; }
 }
