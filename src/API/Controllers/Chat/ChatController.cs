@@ -84,7 +84,7 @@ public class ChatController(IChatMessage chatService) : ControllerBase
         );
     }
 
-    [Authorize(Roles = "Support")]
+    [Authorize(Roles = "SupportAgent")]
     [HttpGet("conversations")]
     public async Task<IResult> GetAllConversations(CancellationToken cancellationToken)
     {
