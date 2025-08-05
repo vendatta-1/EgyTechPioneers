@@ -1,10 +1,12 @@
 using Entities.Models;
 using Infrastructure.Communication;
 using Logic.Implementations.BasicInformation;
+using Logic.Implementations.Chat;
 using Logic.Implementations.Complaints;
 using Logic.Implementations.Helpers;
 using Logic.Implementations.System;
 using Logic.Interfaces.BasicInformation;
+using Logic.Interfaces.Chat;
 using Logic.Interfaces.Complaints;
 using Logic.Interfaces.Helpers;
 using Logic.Interfaces.Identity;
@@ -22,6 +24,7 @@ public static class LogiInjection
     {
 
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IChatMessage, ChatMessageLogic>();
         services.AddScoped<IAcademyClaseDetail, AcademyClaseDetailLogic>();
         services.AddScoped<IAcademyClaseMaster, AcademyClaseMasterLogic>();
         services.AddScoped<IAcademyClaseType, AcademyClaseTypeLogic>();

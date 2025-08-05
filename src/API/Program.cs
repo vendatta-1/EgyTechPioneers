@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Hubs;
 using Common;
 using Infrastructure;
 using Logic;
@@ -30,11 +31,15 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chathub")
+    .RequireAuthorization();
+app.UseRouting();
+app.UseAuthorization();
 
 app.Run();

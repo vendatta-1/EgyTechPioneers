@@ -12,6 +12,7 @@ internal static class APIConfigurations
     {
         AddSwagger(services);
         AddCors(services);
+        AddSignalR(services);
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.AddAuthentication(opt =>
         {
@@ -29,6 +30,20 @@ internal static class APIConfigurations
                 ValidAudience = configuration["JwtSettings:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]!))
+            };
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
+                    {
+                        context.Token = accessToken;
+                    }
+
+                    return Task.CompletedTask;
+                }
             };
         });
 
@@ -70,20 +85,26 @@ internal static class APIConfigurations
         });
         return services;
     }
+
+    private static IServiceCollection AddSignalR(IServiceCollection services)
+    {
+        services.AddSignalR();
+        return services;
+    }
     private static IServiceCollection AddCors(this IServiceCollection services)
     {
         services.AddCors(opt =>
         {
             opt.AddPolicy("AllowAll", policy =>
             {
-                policy.SetIsOriginAllowed(str => str.StartsWith("http://"))
-                    .AllowAnyOrigin()
+                policy.WithOrigins("http://127.0.0.1:5500")
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
         });
 
-
         return services;
     }
+
 }

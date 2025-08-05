@@ -73,7 +73,7 @@ public class AccountService : IAccountService
             if (!result.Succeeded)
                 return Result.Failure<string>(Error.Failure("Register.Failed", string.Join(", ", result.Errors.Select(e => e.Description))));
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, dto.Role);
 
             // Send a welcome email. The registration process should not fail if the email service is down.
             var emailResult = await _emailService.SendWelcomeEmailAsync(user.Email!, cancellationToken);

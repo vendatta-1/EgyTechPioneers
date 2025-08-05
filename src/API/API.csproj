@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Logic\Logic.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Chat\" />
-  </ItemGroup>
-
 </Project>

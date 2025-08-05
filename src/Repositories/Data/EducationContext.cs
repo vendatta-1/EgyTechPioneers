@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Common.Data;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
+using Entities.Models.Chat;
 using Entities.Models.Complaints;
 using Entities.Models.System;
 
@@ -17,7 +18,7 @@ public class EducationContext(DbContextOptions<EducationContext> options) : DbCo
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EducationContext).Assembly);
         
     }
-
+    public virtual DbSet<ChatMessage> ChatMessages { get; set; }
     public virtual DbSet<AcademyClaseDetail> AcademyClaseDetails { get; set; }
 
     public virtual DbSet<AcademyClaseMaster> AcademyClaseMasters { get; set; }
