@@ -15,7 +15,8 @@ public interface IAccountService
     Task<Result<string>> RegisterAsync(RegisterDto dto, CancellationToken cancellationToken = default);
     Task<Result<TokenResultDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default);
 
- 
+    Task<Result<AppUserDto>> GetUserAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<Result<IReadOnlyCollection<AppUserDto>>> GetUsersAsync(CancellationToken cancellationToken = default);
     Task<Result<TokenResultDto>> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
     Task<Result<bool>> RevokeTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
 

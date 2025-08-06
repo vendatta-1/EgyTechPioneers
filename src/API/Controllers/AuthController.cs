@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Extensions;
 using Dtos.Security;
 using Logic.Interfaces.Identity;
@@ -374,5 +375,33 @@ public class AccountController : ControllerBase
             () => Results.NoContent(),
             ApiResults.Problem
         );
+    }
+    [HttpGet("me")]
+    [Authorize]  
+    public async Task<IResult> GetMe()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return Results.Unauthorized();
+
+        var result = await _accountService.GetUserAsync(Guid.Parse(userId));
+        return result.Match(Results.Ok, ApiResults.Problem);
+    }
+ 
+    [HttpGet("{id:guid}")]
+    [Authorize(Roles = "Admin,Instructor")]
+    public async Task<IResult> GetUserById(Guid id)
+    {
+        var result = await _accountService.GetUserAsync(id);
+        return result.Match(Results.Ok, ApiResults.Problem);
+    }
+
+  
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IResult> GetAllUsers()
+    {
+        var result = await _accountService.GetUsersAsync();
+        return result.Match(Results.Ok, ApiResults.Problem);
     }
 }

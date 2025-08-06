@@ -1,8 +1,7 @@
 ﻿using Logic.Implementations.Helpers;
 using Microsoft.AspNetCore.Http;
 using System.Text;
-
-// Fake form file helper
+ 
 class FakeFormFile : IFormFile
 {
     private readonly MemoryStream _stream;

@@ -18,6 +18,7 @@ using Logic.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Logic.Interfaces.Helpers;
+using Mapster;
 using Microsoft.Extensions.Logging;
 
 namespace Logic.Services.Identity;
@@ -113,6 +114,40 @@ public class AccountService : IAccountService
         {
             _logger.LogError(ex, "An unexpected error occurred during login for email {Email}.", dto.Email);
             return Result.Failure<TokenResultDto>(Error.Problem("Login.Exception", $"An unexpected error occurred during login: {ex.Message}"));
+        }
+    }
+
+    public async Task<Result<AppUserDto>> GetUserAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return Result.Failure<AppUserDto>(Error.NotFound("User.NotFound", "User not found"));
+            }
+
+            var dto = user.Adapt<AppUserDto>();
+            
+            return Result.Success(dto);
+        }
+        catch (Exception e)
+        {
+          return Result.Failure<AppUserDto>(Error.Failure("User.InternalError",e.Message));
+        }
+    }
+
+    public async Task<Result<IReadOnlyCollection<AppUserDto>>> GetUsersAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var users = await _userManager.Users.ToListAsync(cancellationToken);
+            var dtos =  users.Adapt<IReadOnlyCollection<AppUserDto>>();
+            return Result.Success(dtos);
+        }
+        catch (Exception e)
+        {
+           return Result.Failure<IReadOnlyCollection<AppUserDto>>(Error.Failure("GetUsers.Exception", e.Message));
         }
     }
 

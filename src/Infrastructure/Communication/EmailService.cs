@@ -44,41 +44,25 @@ public class EmailService : IEmailService
 
     public async Task<Result> SendEmailConfirmationAsync(string toEmail, string confirmationLink, CancellationToken cancellationToken = default)
     {
-        var body = $"""
-            <h2>Confirm Your Email</h2>
-            <p>Click the link below to confirm your email:</p>
-            <a href="{confirmationLink}">Confirm Email</a>
-        """;
+        var body = EmailTemplates.ConfirmationEmail(confirmationLink);
         return await SendAsync(toEmail, "Confirm Your Email", body, cancellationToken);
     }
 
     public async Task<Result> SendPasswordResetAsync(string toEmail, string resetLink, CancellationToken cancellationToken = default)
     {
-        var body = $"""
-            <h2>Password Reset Request</h2>
-            <p>Click the link below to reset your password:</p>
-            <a href="{resetLink}">Reset Password</a>
-        """;
+        var body = EmailTemplates.PasswordReset(resetLink);
         return await SendAsync(toEmail, "Reset Your Password", body, cancellationToken);
     }
 
     public async Task<Result> SendTwoFactorCodeAsync(string toEmail, string code, CancellationToken cancellationToken = default)
     {
-        var body = $"""
-            <h2>Two-Factor Authentication</h2>
-            <p>Your verification code is:</p>
-            <strong>{code}</strong>
-        """;
+        var body = EmailTemplates.TwoFactorCode(code);
         return await SendAsync(toEmail, "Your Two-Factor Code", body, cancellationToken);
     }
 
     public async Task<Result> SendWelcomeEmailAsync(string toEmail, CancellationToken cancellationToken = default)
     {
-        var body = $"""
-            <h2>Welcome to Our Platform</h2>
-            <p>Thank you for joining us, {toEmail}!</p>
-            <p>We're excited to have you onboard.</p>
-        """;
+        var body = EmailTemplates.WelcomeEmail(toEmail);
         return await SendAsync(toEmail, "Welcome to Our Platform", body, cancellationToken);
     }
 }
