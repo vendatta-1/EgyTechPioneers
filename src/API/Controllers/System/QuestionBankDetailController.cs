@@ -3,7 +3,7 @@ using Dtos.System;
 using Logic.Interfaces.System;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers;
+namespace API.Controllers.System;
 
 [ApiController]
 [Route("api/[controller]")]

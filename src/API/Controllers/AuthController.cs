@@ -1,12 +1,10 @@
 using API.Extensions;
-using Common.Results;
 using Dtos.Security;
 using Logic.Interfaces.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
-namespace API.Controllers.Security;
+namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

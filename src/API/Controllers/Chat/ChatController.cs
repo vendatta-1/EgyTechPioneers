@@ -1,15 +1,12 @@
-using System.Security.Claims;
-using Common.Results;
-using Dtos.Chat;
-using Logic.Interfaces.Chat;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using API.Extensions;
 using Common.Constants;
 using Common.Services.Interfaces;
+using Dtos.Chat;
+using Logic.Interfaces.Chat;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers;
+namespace API.Controllers.Chat;
 
 [Route("api/chat")]
 [ApiController]

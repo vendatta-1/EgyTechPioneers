@@ -116,7 +116,7 @@ public class ChatMessageLogic(
     {
         var original = await repository.GetByIdAsync(messageId, cancellationToken);
         if (original.IsFailure )
-            return Result.Failure<MessageResponseDto>(Error.NotFound("Chat.Message", "Message not found"));
+            return Result.Failure<MessageResponseDto>(Error.NotFound("Message.NotFound", "Message not found"));
 
         var reply = new ChatMessage
         {

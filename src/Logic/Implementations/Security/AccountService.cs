@@ -277,8 +277,9 @@ public class AccountService : IAccountService
             var user = await _userManager.GetUserAsync(userPrincipal);
             if (user == null)
                 return Result.Failure<bool>(Error.NotFound("User.NotFound", "User not found"));
-
+            
             var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            
             return result.Succeeded ? Result.Success(true) : Result.Failure<bool>(Error.Failure("ChangePassword.Failed", string.Join(", ", result.Errors.Select(e => e.Description))));
         }
         catch (Exception ex)
