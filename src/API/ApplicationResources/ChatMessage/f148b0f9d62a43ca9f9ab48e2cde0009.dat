@@ -1,0 +1,31 @@
+         CLIPS (Quicksilver Beta 3/26/08)
+CLIPS> (deffacts animal(animal dog) (animal cat) (animal duck))
+CLIPS> (run)
+CLIPS> (facts)
+f-0     (initial-fact)
+For a total of 1 fact.
+CLIPS> (reset)
+CLIPS> (facts)
+f-0     (initial-fact)
+f-1     (animal dog)
+f-2     (animal cat)
+f-3     (animal duck)
+For a total of 4 facts.
+CLIPS> (retrackt 0)
+
+[EXPRNPSR3] Missing function declaration for retrackt.
+CLIPS> (retract 0)
+CLIPS> # to display somethinf
+#
+CLIPS> # to display something 
+#
+CLIPS> #
+
+to display something #
+CLIPS> (deftemplate student(slot age)(slot name)(slot major))
+CLIPS> (reset)
+CLIPS> (deffacts (student(age 20)(name abdullah) (major cs))
+
+
+
+
