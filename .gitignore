@@ -509,3 +509,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# json development configurations 
+/src/API/appsettings.Development.json
