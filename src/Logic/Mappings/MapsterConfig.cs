@@ -1,0 +1,75 @@
+using Dtos.BasicInformation;
+using Dtos.Complaints;
+using Dtos.Security;
+using Dtos.System;
+using Entities.Models;
+using Entities.Models.Complaints;
+using Entities.Models.Security;
+using Entities.Models.System;
+using Mapster;
+
+namespace Logic.Mappings;
+
+public class MapsterConfig : IRegister
+{
+    public void Register(TypeAdapterConfig config)
+    {
+        config.NewConfig<StudentAttend, StudentAttendDto>().TwoWays();
+        config.NewConfig<StudentEvaluation, StudentEvaluationDto>().TwoWays();
+        config.NewConfig<StudentGroup, StudentGroupDto>().TwoWays();
+        config.NewConfig<TeacherData, TeacherDataDto>().TwoWays();
+        config.NewConfig<SkillDevelopment, SkillDevelopmentDto>()
+            .Ignore(dest => dest.AttachedFiles);
+        config.NewConfig<SkillDevelopmentDto, SkillDevelopment>()
+            .Ignore(dest => dest.FilesAttach);
+
+        config.NewConfig<StudentData, StudentDataDto>().TwoWays();
+        config.NewConfig<QuestionBankDetail, QuestionBankDetailDto>().TwoWays();
+        config.NewConfig<QuestionBankMaster, QuestionBankMasterDto>().TwoWays();
+        config.NewConfig<AcademyClaseMaster, AcademyClaseMasterDto>().TwoWays();
+        config.NewConfig<AcademyClaseType, AcademyClaseTypeDto>().TwoWays();
+        config.NewConfig<AcademyClaseDetail, AcademyClaseDetailDto>().TwoWays();
+        config.NewConfig<AcademyData, AcademyDataDto>().Ignore(x => x.Image).Ignore(x => x.Attachments);
+        config.NewConfig<AcademyDataDto, AcademyData>();
+        config.NewConfig<AcademyJob, AcademyJobDto>().TwoWays();
+        config.NewConfig<BranchData, BranchDataDto>().TwoWays();
+        config.NewConfig<CityCode, CityCodeDto>().TwoWays();
+        config.NewConfig<CountryCode, CountryCodeDto>().TwoWays();
+        config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
+        config.NewConfig<ComplaintsStatus, ComplaintsStatusDto>().TwoWays();
+        config.NewConfig<ComplaintsStudent, ComplaintsStudentDto>().Ignore(dest => dest.FilesAttach);
+        config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>().Ignore(dest => dest.FilesAttach);
+        config.NewConfig<ComplaintsType, ComplaintsTypeDto>().TwoWays();
+        config.NewConfig<ProgramsContentDetail, ProgramsContentDetailDto>()
+            .Ignore(dest => dest.SessionTasksFile)
+            .Ignore(dest => dest.SessionProjectFile)
+            .Ignore(dest => dest.ScientificMaterialFile)
+            .Ignore(dest => dest.SessionQuiz);
+
+        config.NewConfig<ProgramsContentDetailDto, ProgramsContentDetail>()
+            .Ignore(dest => dest.SessionTasks)
+            .Ignore(dest => dest.SessionProject)
+            .Ignore(dest => dest.ScientificMaterial)
+            .Ignore(dest => dest.SessionQuiz);
+
+        config.NewConfig<ProgramsContentMaster, ProgramsContentMasterDto>()
+            .Ignore(dest => dest.ScientificMaterial);
+
+        config.NewConfig<ProgramsContentMasterDto, ProgramsContentMaster>()
+            .Ignore(dest => dest.ScientificMaterial);
+
+        config.NewConfig<ProgramsDetail, ProgramsDetailDto>().TwoWays();
+        config.NewConfig<ProjectsMaster, ProjectsMasterDto>()
+            .Ignore(dest => dest.ProjectResources)
+            .Ignore(dest => dest.ProjectResources)
+            .TwoWays();
+
+        config.NewConfig<ProjectsDetail, ProjectsDetailDto>().TwoWays();
+
+        config.NewConfig<EduContactResult, EduContactResultDto>().TwoWays()
+            .Ignore(dest => dest.Attachment)
+            .Ignore(dest => dest.Attachment);
+
+        config.NewConfig<AppUser, RegisterDto>().TwoWays();
+    }
+}

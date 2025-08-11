@@ -1,0 +1,43 @@
+﻿ 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Common;
+using Entities.Models.Complaints;
+using Entities.Models.System;
+
+namespace Entities.Models;
+
+public class ComplaintsStudent : Entity
+{
+
+    public Guid? AcademyDataId { get; set; }
+
+    public Guid? BranchesDataId { get; set; }
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int ComplaintsNo { get; set; }
+
+    public Guid? ComplaintsTypeId { get; set; }
+
+    public Guid? ComplaintsStatusesId { get; set; }
+
+    public Guid? StudentsDataId { get; set; }
+
+    public DateOnly? Date { get; set; }
+    [MaxLength(500)]
+
+    public string? Description { get; set; }
+
+    [MaxLength(250)]
+    public string? FilesAttach { get; set; }
+
+    public virtual BranchData BranchesData { get; set; }
+
+    public virtual ComplaintsStatus ComplaintsStatuses { get; set; }
+
+    public virtual ComplaintsType ComplaintsType { get; set; }
+
+    public virtual StudentData StudentsData { get; set; }
+}
