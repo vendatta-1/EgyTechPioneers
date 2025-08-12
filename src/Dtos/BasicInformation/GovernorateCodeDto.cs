@@ -10,7 +10,8 @@ namespace Dtos.BasicInformation
     public class GovernorateCodeDto
     {
         public Guid? Id { get; set; }
-        public Guid? CountryCodeId { get; set; }
+        [Required]
+        public Guid CountryCodeId { get; set; }
 
         [Required]
         [StringLength(60, MinimumLength = 3)]

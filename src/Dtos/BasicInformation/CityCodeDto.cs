@@ -6,7 +6,8 @@ namespace Dtos.BasicInformation
     public class CityCodeDto
     {
         public Guid? Id { get; set; }
-        public Guid? GovernorateCodeId { get; set; }
+        [Required]
+        public Guid GovernorateCodeId { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 2)]

@@ -10,9 +10,11 @@ namespace Dtos.System
     public class StudentGroupDto
     {
         public Guid? Id { get; set; }
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchDataId { get; set; }
 
         [StringLength(maximumLength: 70)]
         public string GroupNameL1 { get; set; } = null!;

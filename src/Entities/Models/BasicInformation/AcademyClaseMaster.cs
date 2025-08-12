@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
 
-namespace Entities.Models;
+namespace Entities.Models.BasicInformation;
 
 public class AcademyClaseMaster : Entity
 {
@@ -45,6 +43,7 @@ public class AcademyClaseMaster : Entity
     [Required, EmailAddress, MaxLength(150)]
     public string EmailOwner { get; set; }
 
+    
     public int? ClaseBranchNo { get; set; }
 
     [MaxLength(1000)]

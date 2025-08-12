@@ -6,6 +6,7 @@ using Mapster;
 using Repositories.Interfaces;
 using Common.Data;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 
 namespace Logic.Implementations.Complaints;
 
@@ -73,14 +74,13 @@ public class ComplaintsStatusLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(ComplaintsStatusDto dto, CancellationToken ct)
     {
-        if (dto.AcademyDataId is not null)
+       
         {
             var exists = await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!exists)
                 return Result.Failure<bool>(Error.NotFound("Relation.Company", "Company does not exist."));
         }
-
-        if (dto.BranchesDataId is not null)
+ 
         {
             var exists = await branches.AnyAsync(x => x.Id == dto.BranchesDataId, ct);
             if (!exists)

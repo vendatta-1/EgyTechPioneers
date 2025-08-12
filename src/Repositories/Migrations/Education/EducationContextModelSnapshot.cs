@@ -17,12 +17,59 @@ namespace Repository.Migrations.Education
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.18")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseDetail", b =>
+            modelBuilder.HasSequence<int>("AcademyClaseNo_Seq");
+
+            modelBuilder.Entity("Entities.Models.AcademyClaseType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClassTypeNameId")
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateUserName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNotActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AcademyClaseTypes");
+                });
+
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +127,7 @@ namespace Repository.Migrations.Education
                     b.ToTable("AcademyClaseDetails");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseMaster", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseMaster", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,7 +148,9 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<int?>("ClaseBranchNo")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR AcademyClaseNo_Seq");
 
                     b.Property<string>("ClaseNameL1")
                         .IsRequired()
@@ -194,52 +243,7 @@ namespace Repository.Migrations.Education
                     b.ToTable("AcademyClaseMasters");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ClassTypeNameId")
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
-
-                    b.Property<DateTime?>("CreateDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreateUserName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNotActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AcademyClaseTypes");
-                });
-
-            modelBuilder.Entity("Entities.Models.AcademyData", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyData", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -383,7 +387,7 @@ namespace Repository.Migrations.Education
                     b.ToTable("AcademyData");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyJob", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyJob", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -455,7 +459,7 @@ namespace Repository.Migrations.Education
                     b.ToTable("AcademyJobs");
                 });
 
-            modelBuilder.Entity("Entities.Models.BranchData", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.BranchData", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -556,6 +560,113 @@ namespace Repository.Migrations.Education
                     b.HasIndex("GovernorateCodeId");
 
                     b.ToTable("BranchesData");
+                });
+
+            modelBuilder.Entity("Entities.Models.BasicInformation.CountryCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CountryNameL1")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CountryNameL2")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateUserName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNotActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CountryCodes");
+                });
+
+            modelBuilder.Entity("Entities.Models.BasicInformation.GovernorateCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CountryCodeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateUserName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GovernorateNameL1")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("GovernorateNameL2")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNotActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryCodeId");
+
+                    b.ToTable("GovernorateCodes");
                 });
 
             modelBuilder.Entity("Entities.Models.Chat.ChatMessage", b =>
@@ -746,64 +857,7 @@ namespace Repository.Migrations.Education
                     b.ToTable("ComplaintsStatuses");
                 });
 
-            modelBuilder.Entity("Entities.Models.Complaints.ComplaintsType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AcademyDataId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BranchesDataId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreateUserName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNotActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TypeNameL1")
-                        .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
-
-                    b.Property<string>("TypeNameL2")
-                        .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ComplaintsTypes");
-                });
-
-            modelBuilder.Entity("Entities.Models.ComplaintsStudent", b =>
+            modelBuilder.Entity("Entities.Models.Complaints.ComplaintsStudent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -884,21 +938,17 @@ namespace Repository.Migrations.Education
                     b.ToTable("ComplaintsStudents");
                 });
 
-            modelBuilder.Entity("Entities.Models.CountryCode", b =>
+            modelBuilder.Entity("Entities.Models.Complaints.ComplaintsType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CountryNameL1")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<Guid?>("AcademyDataId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CountryNameL2")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<Guid?>("BranchesDataId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDateTime")
                         .HasColumnType("datetime2");
@@ -930,65 +980,19 @@ namespace Repository.Migrations.Education
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("CountryCodes");
-                });
-
-            modelBuilder.Entity("Entities.Models.GovernorateCode", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CountryCodeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreateUserName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("GovernorateNameL1")
+                    b.Property<string>("TypeNameL1")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
-                    b.Property<string>("GovernorateNameL2")
+                    b.Property<string>("TypeNameL2")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsNotActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryCodeId");
-
-                    b.ToTable("GovernorateCodes");
+                    b.ToTable("ComplaintsTypes");
                 });
 
             modelBuilder.Entity("Entities.Models.PermissionUser", b =>
@@ -1159,7 +1163,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1178,19 +1183,24 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ScientificMaterial")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("SessionProject")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("SessionQuiz")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("SessionTasks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("SessionVideo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
 
@@ -1223,7 +1233,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1242,15 +1253,18 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ScientificMaterial")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("SessionNameL1")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("SessionNameL2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<int>("SessionNo")
                         .ValueGeneratedOnAdd()
@@ -1825,8 +1839,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CertificateName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid?>("CityCodeId")
                         .HasColumnType("uniqueidentifier");
@@ -1863,8 +1877,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Facebook")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid?>("GovernorateCodeId")
                         .HasColumnType("uniqueidentifier");
@@ -1884,8 +1898,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LinkedIn")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(100)
@@ -1965,8 +1979,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TrainingProvider")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(222)
+                        .HasColumnType("nvarchar(222)");
 
                     b.Property<DateTime?>("TrainingTime")
                         .HasColumnType("datetime2");
@@ -2332,18 +2346,18 @@ namespace Repository.Migrations.Education
                     b.ToTable("TeacherData");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseDetail", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseDetail", b =>
                 {
-                    b.HasOne("Entities.Models.AcademyClaseMaster", "AcademyClaseMaster")
+                    b.HasOne("Entities.Models.BasicInformation.AcademyClaseMaster", "AcademyClaseMaster")
                         .WithMany("AcademyClaseDetails")
                         .HasForeignKey("AcademyClaseMasterId");
 
                     b.Navigation("AcademyClaseMaster");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseMaster", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseMaster", b =>
                 {
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("AcademyClaseMasters")
                         .HasForeignKey("BranchesDataId");
 
@@ -2351,7 +2365,7 @@ namespace Repository.Migrations.Education
                         .WithMany("AcademyClaseMasters")
                         .HasForeignKey("CityCodeId");
 
-                    b.HasOne("Entities.Models.GovernorateCode", "GovernorateCode")
+                    b.HasOne("Entities.Models.BasicInformation.GovernorateCode", "GovernorateCode")
                         .WithMany("AcademyClaseMasters")
                         .HasForeignKey("GovernorateCodeId");
 
@@ -2362,18 +2376,18 @@ namespace Repository.Migrations.Education
                     b.Navigation("GovernorateCode");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyJob", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyJob", b =>
                 {
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("AcademyJobs")
                         .HasForeignKey("BranchesDataId");
 
                     b.Navigation("BranchesData");
                 });
 
-            modelBuilder.Entity("Entities.Models.BranchData", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.BranchData", b =>
                 {
-                    b.HasOne("Entities.Models.AcademyData", "AcademyData")
+                    b.HasOne("Entities.Models.BasicInformation.AcademyData", "AcademyData")
                         .WithMany("BranchesData")
                         .HasForeignKey("AcademyDataId");
 
@@ -2381,11 +2395,11 @@ namespace Repository.Migrations.Education
                         .WithMany("BranchesData")
                         .HasForeignKey("CityCodeId");
 
-                    b.HasOne("Entities.Models.CountryCode", "CountryCode")
+                    b.HasOne("Entities.Models.BasicInformation.CountryCode", "CountryCode")
                         .WithMany("BranchesData")
                         .HasForeignKey("CountryCodeId");
 
-                    b.HasOne("Entities.Models.GovernorateCode", "GovernorateCode")
+                    b.HasOne("Entities.Models.BasicInformation.GovernorateCode", "GovernorateCode")
                         .WithMany("BranchesData")
                         .HasForeignKey("GovernorateCodeId");
 
@@ -2398,18 +2412,27 @@ namespace Repository.Migrations.Education
                     b.Navigation("GovernorateCode");
                 });
 
+            modelBuilder.Entity("Entities.Models.BasicInformation.GovernorateCode", b =>
+                {
+                    b.HasOne("Entities.Models.BasicInformation.CountryCode", "CountryCode")
+                        .WithMany("GovernorateCodes")
+                        .HasForeignKey("CountryCodeId");
+
+                    b.Navigation("CountryCode");
+                });
+
             modelBuilder.Entity("Entities.Models.CityCode", b =>
                 {
-                    b.HasOne("Entities.Models.GovernorateCode", "GovernorateCode")
+                    b.HasOne("Entities.Models.BasicInformation.GovernorateCode", "GovernorateCode")
                         .WithMany("CityCodes")
                         .HasForeignKey("GovernorateCodeId");
 
                     b.Navigation("GovernorateCode");
                 });
 
-            modelBuilder.Entity("Entities.Models.ComplaintsStudent", b =>
+            modelBuilder.Entity("Entities.Models.Complaints.ComplaintsStudent", b =>
                 {
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("ComplaintsStudents")
                         .HasForeignKey("BranchesDataId");
 
@@ -2432,15 +2455,6 @@ namespace Repository.Migrations.Education
                     b.Navigation("ComplaintsType");
 
                     b.Navigation("StudentsData");
-                });
-
-            modelBuilder.Entity("Entities.Models.GovernorateCode", b =>
-                {
-                    b.HasOne("Entities.Models.CountryCode", "CountryCode")
-                        .WithMany("GovernorateCodes")
-                        .HasForeignKey("CountryCodeId");
-
-                    b.Navigation("CountryCode");
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProgramsContentDetail", b =>
@@ -2481,11 +2495,11 @@ namespace Repository.Migrations.Education
 
             modelBuilder.Entity("Entities.Models.System.ProjectsMaster", b =>
                 {
-                    b.HasOne("Entities.Models.AcademyData", "AcademyData")
+                    b.HasOne("Entities.Models.BasicInformation.AcademyData", "AcademyData")
                         .WithMany("ProjectsMasters")
                         .HasForeignKey("AcademyDataId");
 
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("ProjectsMasters")
                         .HasForeignKey("BranchesDataId");
 
@@ -2514,7 +2528,7 @@ namespace Repository.Migrations.Education
 
             modelBuilder.Entity("Entities.Models.System.SkillDevelopment", b =>
                 {
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("SkillDevelopments")
                         .HasForeignKey("BranchesDataId");
 
@@ -2547,20 +2561,20 @@ namespace Repository.Migrations.Education
 
             modelBuilder.Entity("Entities.Models.System.StudentData", b =>
                 {
-                    b.HasOne("Entities.Models.AcademyClaseDetail", null)
+                    b.HasOne("Entities.Models.BasicInformation.AcademyClaseDetail", null)
                         .WithMany("StudentData")
                         .HasForeignKey("AcademyClaseDetailId");
 
-                    b.HasOne("Entities.Models.AcademyClaseDetail", "AcademyClaseDetails")
+                    b.HasOne("Entities.Models.BasicInformation.AcademyClaseDetail", "AcademyClaseDetails")
                         .WithMany()
                         .HasForeignKey("AcademyClaseDetailsId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Entities.Models.BranchData", null)
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", null)
                         .WithMany("StudentData")
                         .HasForeignKey("BranchDataId");
 
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany()
                         .HasForeignKey("BranchesDataId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -2574,7 +2588,7 @@ namespace Repository.Migrations.Education
                         .WithMany("StudentData")
                         .HasForeignKey("CityCodeId1");
 
-                    b.HasOne("Entities.Models.GovernorateCode", "GovernorateCode")
+                    b.HasOne("Entities.Models.BasicInformation.GovernorateCode", "GovernorateCode")
                         .WithMany("StudentDataGovernorateCodes")
                         .HasForeignKey("GovernorateCodeId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -2597,7 +2611,7 @@ namespace Repository.Migrations.Education
                         .WithMany("StudentData")
                         .HasForeignKey("StudentGroupId1");
 
-                    b.HasOne("Entities.Models.GovernorateCode", "TrainingGovernorate")
+                    b.HasOne("Entities.Models.BasicInformation.GovernorateCode", "TrainingGovernorate")
                         .WithMany("StudentDataTrainingGovernorates")
                         .HasForeignKey("TrainingGovernorateId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -2628,11 +2642,11 @@ namespace Repository.Migrations.Education
 
             modelBuilder.Entity("Entities.Models.System.StudentGroup", b =>
                 {
-                    b.HasOne("Entities.Models.AcademyClaseDetail", "AcademyClaseDetails")
+                    b.HasOne("Entities.Models.BasicInformation.AcademyClaseDetail", "AcademyClaseDetails")
                         .WithMany("StudentGroups")
                         .HasForeignKey("AcademyClaseDetailsId");
 
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("StudentGroups")
                         .HasForeignKey("BranchesDataId");
 
@@ -2643,7 +2657,7 @@ namespace Repository.Migrations.Education
 
             modelBuilder.Entity("Entities.Models.System.TeacherData", b =>
                 {
-                    b.HasOne("Entities.Models.BranchData", "BranchesData")
+                    b.HasOne("Entities.Models.BasicInformation.BranchData", "BranchesData")
                         .WithMany("TeacherData")
                         .HasForeignKey("BranchesDataId");
 
@@ -2651,7 +2665,7 @@ namespace Repository.Migrations.Education
                         .WithMany("TeacherData")
                         .HasForeignKey("CityCodeId");
 
-                    b.HasOne("Entities.Models.GovernorateCode", "GovernorateCode")
+                    b.HasOne("Entities.Models.BasicInformation.GovernorateCode", "GovernorateCode")
                         .WithMany("TeacherData")
                         .HasForeignKey("GovernorateCodeId");
 
@@ -2662,26 +2676,26 @@ namespace Repository.Migrations.Education
                     b.Navigation("GovernorateCode");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseDetail", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseDetail", b =>
                 {
                     b.Navigation("StudentData");
 
                     b.Navigation("StudentGroups");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyClaseMaster", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseMaster", b =>
                 {
                     b.Navigation("AcademyClaseDetails");
                 });
 
-            modelBuilder.Entity("Entities.Models.AcademyData", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.AcademyData", b =>
                 {
                     b.Navigation("BranchesData");
 
                     b.Navigation("ProjectsMasters");
                 });
 
-            modelBuilder.Entity("Entities.Models.BranchData", b =>
+            modelBuilder.Entity("Entities.Models.BasicInformation.BranchData", b =>
                 {
                     b.Navigation("AcademyClaseMasters");
 
@@ -2696,6 +2710,28 @@ namespace Repository.Migrations.Education
                     b.Navigation("StudentData");
 
                     b.Navigation("StudentGroups");
+
+                    b.Navigation("TeacherData");
+                });
+
+            modelBuilder.Entity("Entities.Models.BasicInformation.CountryCode", b =>
+                {
+                    b.Navigation("BranchesData");
+
+                    b.Navigation("GovernorateCodes");
+                });
+
+            modelBuilder.Entity("Entities.Models.BasicInformation.GovernorateCode", b =>
+                {
+                    b.Navigation("AcademyClaseMasters");
+
+                    b.Navigation("BranchesData");
+
+                    b.Navigation("CityCodes");
+
+                    b.Navigation("StudentDataGovernorateCodes");
+
+                    b.Navigation("StudentDataTrainingGovernorates");
 
                     b.Navigation("TeacherData");
                 });
@@ -2719,28 +2755,6 @@ namespace Repository.Migrations.Education
             modelBuilder.Entity("Entities.Models.Complaints.ComplaintsType", b =>
                 {
                     b.Navigation("ComplaintsStudents");
-                });
-
-            modelBuilder.Entity("Entities.Models.CountryCode", b =>
-                {
-                    b.Navigation("BranchesData");
-
-                    b.Navigation("GovernorateCodes");
-                });
-
-            modelBuilder.Entity("Entities.Models.GovernorateCode", b =>
-                {
-                    b.Navigation("AcademyClaseMasters");
-
-                    b.Navigation("BranchesData");
-
-                    b.Navigation("CityCodes");
-
-                    b.Navigation("StudentDataGovernorateCodes");
-
-                    b.Navigation("StudentDataTrainingGovernorates");
-
-                    b.Navigation("TeacherData");
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProgramsContentDetail", b =>

@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.BasicInformation;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Logic.Interfaces.BasicInformation;
 using Mapster;
 using Repositories.Interfaces;

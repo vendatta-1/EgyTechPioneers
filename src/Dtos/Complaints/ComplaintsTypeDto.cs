@@ -10,9 +10,11 @@ namespace Dtos.Complaints
     public class ComplaintsTypeDto
     {
         public Guid? Id { get; set; }
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
 
         [StringLength(70, MinimumLength = 3)]
         public string TypeNameL1 { get; set; } = null!;

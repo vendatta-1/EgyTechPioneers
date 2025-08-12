@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.BasicInformation;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Logic.Interfaces.BasicInformation;
 using Mapster;
 using Repositories.Interfaces;
@@ -72,14 +73,14 @@ public class AcademyJobLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(AcademyJobDto dto, CancellationToken ct)
     {
-        if (dto.AcademyDataId is not null)
+       
         {
             var exists = await academies.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!exists)
                 return Result.Failure<bool>(Error.NotFound("Relation.AcademyData", "Academy does not exist."));
         }
 
-        if (dto.BranchesDataId is not null)
+        
         {
             var exists = await branches.AnyAsync(x => x.Id == dto.BranchesDataId, ct);
             if (!exists)

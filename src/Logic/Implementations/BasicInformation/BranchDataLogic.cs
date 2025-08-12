@@ -5,6 +5,7 @@ using Logic.Interfaces.BasicInformation;
 using Mapster;
 using Repositories.Interfaces;
 using Common.Data;
+using Entities.Models.BasicInformation;
 
 namespace Logic.Implementations.BasicInformation;
 
@@ -99,7 +100,7 @@ public class BranchDataLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(BranchDataDto dto, CancellationToken ct)
     {
-        if (dto.AcademyDataId is not null)
+         
         {
             var exists = await academies.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!exists)

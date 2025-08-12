@@ -15,10 +15,10 @@ namespace Dtos.System
 
         public int? QuestionNo { get; set; }
         
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 1)]
         public string QuestionNameL1 { get; set; } = null!;
         
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 1)]
         public string? QuestionNameL2 { get; set; }
         
         [StringLength(500, MinimumLength = 10)]

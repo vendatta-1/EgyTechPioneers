@@ -161,7 +161,7 @@ public class ProgramsContentDetailLogic(
 
     private async Task<Result> ValidateRelationsAsync(ProgramsContentDetailDto dto, CancellationToken ct)
     {
-        if (dto.ProgramsContentMasterId is not null)
+ 
         {
             var exists = await masterRepo.AnyAsync(x => x.Id == dto.ProgramsContentMasterId, ct);
             if (!exists) return Result.Failure(Error.NotFound("ProgramsContentMaster.NotFound", "ProgramsContentMaster not found"));

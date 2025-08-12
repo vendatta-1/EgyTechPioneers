@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common;
+using Entities.Models.BasicInformation;
 
 namespace Entities.Models.System;
 
@@ -14,10 +15,10 @@ public class ProjectsMaster : Entity
     public int ProjectNo { get; set; }
 
     [Required]
-    [StringLength(70, MinimumLength = 3)]
+    [StringLength(70, MinimumLength = 2)]
     public string ProjectNameL1 { get; set; } = null!;
 
-    [StringLength(70, MinimumLength = 3)]
+    [StringLength(70, MinimumLength = 2)]
     public string ProjectNameL2 { get; set; } = null!;
 
     public DateOnly? ProjectStart { get; set; }

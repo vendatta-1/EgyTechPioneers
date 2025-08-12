@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
 using Entities.Models.System;
 
-namespace Entities.Models;
+namespace Entities.Models.BasicInformation;
 
 public class AcademyData : Entity
 {

@@ -12,11 +12,11 @@ namespace Dtos.System
         public Guid? Id { get; set; }
         public Guid? ProjectsDetailsId { get; set; }
         [Required]
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 2)]
 
         public string ProgramNameL1 { get; set; }
 
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 2)]
         public string? ProgramNameL2 { get; set; }
 
         [StringLength(500, MinimumLength = 10)]

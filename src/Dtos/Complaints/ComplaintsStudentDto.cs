@@ -8,15 +8,18 @@ namespace Dtos.Complaints
     {
         public Guid? Id { get; set; }
         public int? ComplaintsNo { get; set; }
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
 
         public Guid? ComplaintsTypeId { get; set; }
 
         public Guid? ComplaintsStatusesId { get; set; }
 
-        public Guid? StudentsDataId { get; set; }
+        [Required]
+        public Guid StudentsDataId { get; set; }
 
         public DateOnly? Date { get; set; }
 

@@ -8,9 +8,11 @@ namespace Dtos.Complaints
     public class ComplaintsStatusDto
     {
         public Guid? Id { get; set; }
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 2)]

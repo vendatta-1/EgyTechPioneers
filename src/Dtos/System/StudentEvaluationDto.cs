@@ -10,7 +10,8 @@ namespace Dtos.System
     public class StudentEvaluationDto
     {
         public Guid? Id { get; set; }
-        public Guid? StudentDataId { get; set; }
+        [Required]
+        public Guid StudentDataId { get; set; }
 
         [Range(0, 100)] public decimal? AttendanceRate { get; set; }
         [Range(0, 100)] public decimal? AbsenceRate { get; set; }

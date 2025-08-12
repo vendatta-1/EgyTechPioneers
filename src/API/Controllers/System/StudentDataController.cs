@@ -29,15 +29,15 @@ public class StudentDataController(IStudentData service) : ControllerBase
         );
     }
 
-    [HttpGet("not-active")]
-    public async Task<IResult> GetNotActive(CancellationToken ct)
-    {
-        var result = await service.GetNotActiveAsync(ct);
-        return result.Match(
-            Results.Ok,
-            ApiResults.Problem
-        );
-    }
+    // [HttpGet("not-active")]
+    // public async Task<IResult> GetNotActive(CancellationToken ct)
+    // {
+    //     var result = await service.GetNotActiveAsync(ct);
+    //     return result.Match(
+    //         Results.Ok,
+    //         ApiResults.Problem
+    //     );
+    // }
 
     [HttpGet("by-email/{email}")]
     public async Task<IResult> GetByEmail(string email, CancellationToken ct)

@@ -6,6 +6,7 @@ using Common.Data;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Entities.Models.Chat;
 using Entities.Models.Complaints;
 using Entities.Models.System;
@@ -49,6 +50,13 @@ public class EducationContext(DbContextOptions<EducationContext> options) : DbCo
         modelBuilder.Entity<StudentEvaluation>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
         modelBuilder.Entity<StudentGroup>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
         modelBuilder.Entity<TeacherData>().HasQueryFilter(e => !e.IsDeleted && e.IsNotActive == false);
+        modelBuilder.HasSequence<int>("AcademyClaseNo_Seq")
+            .StartsAt(1)
+            .IncrementsBy(1);
+
+        modelBuilder.Entity<AcademyClaseMaster>()
+            .Property(b => b.ClaseBranchNo)
+            .HasDefaultValueSql("NEXT VALUE FOR AcademyClaseNo_Seq");
     }
 
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }

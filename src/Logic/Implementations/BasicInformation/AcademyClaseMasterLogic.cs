@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.BasicInformation;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Logic.Interfaces.BasicInformation;
 using Logic.Interfaces.System;
 using Mapster;
@@ -44,6 +45,11 @@ public class AcademyClaseMasterLogic(
 
         var entity = dto.Adapt<AcademyClaseMaster>();
         var result = await _repository.InsertAsync(entity, cancellationToken);
+        if (result.IsFailure)
+        {
+            return Result.Failure<AcademyClaseMasterDto>(result.Error);
+        }
+        
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return result.IsSuccess
@@ -75,12 +81,10 @@ public class AcademyClaseMasterLogic(
 
     private async Task<Result> ValidateForeignKeys(AcademyClaseMasterDto dto, CancellationToken cancellationToken)
     {
-        if (dto.AcademyDataId is not null &&
-            !await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, cancellationToken))
+        if (!await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, cancellationToken))
             return Result.Failure(Error.NotFound("Academy.NotFound", "AcademyDataId not found"));
 
-        if (dto.BranchesDataId is not null &&
-            !await branchRepo.AnyAsync(x => x.Id == dto.BranchesDataId, cancellationToken))
+        if (!await branchRepo.AnyAsync(x => x.Id == dto.BranchesDataId, cancellationToken))
             return Result.Failure(Error.NotFound("Branch.NotFound", "BranchesDataId not found"));
 
         if (dto.GovernorateCodeId is not null &&

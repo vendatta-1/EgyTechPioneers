@@ -5,6 +5,7 @@ using Logic.Interfaces.BasicInformation;
 using Mapster;
 using Repositories.Interfaces;
 using Common.Data;
+using Entities.Models.BasicInformation;
 
 namespace Logic.Implementations.BasicInformation;
 
@@ -71,7 +72,7 @@ public class GovernorateCodeLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(GovernorateCodeDto dto, CancellationToken ct)
     {
-        if (dto.CountryCodeId is not null)
+         
         {
             var exists = await countries.AnyAsync(x => x.Id == dto.CountryCodeId, ct);
             if (!exists)

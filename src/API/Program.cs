@@ -1,8 +1,10 @@
 using API.Extensions;
+using API.Filters;
 using API.Hubs;
 using Common;
 using Infrastructure;
 using Logic;
+using Logic.Interfaces.Cache;
 using Repositories;
 using Serilog;
 
@@ -12,7 +14,12 @@ builder.Host.UseSerilog((context, configuration) =>configuration.ReadFrom.Config
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
-builder.Services.AddControllers(); 
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalCacheFilter>();
+}); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

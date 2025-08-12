@@ -7,9 +7,11 @@ namespace Dtos.System
     public class TeacherDataDto
     {
         public Guid? Id { get; set; }
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
 
         public Guid? CountryCodeId { get; set; }
 

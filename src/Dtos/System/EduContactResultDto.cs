@@ -5,9 +5,11 @@ namespace Dtos.System
 {
     public class EduContactResultDto
     {
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? StudentDataId { get; set; }
+        [Required]
+        public Guid StudentDataId { get; set; }
 
         public Guid? ReasonsRejectionId { get; set; }
 

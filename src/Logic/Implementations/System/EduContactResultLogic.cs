@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.System;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Entities.Models.System;
 using Logic.Interfaces.Helpers;
 using Logic.Interfaces.System;
@@ -131,14 +132,14 @@ public class EduContactResultLogic(
 
     private async Task<Result> ValidateRelationsAsync(EduContactResultDto dto, CancellationToken ct)
     {
-        if (dto.AcademyDataId is not null)
+     
         {
             var companyExists = await academyRepository.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!companyExists)
                 return Result.Failure(Error.NotFound("Company.NotFound", $"Company ID {dto.AcademyDataId} not found"));
         }
 
-        if (dto.StudentDataId is not null)
+       
         {
             var studentExists = await studentRepository.AnyAsync(x => x.Id == dto.StudentDataId, ct);
             if (!studentExists)

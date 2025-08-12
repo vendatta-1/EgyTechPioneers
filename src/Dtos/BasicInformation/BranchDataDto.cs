@@ -6,7 +6,8 @@ namespace Dtos.BasicInformation
     public class BranchDataDto
     {
         public Guid? Id { get; set; }
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 3)]

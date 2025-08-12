@@ -10,10 +10,13 @@ namespace Dtos.System
     public class QuestionBankDetailDto
     {
         public Guid? Id { get; set; }
-        public Guid? QuestionBankMasterId { get; set; }
-        [StringLength(70 , MinimumLength = 3)]
+        [Required]
+        public Guid QuestionBankMasterId { get; set; }
+        
+        [StringLength(70 , MinimumLength = 1)]
         public string AnswerNameL1 { get; set; } = null!;
-        [StringLength(70 , MinimumLength = 3)]
+        
+        [StringLength(70 , MinimumLength = 1)]
         public string? AnswerNameL2 { get; set; }
     }
 

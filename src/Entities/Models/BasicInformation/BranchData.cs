@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common;
+using Entities.Models.Complaints;
 using Entities.Models.System;
 
-namespace Entities.Models;
+namespace Entities.Models.BasicInformation;
 
 public class BranchData : Entity
 {

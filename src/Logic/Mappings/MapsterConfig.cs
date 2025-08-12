@@ -3,6 +3,7 @@ using Dtos.Complaints;
 using Dtos.Security;
 using Dtos.System;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Entities.Models.Complaints;
 using Entities.Models.Security;
 using Entities.Models.System;
@@ -37,8 +38,14 @@ public class MapsterConfig : IRegister
         config.NewConfig<CountryCode, CountryCodeDto>().TwoWays();
         config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
         config.NewConfig<ComplaintsStatus, ComplaintsStatusDto>().TwoWays();
-        config.NewConfig<ComplaintsStudent, ComplaintsStudentDto>().Ignore(dest => dest.FilesAttach);
-        config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>().Ignore(dest => dest.FilesAttach);
+        config.NewConfig<ComplaintsStudent, ComplaintsStudentDto>()
+            .Ignore(dest => dest.FilesAttach)
+            .IgnoreNonMapped(true);
+
+        config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>()
+            .Ignore(dest => dest.FilesAttach)
+            .IgnoreNonMapped(true);
+        
         config.NewConfig<ComplaintsType, ComplaintsTypeDto>().TwoWays();
         config.NewConfig<ProgramsContentDetail, ProgramsContentDetailDto>()
             .Ignore(dest => dest.SessionTasksFile)
@@ -53,22 +60,32 @@ public class MapsterConfig : IRegister
             .Ignore(dest => dest.SessionQuiz);
 
         config.NewConfig<ProgramsContentMaster, ProgramsContentMasterDto>()
-            .Ignore(dest => dest.ScientificMaterial);
+            .Ignore(dest => dest.ScientificMaterial)
+            .IgnoreNonMapped(true);
 
         config.NewConfig<ProgramsContentMasterDto, ProgramsContentMaster>()
-            .Ignore(dest => dest.ScientificMaterial);
+            .Ignore(dest => dest.ScientificMaterial)
+            .IgnoreNonMapped(true);
 
         config.NewConfig<ProgramsDetail, ProgramsDetailDto>().TwoWays();
         config.NewConfig<ProjectsMaster, ProjectsMasterDto>()
             .Ignore(dest => dest.ProjectResources)
-            .Ignore(dest => dest.ProjectResources)
-            .TwoWays();
+            .IgnoreNonMapped(true);
+        
+        config.NewConfig<ProjectsMasterDto, ProjectsMaster>()
+            .Ignore(x=>x.ProjectResources)
+            .IgnoreNonMapped(true);
+           
 
         config.NewConfig<ProjectsDetail, ProjectsDetailDto>().TwoWays();
 
-        config.NewConfig<EduContactResult, EduContactResultDto>().TwoWays()
+        config.NewConfig<EduContactResult, EduContactResultDto>()
             .Ignore(dest => dest.Attachment)
-            .Ignore(dest => dest.Attachment);
+            .IgnoreNonMapped(true);
+        
+        config.NewConfig<EduContactResultDto, EduContactResult>()
+            .Ignore(x=>x.Attachment)
+            .IgnoreNonMapped(true);
 
         config.NewConfig<AppUser, RegisterDto>().TwoWays();
     }

@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.System;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Entities.Models.System;
 using Logic.Interfaces.Helpers;
 using Logic.Interfaces.System;
@@ -116,13 +117,13 @@ public class SkillDevelopmentLogic(
 
     private async Task<Result> ValidateRelationsAsync(SkillDevelopmentDto dto, CancellationToken ct)
     {
-        if (dto.BranchesDataId is not null)
+         
         {
             var exists = await branchRepo.AnyAsync(x => x.Id == dto.BranchesDataId, ct);
             if (!exists) return Result.Failure(Error.NotFound("Branch.NotFound", "Branch ID not found"));
         }
 
-        if (dto.AcademyDataId is not null)
+        
         {
             var exists = await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if(!exists) return Result.Failure(Error.NotFound("Academy.NotFound", "Academy ID not found"));

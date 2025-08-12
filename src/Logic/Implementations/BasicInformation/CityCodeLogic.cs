@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.BasicInformation;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Logic.Interfaces.BasicInformation;
 using Mapster;
 using Repositories.Interfaces;
@@ -74,7 +75,7 @@ public class CityCodeLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(CityCodeDto dto, CancellationToken cancellationToken)
     {
-        if (dto.GovernorateCodeId is not null)
+        
         {
             var exists = await governorates.AnyAsync(x => x.Id == dto.GovernorateCodeId, cancellationToken);
             if (!exists)

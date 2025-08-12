@@ -73,7 +73,7 @@ public class StudentEvaluationLogic(
 
     private async Task<Result> ValidateRelationsAsync(StudentEvaluationDto dto, CancellationToken ct)
     {
-        if (dto.StudentDataId is not null)
+        
         {
             var exists = await studentRepo.AnyAsync(x => x.Id == dto.StudentDataId, ct);
             if (!exists)

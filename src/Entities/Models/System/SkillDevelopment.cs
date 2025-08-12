@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common;
+using Entities.Models.BasicInformation;
 
 namespace Entities.Models.System;
 
@@ -13,10 +14,10 @@ public class SkillDevelopment : Entity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int SkillNo { get; set; }
 
-    [StringLength(70, MinimumLength = 3)]
+    [StringLength(70, MinimumLength = 2)]
     public string SkillNameL1 { get; set; } = null!;
 
-    [StringLength(70, MinimumLength = 3)]
+    [StringLength(70, MinimumLength = 2)]
     public string? SkillNameL2 { get; set; }
 
     [StringLength(500, MinimumLength = 3)]

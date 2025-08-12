@@ -13,20 +13,27 @@ namespace Dtos.System
     {
         public Guid? Id { get; set; }
         
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
         
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
+         
+        public int? SkillNo { get; set; }
         
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int SkillNo { get; set; }
-        [StringLength(70,  MinimumLength = 3)]
+        [StringLength(70,  MinimumLength = 1)]
         public string SkillNameL1 { get; set; } = null!;
-        [StringLength(70, MinimumLength = 3)]
+        
+        [StringLength(70, MinimumLength = 1)]
         public string? SkillNameL2 { get; set; }
+        
         [StringLength(500, MinimumLength = 10)]
         public string? Description { get; set; }
+        
         [StringLength(250)]
+        [Url]
         public string? LinkVideo { get; set; }
+        
         public IFormFile? AttachedFiles { get; set; }
       
     }

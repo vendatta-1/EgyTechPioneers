@@ -6,9 +6,11 @@ namespace Dtos.System;
 public class StudentContentDetailDto
 {
     public Guid? Id { get; set; }
-    public Guid? ProgramsContentDetailsId { get; set; }
+    
+    public Guid? ProgramContentDetailsId { get; set; }
 
-    public Guid? StudentDataId { get; set; }
+    [Required]
+    public Guid StudentDataId { get; set; }
 
     public IFormFile? SessionTasks { get; set; }
  
@@ -17,6 +19,6 @@ public class StudentContentDetailDto
     public IFormFile? SessionQuiz { get; set; }
   
 
-    [StringLength(500, MinimumLength = 10, ErrorMessage = "Description must be between 10 and 500 characters.")]
+    [StringLength(500, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 500 characters.")]
     public string? Description { get; set; }
 }

@@ -9,9 +9,11 @@ namespace Dtos.BasicInformation
         public Guid? Id { get; set; }
         public int? JobNo { get; set; }
 
-        public Guid? AcademyDataId { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 2)]

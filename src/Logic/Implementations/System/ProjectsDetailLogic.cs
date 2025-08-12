@@ -80,7 +80,7 @@ public class ProjectsDetailLogic(
 
     private async Task<Result> ValidateRelationsAsync(ProjectsDetailDto dto, CancellationToken ct)
     {
-        if (dto.ProjectsMasterId is not null)
+     
         {
             var exists = await masterRepository.AnyAsync(x=>x.Id == dto.ProjectsMasterId, ct);
             if (!exists) return Result.Failure(Error.NotFound("ProjectsMaster.NotFound", "Related master not found"));

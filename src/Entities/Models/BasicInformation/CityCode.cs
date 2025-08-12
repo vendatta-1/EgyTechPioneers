@@ -4,6 +4,7 @@ using Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Entities.Models.BasicInformation;
 using Entities.Models.System;
 
 namespace Entities.Models;

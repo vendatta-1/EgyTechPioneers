@@ -10,12 +10,13 @@ namespace Dtos.System
     public class ProjectsDetailDto
     {
         public Guid? Id { get; set; }
-        public Guid? ProjectsMasterId { get; set; }
+        [Required]
+        public Guid ProjectsMasterId { get; set; }
 
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 2)]
         public string ProjectNameL1 { get; set; }
 
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 2)]
         public string? ProjectNameL2 { get; set; }
 
         [StringLength(500, MinimumLength = 10)]

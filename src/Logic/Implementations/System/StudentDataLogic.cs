@@ -4,6 +4,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.System;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Entities.Models.System;
 using Logic.Interfaces.System;
 using Mapster;
@@ -132,7 +133,7 @@ public class StudentDataLogic(
             if (!exists) return Result.Failure(Error.NotFound("Class.NotFound", "Class ID not found"));
         }
 
-        if (dto.BranchesDataId is not null)
+      
         {
             var exists = await branchRepo.AnyAsync(x => x.Id == dto.BranchesDataId, ct);
             if (!exists) return Result.Failure(Error.NotFound("Branch.NotFound", "Branch ID not found"));
@@ -158,7 +159,7 @@ public class StudentDataLogic(
                     "Training Governorate ID not found"));
         }
 
-        if (dto.AcademyDataId is not null)
+         
         {
             var exists = await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!exists)

@@ -2,6 +2,7 @@ using Common.Data;
 using Common.Results;
 using Dtos.Complaints;
 using Entities.Models;
+using Entities.Models.BasicInformation;
 using Entities.Models.Complaints;
 using Entities.Models.System;
 using Logic.Interfaces.Complaints;
@@ -56,7 +57,7 @@ public class ComplaintsStudentLogic(
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(entity.Adapt<ComplaintsStudentDto>());
+        return Result.Success(result.Value.Adapt<ComplaintsStudentDto>());
     }
 
     public async Task<Result<bool>> UpdateAsync(Guid id, ComplaintsStudentDto dto, CancellationToken cancellationToken = default)
@@ -147,13 +148,12 @@ public class ComplaintsStudentLogic(
 
     private async Task<Result<bool>> ValidateRelationsAsync(ComplaintsStudentDto dto, CancellationToken ct)
     {
-        if (dto.AcademyDataId is not null)
+       
         {
             var exists = await academyRepo.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!exists) return Result.Failure<bool>(Error.NotFound("Relation.Academy", "Academy not found."));
         }
-
-        if (dto.BranchesDataId is not null)
+ 
         {
             var exists = await branchRepo.AnyAsync(x => x.Id == dto.BranchesDataId, ct);
             if (!exists) return Result.Failure<bool>(Error.NotFound("Relation.Branch", "Branch not found."));
@@ -170,8 +170,7 @@ public class ComplaintsStudentLogic(
             var exists = await typeRepo.AnyAsync(x => x.Id == dto.ComplaintsTypeId, ct);
             if (!exists) return Result.Failure<bool>(Error.NotFound("Relation.Type", "Type not found."));
         }
-
-        if (dto.StudentsDataId is not null)
+ 
         {
             var exists = await studentRepo.AnyAsync(x => x.Id == dto.StudentsDataId, ct);
             if (!exists) return Result.Failure<bool>(Error.NotFound("Relation.Student", "Student not found."));

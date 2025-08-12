@@ -14,13 +14,13 @@ public class QuestionBankMaster : Entity
 
     // public Guid? QuestionTypeId { get; set; }
 
-    [StringLength(70 , MinimumLength = 3)]
+    [StringLength(70 , MinimumLength = 2)]
     public string QuestionNameL1 { get; set; } = null!;
 
-    [StringLength(70 , MinimumLength = 3)]
+    [StringLength(70 , MinimumLength = 2)]
     public string? QuestionNameL2 { get; set; }
 
-    [StringLength(500 , MinimumLength = 10)]
+    [StringLength(500 , MinimumLength = 5)]
     public string? Description { get; set; }
 
     public virtual ProgramsDetail ProgramsDetails { get; set; }

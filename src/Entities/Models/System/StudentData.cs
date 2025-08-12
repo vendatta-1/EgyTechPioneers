@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common;
+using Entities.Models.BasicInformation;
+using Entities.Models.Complaints;
 
 namespace Entities.Models.System;
 
@@ -15,9 +17,9 @@ public class StudentData : Entity
 
     public Guid? StudentBarCode { get; set; }
 
-    [StringLength(70, MinimumLength = 3)] public string StudentNameL1 { get; set; } = null!;
+    [StringLength(70, MinimumLength = 2)] public string StudentNameL1 { get; set; } = null!;
 
-    [StringLength(70, MinimumLength = 3)] public string StudentNameL2 { get; set; } = null!;
+    [StringLength(70, MinimumLength = 2)] public string StudentNameL2 { get; set; } = null!;
 
     public Guid? CountryCodeId { get; set; }
 
@@ -50,15 +52,15 @@ public class StudentData : Entity
 
     public Guid? ProjectsDetailsId { get; set; }
 
-    [StringLength(100)] public string? TrainingProvider { get; set; }
+    [StringLength(222)] public string? TrainingProvider { get; set; }
 
-    [StringLength(100)] public string? LinkedIn { get; set; }
+    [StringLength(255)] public string? LinkedIn { get; set; }
 
-    [StringLength(100)] public string? Facebook { get; set; }
+    [StringLength(255)] public string? Facebook { get; set; }
 
     [StringLength(50)] public string? Language { get; set; }
 
-    [StringLength(100)] public string? CertificateName { get; set; }
+    [StringLength(200)] public string? CertificateName { get; set; }
 
     [StringLength(12, MinimumLength = 7)] public string? StudentMobil { get; set; }
 

@@ -1,11 +1,8 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using Entities.Models.System;
 
-namespace Entities.Models;
+namespace Entities.Models.BasicInformation;
 
 public  class AcademyClaseDetail : Entity
 { 

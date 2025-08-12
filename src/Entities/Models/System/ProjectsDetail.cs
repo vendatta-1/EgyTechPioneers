@@ -12,13 +12,13 @@ public class ProjectsDetail : Entity
     public Guid? ProjectsMasterId { get; set; }
 
     [Required]
-    [StringLength(70, MinimumLength = 3)]
+    [StringLength(70, MinimumLength = 2)]
     public string ProjectNameL1 { get; set; } = null!;
 
-    [StringLength(70, MinimumLength = 3)]
+    [StringLength(70, MinimumLength = 2)]
     public string ProjectNameL2 { get; set; } = null!;
 
-    [StringLength(500, MinimumLength = 10)]
+    [StringLength(500, MinimumLength = 5)]
     public string? Description { get; set; }
 
     public virtual ProjectsMaster ProjectsMaster { get; set; }

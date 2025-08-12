@@ -6,6 +6,7 @@ using Dtos.BasicInformation;
 using Entities.Models;
 using Mapster;
 using Common.Data;
+using Entities.Models.BasicInformation;
 
 namespace Logic.Implementations.BasicInformation;
 

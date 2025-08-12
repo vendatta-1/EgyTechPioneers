@@ -1,10 +1,7 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 using Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Models;
+namespace Entities.Models.BasicInformation;
 
 public class CountryCode: Entity
 { 

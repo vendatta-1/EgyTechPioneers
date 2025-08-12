@@ -11,7 +11,8 @@ namespace Dtos.System
     public class ProgramsContentDetailDto
     {
         public Guid? Id { get; set; }
-        public Guid? ProgramsContentMasterId { get; set; }
+        [Required]
+        public Guid ProgramsContentMasterId { get; set; }
 
         public IFormFile? SessionTasksFile { get; set; }
 

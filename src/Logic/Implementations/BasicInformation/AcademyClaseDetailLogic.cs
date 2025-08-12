@@ -7,6 +7,7 @@ using Mapster;
 using Repositories.Interfaces;
 using System.Linq.Expressions;
 using Common.Data;
+using Entities.Models.BasicInformation;
 
 namespace Logic.Implementations.BasicInformation;
 
@@ -44,7 +45,7 @@ public class AcademyClaseDetailLogic(
     public async Task<Result<AcademyClaseDetailDto>> CreateAsync(AcademyClaseDetailDto dto, CancellationToken cancellationToken = default)
     {
         
-        if (dto.AcademyClaseMasterId is not null)
+         
         {
             var exists = await _masterRepository.AnyAsync(m => m.Id == dto.AcademyClaseMasterId, cancellationToken);
             if (!exists) return Result.Failure<AcademyClaseDetailDto>(Error.NotFound("Master.NotFound", "AcademyClaseMaster does not exist."));
@@ -77,12 +78,10 @@ public class AcademyClaseDetailLogic(
     {
         var entityResult = await _repository.GetByIdAsync(id, cancellationToken);
         if (!entityResult.IsSuccess) return Result.Failure<bool>(entityResult.Error);
-
-        if (dto.AcademyClaseMasterId is not null)
-        {
-            var exists = await _masterRepository.AnyAsync(m => m.Id == dto.AcademyClaseMasterId, cancellationToken);
-            if (!exists) return Result.Failure<bool>(Error.NotFound("Master.NotFound", "AcademyClaseMaster does not exist."));
-        }
+ 
+            var academyExists = await _masterRepository.AnyAsync(m => m.Id == dto.AcademyClaseMasterId, cancellationToken);
+            if (!academyExists) return Result.Failure<bool>(Error.NotFound("Master.NotFound", "AcademyClaseMaster does not exist."));
+        
 
         if (dto.AcademyClaseTypeId is not null)
         {

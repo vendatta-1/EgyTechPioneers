@@ -72,7 +72,7 @@ public class StudentAttendLogic(
 
     private async Task<Result> ValidateRelationsAsync(StudentAttendDto dto, CancellationToken ct)
     {
-        if (dto.StudentDataId is not null)
+         
         {
             var exists = await studentRepo.AnyAsync(x => x.Id == dto.StudentDataId, ct);
             if (!exists) return Result.Failure(Error.NotFound("Student.NotFound", "Student ID not found"));

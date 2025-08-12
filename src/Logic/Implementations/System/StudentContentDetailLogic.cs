@@ -153,15 +153,15 @@ public class StudentContentDetailLogic(
 
     private async Task<Result> ValidateRelationsAsync(StudentContentDetailDto dto, CancellationToken ct)
     {
-        if (dto.ProgramsContentDetailsId is not null)
+        if (dto.ProgramContentDetailsId is not null)
         {
-            var exists = await programsContentDetailRepo.AnyAsync(x => x.Id == dto.ProgramsContentDetailsId, ct);
+            var exists = await programsContentDetailRepo.AnyAsync(x => x.Id == dto.ProgramContentDetailsId, ct);
             if (!exists)
                 return Result.Failure(Error.NotFound("ProgramsContentDetail.NotFound",
                     "ProgramsContentDetail ID not found"));
         }
 
-        if (dto.StudentDataId is not null)
+         
         {
             var exists = await studentDataRepo.AnyAsync(x => x.Id == dto.StudentDataId, ct);
             if (!exists) return Result.Failure(Error.NotFound("StudentData.NotFound", "StudentData ID not found"));

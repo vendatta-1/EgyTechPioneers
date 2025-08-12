@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common;
+using Entities.Models.BasicInformation;
 
 namespace Entities.Models.System;
 

@@ -8,9 +8,11 @@ public class StudentDataDto
 {
     public Guid? Id { get; set; }
 
-    public Guid? AcademyDataId { get; set; }
+    [Required]
+    public Guid AcademyDataId { get; set; }
 
-    public Guid? BranchesDataId { get; set; }
+    [Required]
+    public Guid BranchesDataId { get; set; }
 
     public int? StudentCode { get; set; }
 
@@ -48,6 +50,8 @@ public class StudentDataDto
     public string? RecommendJobProfile { get; set; }
 
     [StringLength(50)]
+    [RegularExpression("^(?i)(Graduated|Undergraduate)$", ErrorMessage = "Education level must be 'Graduated' or 'Undergraduate'.")]
+
     public string? GraduationStatus { get; set; }
 
     [StringLength(100)]
@@ -61,25 +65,28 @@ public class StudentDataDto
 
     public Guid? ProjectsDetailsId { get; set; }
 
-    [StringLength(100)]
+    [StringLength(255)]
     public string? TrainingProvider { get; set; }
 
-    [StringLength(100)]
+    [StringLength(255)]
     public string? LinkedIn { get; set; }
 
-    [StringLength(100)]
+    [StringLength(255)]
     public string? Facebook { get; set; }
 
     [StringLength(50)]
     public string? Language { get; set; }
 
-    [StringLength(100)]
+    [StringLength(255)]
     public string? CertificateName { get; set; }
 
     [StringLength(12, MinimumLength = 7)]
+    [Phone]
+    
     public string? StudentMobil { get; set; }
 
     [StringLength(12, MinimumLength = 7)]
+    [Phone]
     public string? StudentWhatsapp { get; set; }
 
     [StringLength(150)]

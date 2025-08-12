@@ -84,7 +84,7 @@ public class QuestionBankDetailLogic(
 
     private async Task<Result> ValidateRelationsAsync(QuestionBankDetailDto dto, CancellationToken ct)
     {
-        if (dto.QuestionBankMasterId is not null)
+       
         {
             var exists = await masterRepository.AnyAsync(x => x.Id == dto.QuestionBankMasterId, ct);
             if (!exists) return Result.Failure(Error.NotFound("Relation.QuestionBankMaster", "Master not found"));
