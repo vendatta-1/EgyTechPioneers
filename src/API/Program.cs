@@ -14,12 +14,7 @@ builder.Host.UseSerilog((context, configuration) =>configuration.ReadFrom.Config
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
-builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<GlobalCacheFilter>();
-}); 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
