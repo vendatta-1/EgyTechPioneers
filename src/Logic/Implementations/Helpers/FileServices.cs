@@ -88,7 +88,7 @@ public class FileService : IFileService
         if (!File.Exists(filePath)) return false;
 
         // File.Delete(filePath);
-        if (File.Exists(metadataPath))
+        if (!File.Exists(metadataPath))
             return false;
             // File.Delete(metadataPath);
 

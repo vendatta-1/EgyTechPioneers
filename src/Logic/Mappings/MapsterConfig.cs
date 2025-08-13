@@ -52,6 +52,15 @@ public class MapsterConfig : IRegister
         config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
         config.NewConfig<ComplaintsStatus, ComplaintsStatusDto>().TwoWays();
 
+        config.NewConfig<StudentContentDetailDto, StudentContentDetail>()
+            .Ignore(x => x.SessionTasks)
+            .Ignore(x => x.SessionProject)
+            .Ignore(x => x.SessionQuiz);
+        
+        config.NewConfig<StudentContentDetail, StudentContentDetailDto>()
+            .Ignore(x => x.SessionTasks)
+            .Ignore(x => x.SessionProject)
+            .Ignore(x => x.SessionQuiz);
         config.NewConfig<ComplaintsStudent, ComplaintsStudentDto>()
             .Ignore(dest => dest.FilesAttach);
 

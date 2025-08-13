@@ -5,6 +5,7 @@ using Common;
 using Infrastructure;
 using Logic;
 using Logic.Interfaces.Cache;
+using Microsoft.AspNetCore.Http.Features;
 using Repositories;
 using Repositories.Seeds;
 using Serilog;
@@ -15,6 +16,15 @@ builder.Host.UseSerilog((context, configuration) =>configuration.ReadFrom.Config
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.WebHost.ConfigureKestrel(opt =>
+{
+    opt.Limits.MaxRequestBodySize = int.MaxValue;
+});
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = long.MaxValue; // Allow very large files
+    options.MemoryBufferThreshold = int.MaxValue;
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

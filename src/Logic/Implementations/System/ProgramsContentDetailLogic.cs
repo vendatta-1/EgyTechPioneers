@@ -124,26 +124,37 @@ public class ProgramsContentDetailLogic(
         return Result.Success(true);
     }
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, nameof(ProgramsContentDetail.SessionTasks));
+        => await GetFile(id, "_tasks", e => e.SessionTasks);
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, nameof(ProgramsContentDetail.SessionProject));
+        => await GetFile(id, "_project", e => e.SessionProject);
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, nameof(ProgramsContentDetail.ScientificMaterial));
+        => await GetFile(id, "_material", e => e.ScientificMaterial);
 
     public async Task<Result<(FileStream Stream, string? ContentType)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default)
-        => await GetFile(id, nameof(ProgramsContentDetail.SessionQuiz));
+        => await GetFile(id, "_quiz", e => e.SessionQuiz);
 
-    private async Task<Result<(FileStream Stream, string? ContentType)>> GetFile(Guid id, string suffix)
+    private async Task<Result<(FileStream Stream, string? ContentType)>> GetFile(
+        Guid id,
+        string suffix,
+        Func<ProgramsContentDetail, string?> fileSelector)
     {
-        var entity = await repository.GetAsync(x=>x.Id == id && EF.Property<string?>(x, suffix) !=null );
-        if(entity.IsFailure)
-            return Result.Failure<(FileStream, string?)>(entity.Error);
-        var filePath = entity.Value.GetType().GetProperty(suffix)?.Name;
-        var (stream, ext) = fileService.Get<ProgramsContentDetail>(filePath!, suffix);
+        var entityResult = await repository.GetByIdAsync(id);
+        if (entityResult.IsFailure)
+            return Result.Failure<(FileStream, string?)>(entityResult.Error);
+
+        var filePath = fileSelector(entityResult.Value);
+        if (string.IsNullOrWhiteSpace(filePath))
+            return Result.Failure<(FileStream, string?)>(
+                Error.NotFound("FileNotFound", $"No file found for ID: {id}")
+            );
+
+        var (stream, ext) = fileService.Get<ProgramsContentDetail>(filePath, suffix);
         if (stream is null)
-            return Result.Failure<(FileStream, string?)>(Error.NotFound("FileNotFound", $"No file found for ID: {id}"));
+            return Result.Failure<(FileStream, string?)>(
+                Error.NotFound("FileNotFound", $"No file found for ID: {id}")
+            );
 
         return Result.Success((stream, GetMimeType(ext)));
     }
