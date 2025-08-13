@@ -571,7 +571,7 @@ public class AccountService : IAccountService
             if (user == null)
                 return Result.Failure<bool>(Error.NotFound("User.NotFound", "User not found"));
 
-            await _fileService.SaveAsync<AppUser>(file);
+            user.ProfilePicture =  await _fileService.SaveAsync<AppUser>(file);
             return Result.Success(true);
         }
         catch (Exception ex)
