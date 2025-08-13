@@ -40,7 +40,7 @@ public class ProjectsDetailController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IResult> Create([FromForm] ProjectsDetailDto dto, CancellationToken ct)
+    public async Task<IResult> Create(ProjectsDetailDto dto, CancellationToken ct)
     {
         var result = await _service.CreateAsync(dto, ct);
         return result.Match(
@@ -50,7 +50,7 @@ public class ProjectsDetailController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IResult> Update(Guid id, [FromForm] ProjectsDetailDto dto, CancellationToken ct)
+    public async Task<IResult> Update(Guid id, ProjectsDetailDto dto, CancellationToken ct)
     {
         var result = await _service.UpdateAsync(id, dto, ct);
         return result.Match(Results.NoContent, ApiResults.Problem);

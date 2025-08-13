@@ -46,9 +46,7 @@ public class ProjectsMasterLogic(
 
         if (dto.ProjectFiles is not null)
             entity.ProjectFile = await fileService.SaveAsync<ProjectsMaster>(dto.ProjectFiles, "file.dat");
-
-        var updateResult = await repository.UpdateAsync(entity, cancellationToken);
-        if (!updateResult.IsSuccess) return Result.Failure<ProjectsMasterDto>(updateResult.Error);
+ 
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(entity.Adapt<ProjectsMasterDto>());
@@ -86,7 +84,7 @@ public class ProjectsMasterLogic(
 
         if (!string.IsNullOrWhiteSpace(entity.ProjectResources))
         {
-            var deleted = fileService.Delete<ProjectsMaster>(entity.ProjectResources);
+            var deleted = fileService.Delete<ProjectsMaster>(entity.ProjectResources, "resource.dat");
             if (!deleted)
                 return Result.Failure<bool>(Error.Problem("File.Delete",
                     $"Failed to delete 'resource.dat' for project {id}"));
@@ -94,7 +92,7 @@ public class ProjectsMasterLogic(
 
         if (!string.IsNullOrWhiteSpace(entity.ProjectFile))
         {
-            var deleted = fileService.Delete<ProjectsMaster>(entity.ProjectFile);
+            var deleted = fileService.Delete<ProjectsMaster>(entity.ProjectFile,"file.dat");
             if (!deleted)
                 return Result.Failure<bool>(Error.Problem("File.Delete",
                     $"Failed to delete 'file.dat' for project {id}"));

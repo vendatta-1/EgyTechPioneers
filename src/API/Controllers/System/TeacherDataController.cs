@@ -29,15 +29,15 @@ public class TeacherDataController(ITeacherData service) : ControllerBase
         );
     }
 
-    [HttpGet("not-active")]
-    public async Task<IResult> GetNotActive(CancellationToken ct)
-    {
-        var result = await service.GetNotActiveAsync(ct);
-        return result.Match(
-            data => Results.Ok(data),
-            ApiResults.Problem
-        );
-    }
+    // [HttpGet("not-active")]
+    // public async Task<IResult> GetNotActive(CancellationToken ct)
+    // {
+    //     var result = await service.GetNotActiveAsync(ct);
+    //     return result.Match(
+    //         data => Results.Ok(data),
+    //         ApiResults.Problem
+    //     );
+    // }
 
     [HttpGet("by-branch/{branchId:guid}")]
     public async Task<IResult> GetByBranch(Guid branchId, CancellationToken ct)

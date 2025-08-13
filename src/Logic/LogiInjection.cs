@@ -11,8 +11,10 @@ using Logic.Interfaces.Complaints;
 using Logic.Interfaces.Helpers;
 using Logic.Interfaces.Identity;
 using Logic.Interfaces.System;
+using Logic.Mappings;
 using Logic.Services.Communication;
 using Logic.Services.Identity;
+using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +25,8 @@ public static class LogiInjection
     public static IServiceCollection AddLogic(this IServiceCollection services, IConfiguration configuration)
     {
 
+        var config = TypeAdapterConfig.GlobalSettings;
+        config.Scan(typeof(MapsterConfig).Assembly);
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<IChatMessage, ChatMessageLogic>();
         services.AddScoped<IAcademyClaseDetail, AcademyClaseDetailLogic>();

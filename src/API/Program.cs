@@ -6,6 +6,7 @@ using Infrastructure;
 using Logic;
 using Logic.Interfaces.Cache;
 using Repositories;
+using Repositories.Seeds;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +38,7 @@ if (app.Environment.IsDevelopment())
 
 }
 
-
+app.UserCreate();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseRouting();

@@ -15,6 +15,19 @@ public class MapsterConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
+        config.Default.IgnoreMember((member, side) =>
+        {
+            // Ignore collections
+            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(member.Type) 
+                && member.Type != typeof(string))
+                return true;
+
+            // Ignore single navigation references (class but not string), in future if there'll be any refs between classes and it needed can enhance that configurations
+            if (member.Type.IsClass && member.Type != typeof(string))
+                return true;
+
+            return false;
+        });
         config.NewConfig<StudentAttend, StudentAttendDto>().TwoWays();
         config.NewConfig<StudentEvaluation, StudentEvaluationDto>().TwoWays();
         config.NewConfig<StudentGroup, StudentGroupDto>().TwoWays();
@@ -38,13 +51,12 @@ public class MapsterConfig : IRegister
         config.NewConfig<CountryCode, CountryCodeDto>().TwoWays();
         config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
         config.NewConfig<ComplaintsStatus, ComplaintsStatusDto>().TwoWays();
+
         config.NewConfig<ComplaintsStudent, ComplaintsStudentDto>()
-            .Ignore(dest => dest.FilesAttach)
-            .IgnoreNonMapped(true);
+            .Ignore(dest => dest.FilesAttach);
 
         config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>()
-            .Ignore(dest => dest.FilesAttach)
-            .IgnoreNonMapped(true);
+            .Ignore(dest => dest.FilesAttach );
         
         config.NewConfig<ComplaintsType, ComplaintsTypeDto>().TwoWays();
         config.NewConfig<ProgramsContentDetail, ProgramsContentDetailDto>()
@@ -60,33 +72,29 @@ public class MapsterConfig : IRegister
             .Ignore(dest => dest.SessionQuiz);
 
         config.NewConfig<ProgramsContentMaster, ProgramsContentMasterDto>()
-            .Ignore(dest => dest.ScientificMaterial)
-            .IgnoreNonMapped(true);
+            .Ignore(dest => dest.ScientificMaterial);
+            
 
         config.NewConfig<ProgramsContentMasterDto, ProgramsContentMaster>()
-            .Ignore(dest => dest.ScientificMaterial)
-            .IgnoreNonMapped(true);
+            .Ignore(dest => dest.ScientificMaterial);
 
         config.NewConfig<ProgramsDetail, ProgramsDetailDto>().TwoWays();
+
         config.NewConfig<ProjectsMaster, ProjectsMasterDto>()
-            .Ignore(dest => dest.ProjectResources)
-            .IgnoreNonMapped(true);
-        
+            .Ignore(dest => dest.ProjectResources);
+
         config.NewConfig<ProjectsMasterDto, ProjectsMaster>()
-            .Ignore(x=>x.ProjectResources)
-            .IgnoreNonMapped(true);
+            .Ignore(x => x.ProjectResources);
            
 
         config.NewConfig<ProjectsDetail, ProjectsDetailDto>().TwoWays();
 
         config.NewConfig<EduContactResult, EduContactResultDto>()
-            .Ignore(dest => dest.Attachment)
-            .IgnoreNonMapped(true);
+            .Ignore(dest => dest.Attachment);
         
         config.NewConfig<EduContactResultDto, EduContactResult>()
-            .Ignore(x=>x.Attachment)
-            .IgnoreNonMapped(true);
-
+            .Ignore(x => x.Attachment);
+          
         config.NewConfig<AppUser, RegisterDto>().TwoWays();
     }
 }

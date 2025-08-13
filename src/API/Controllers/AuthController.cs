@@ -4,6 +4,7 @@ using Dtos.Security;
 using Logic.Interfaces.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace API.Controllers;
 
@@ -263,7 +264,7 @@ public class AccountController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A success result.</returns>
     [HttpPut("deactivate/{userId:guid}")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IResult> DeactivateAccount(Guid userId, CancellationToken cancellationToken)
     {
         var result = await _accountService.DeactivateAccountAsync(userId, cancellationToken);
@@ -280,7 +281,7 @@ public class AccountController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A success result.</returns>
     [HttpPut("activate/{userId:guid}")]
-    [Authorize]
+    [Authorize(Roles="Admin")]
     public async Task<IResult> ActivateAccount(Guid userId, CancellationToken cancellationToken)
     {
         var result = await _accountService.ActivateAccountAsync(userId, cancellationToken);
@@ -396,6 +397,7 @@ public class AccountController : ControllerBase
         return result.Match(Results.Ok, ApiResults.Problem);
     }
 
+ 
   
     [HttpGet]
     [Authorize(Roles = "Admin")]

@@ -75,6 +75,7 @@ public class FileService : IFileService
         return File.Exists(filePath);
     }
 
+    [Obsolete("is not do anything and don't remove the files it keep it related to soft delete operations in the future will introduce hard delete")]
     public bool Delete<T>(string? fileId, string fakeExtension = ".dat")
     {
         if (fileId is null)
@@ -86,8 +87,10 @@ public class FileService : IFileService
 
         if (!File.Exists(filePath)) return false;
 
-        File.Delete(filePath);
-        if (File.Exists(metadataPath)) File.Delete(metadataPath);
+        // File.Delete(filePath);
+        if (File.Exists(metadataPath))
+            return false;
+            // File.Delete(metadataPath);
 
         return true;
     }

@@ -1,4 +1,5 @@
 using Common.Data;
+using Entities.Models.BasicInformation;
 using Entities.Models.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,6 +14,8 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options)  : IdentityD
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);   
+        base.OnModelCreating(builder);
+       
     }
+
 }
