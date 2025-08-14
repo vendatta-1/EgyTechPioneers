@@ -19,7 +19,7 @@ namespace Dtos.Complaints
         [StringLength(70, MinimumLength = 3)]
         public string TypeNameL1 { get; set; } = null!;
         [StringLength(70, MinimumLength = 3)]
-
+        [Required]
         public string TypeNameL2 { get; set; } = null!;
     }
 }

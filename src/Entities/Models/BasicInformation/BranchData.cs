@@ -17,7 +17,7 @@ public class BranchData : Entity
     public string BranchNameL1 { get; set; }
 
     [Required, MaxLength(100)]
-    public string BranchNameL2 { get; set; }
+    public string? BranchNameL2 { get; set; }
 
     public Guid? CountryCodeId { get; set; }
 

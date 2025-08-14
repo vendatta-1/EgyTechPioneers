@@ -11,7 +11,8 @@ namespace Dtos.BasicInformation
         public string AcademyNameL1 { get; set; }
 
         [StringLength(100)]
-        public string? AcademyNameL2 { get; set; }
+        [Required]
+        public string AcademyNameL2 { get; set; }
 
         public Guid? CountryCodeId { get; set; }
         public Guid? GovernorateCodeId { get; set; }

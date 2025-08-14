@@ -17,7 +17,7 @@ public class AcademyClaseMaster : Entity
     public string ClaseNameL1 { get; set; }
 
     [Required, MaxLength(100)]
-    public string ClaseNameL2 { get; set; }
+    public string? ClaseNameL2 { get; set; }
 
     [Required, MaxLength(200)]
     public string ClaseAddress { get; set; }

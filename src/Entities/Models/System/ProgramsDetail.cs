@@ -15,7 +15,7 @@ public class ProgramsDetail: Entity
     public string ProgramNameL1 { get; set; } = null!;
 
     [StringLength(70)]
-    public string ProgramNameL2 { get; set; } = null!;
+    public string? ProgramNameL2 { get; set; } = null!;
 
     [StringLength(500)]
     public string? Description { get; set; }

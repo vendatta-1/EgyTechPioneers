@@ -14,6 +14,7 @@ namespace Dtos.BasicInformation
         public string CityNameL1 { get; set; } = null!;
 
         [StringLength(100)]
+        [Required]
         public string CityNameL2 { get; set; } = null!;
     }
 }

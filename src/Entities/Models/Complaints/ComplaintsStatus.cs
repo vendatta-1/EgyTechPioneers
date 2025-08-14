@@ -14,7 +14,7 @@ public class ComplaintsStatus : Entity
     public string StatusesNameL1 { get; set; } = null!;
 
     [MaxLength(100)]
-    public string StatusesNameL2 { get; set; } = null!;
+    public string? StatusesNameL2 { get; set; } = null!;
  
     public virtual ICollection<ComplaintsStudent> ComplaintsStudents { get; set; } = new List<ComplaintsStudent>();
 }

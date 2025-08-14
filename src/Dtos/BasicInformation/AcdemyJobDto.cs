@@ -19,7 +19,9 @@ namespace Dtos.BasicInformation
         [StringLength(100, MinimumLength = 2)]
         public string JobNameL1 { get; set; }
 
-        [StringLength(100)] public string? JobNameL2 { get; set; }
+        [StringLength(100)]
+        [Required]
+        public string JobNameL2 { get; set; }
 
         [StringLength(500)] public string Description { get; set; }
 

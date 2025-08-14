@@ -17,9 +17,9 @@ public class StudentData : Entity
 
     public Guid? StudentBarCode { get; set; }
 
-    [StringLength(70, MinimumLength = 2)] public string StudentNameL1 { get; set; } = null!;
+    [StringLength(70, MinimumLength = 2),Required] public string StudentNameL1 { get; set; } = null!;
 
-    [StringLength(70, MinimumLength = 2)] public string StudentNameL2 { get; set; } = null!;
+    [StringLength(70, MinimumLength = 2), Required] public string StudentNameL2 { get; set; } = null!;
 
     public Guid? CountryCodeId { get; set; }
 

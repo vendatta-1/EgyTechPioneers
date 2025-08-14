@@ -14,7 +14,7 @@ public class ComplaintsType : Entity
     [MaxLength(70)]
     public string TypeNameL1 { get; set; } = null!;
     [MaxLength(70)]
-    public string TypeNameL2 { get; set; } = null!;
+    public string? TypeNameL2 { get; set; } = null!;
 
     public virtual ICollection<ComplaintsStudent> ComplaintsStudents { get; set; } = new List<ComplaintsStudent>();
 }

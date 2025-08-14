@@ -14,7 +14,8 @@ namespace Dtos.BasicInformation
         public string BranchNameL1 { get; set; }
 
         [StringLength(100)]
-        public string? BranchNameL2 { get; set; }
+        [Required]
+        public string BranchNameL2 { get; set; }
 
         public Guid? CountryCodeId { get; set; }
         public Guid? GovernorateCodeId { get; set; }
