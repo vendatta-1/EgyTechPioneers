@@ -30,7 +30,7 @@ namespace Dtos.System
         [StringLength(500, MinimumLength = 10)]
         public string? Description { get; set; }
         
-        [StringLength(250)]
+        
         [Url]
         public string? LinkVideo { get; set; }
         

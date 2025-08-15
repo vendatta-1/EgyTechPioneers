@@ -13,7 +13,7 @@ public class AppUser : IdentityUser<Guid>
     [Required]
     [MaxLength(60)]
     public string LastName { get; set; } = null!;
-    [MaxLength(250)]
+    [MaxLength(2023)]
     public string? ProfilePicture { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

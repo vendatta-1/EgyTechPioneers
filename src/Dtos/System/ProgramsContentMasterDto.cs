@@ -12,15 +12,17 @@ namespace Dtos.System
     {
         public Guid? Id { get; set; }
         public Guid? ProgramsDetailsId { get; set; }
-        [StringLength(70, MinimumLength = 2), Required] public string SessionNameL1 { get; set; } = null!;
+        [StringLength(70, MinimumLength = 2), Required]
+        public string SessionNameL1 { get; set; } = null!;
 
-        [StringLength(70, MinimumLength = 2), Required] public string SessionNameL2 { get; set; }
+        [StringLength(70, MinimumLength = 2)] 
+        public string? SessionNameL2 { get; set; }
 
         public int? SessionNo { get; set; }
         public IFormFile? ScientificMaterial { get; set; }
  
 
-        [StringLength(500, MinimumLength = 5)]
+        [StringLength(500, MinimumLength = 3)]
         public string? Description { get; set; }
     }
 }

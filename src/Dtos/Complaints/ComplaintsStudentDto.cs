@@ -18,13 +18,13 @@ namespace Dtos.Complaints
 
         public Guid? ComplaintsStatusesId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "StudentId can not be null or empty")]
         public Guid StudentsDataId { get; set; }
 
         public DateOnly? Date { get; set; }
 
         [Required]
-        [MinLength(10)]
+        [MaxLength(1000)]
         public string Description { get; set; } = null!;
 
         public IFormFile? FilesAttach { get; set; } 

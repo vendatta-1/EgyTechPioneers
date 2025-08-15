@@ -18,7 +18,7 @@ public class MapsterConfig : IRegister
         config.Default.IgnoreMember((member, side) =>
         {
             // Ignore collections
-            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(member.Type) 
+            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(member.Type)
                 && member.Type != typeof(string))
                 return true;
 
@@ -28,6 +28,22 @@ public class MapsterConfig : IRegister
 
             return false;
         });
+
+        #region Basic Information
+
+        config.NewConfig<AcademyClaseMaster, AcademyClaseMasterDto>().TwoWays();
+        config.NewConfig<AcademyClaseType, AcademyClaseTypeDto>().TwoWays();
+        config.NewConfig<AcademyClaseDetail, AcademyClaseDetailDto>().TwoWays();
+        config.NewConfig<AcademyData, AcademyDataDto>().Ignore(x => x.Image).Ignore(x => x.Attachments);
+        config.NewConfig<AcademyDataDto, AcademyData>();
+        config.NewConfig<AcademyJob, AcademyJobDto>().TwoWays();
+        config.NewConfig<BranchData, BranchDataDto>().TwoWays();
+        config.NewConfig<CityCode, CityCodeDto>().TwoWays();
+        config.NewConfig<CountryCode, CountryCodeDto>().TwoWays();
+        config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
+
+        #endregion
+
         config.NewConfig<StudentAttend, StudentAttendDto>().TwoWays();
         config.NewConfig<StudentEvaluation, StudentEvaluationDto>().TwoWays();
         config.NewConfig<StudentGroup, StudentGroupDto>().TwoWays();
@@ -40,23 +56,13 @@ public class MapsterConfig : IRegister
         config.NewConfig<StudentData, StudentDataDto>().TwoWays();
         config.NewConfig<QuestionBankDetail, QuestionBankDetailDto>().TwoWays();
         config.NewConfig<QuestionBankMaster, QuestionBankMasterDto>().TwoWays();
-        config.NewConfig<AcademyClaseMaster, AcademyClaseMasterDto>().TwoWays();
-        config.NewConfig<AcademyClaseType, AcademyClaseTypeDto>().TwoWays();
-        config.NewConfig<AcademyClaseDetail, AcademyClaseDetailDto>().TwoWays();
-        config.NewConfig<AcademyData, AcademyDataDto>().Ignore(x => x.Image).Ignore(x => x.Attachments);
-        config.NewConfig<AcademyDataDto, AcademyData>();
-        config.NewConfig<AcademyJob, AcademyJobDto>().TwoWays();
-        config.NewConfig<BranchData, BranchDataDto>().TwoWays();
-        config.NewConfig<CityCode, CityCodeDto>().TwoWays();
-        config.NewConfig<CountryCode, CountryCodeDto>().TwoWays();
-        config.NewConfig<GovernorateCode, GovernorateCodeDto>().TwoWays();
         config.NewConfig<ComplaintsStatus, ComplaintsStatusDto>().TwoWays();
 
         config.NewConfig<StudentContentDetailDto, StudentContentDetail>()
             .Ignore(x => x.SessionTasks)
             .Ignore(x => x.SessionProject)
             .Ignore(x => x.SessionQuiz);
-        
+
         config.NewConfig<StudentContentDetail, StudentContentDetailDto>()
             .Ignore(x => x.SessionTasks)
             .Ignore(x => x.SessionProject)
@@ -65,8 +71,8 @@ public class MapsterConfig : IRegister
             .Ignore(dest => dest.FilesAttach);
 
         config.NewConfig<ComplaintsStudentDto, ComplaintsStudent>()
-            .Ignore(dest => dest.FilesAttach );
-        
+            .Ignore(dest => dest.FilesAttach);
+
         config.NewConfig<ComplaintsType, ComplaintsTypeDto>().TwoWays();
         config.NewConfig<ProgramsContentDetail, ProgramsContentDetailDto>()
             .Ignore(dest => dest.SessionTasksFile)
@@ -82,7 +88,7 @@ public class MapsterConfig : IRegister
 
         config.NewConfig<ProgramsContentMaster, ProgramsContentMasterDto>()
             .Ignore(dest => dest.ScientificMaterial);
-            
+
 
         config.NewConfig<ProgramsContentMasterDto, ProgramsContentMaster>()
             .Ignore(dest => dest.ScientificMaterial);
@@ -94,16 +100,16 @@ public class MapsterConfig : IRegister
 
         config.NewConfig<ProjectsMasterDto, ProjectsMaster>()
             .Ignore(x => x.ProjectResources);
-           
+
 
         config.NewConfig<ProjectsDetail, ProjectsDetailDto>().TwoWays();
 
         config.NewConfig<EduContactResult, EduContactResultDto>()
             .Ignore(dest => dest.Attachment);
-        
+
         config.NewConfig<EduContactResultDto, EduContactResult>()
             .Ignore(x => x.Attachment);
-          
+
         config.NewConfig<AppUser, RegisterDto>().TwoWays();
     }
 }

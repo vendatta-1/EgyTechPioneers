@@ -17,10 +17,13 @@ namespace Dtos.Security
 
         [Required, EmailAddress] public string Email { get; set; } = null!;
 
-        [Phone] public string? PhoneNumber { get; set; }
+        [Phone] 
+        public string? PhoneNumber { get; set; }
 
         public string? ProfilePicture { get; set; }
+        
         public bool IsActive { get; set; }
+        
         public bool EmailConfirmed { get; set; }
 
         public DateTime CreatedAt { get; set; }

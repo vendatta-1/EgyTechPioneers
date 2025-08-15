@@ -614,68 +614,7 @@ public class AccountService : IAccountService
         };
     }
     
-    public async Task<Result<TokenResultDto>> ExternalLoginAsync(ExternalLoginDto dto, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            string? email = null;
-
-            if (dto.Provider.ToLower() == "google")
-            {
-                var payload = await ValidateGoogleTokenAsync(dto.IdToken);
-                if (payload == null || string.IsNullOrEmpty(payload.Email))
-                    return Result.Failure<TokenResultDto>(Error.Failure("External.InvalidToken", "Invalid Google token"));
-                email = payload.Email;
-            }
-            else if (dto.Provider.ToLower() == "github")
-            {
-                email = await GetGithubEmailAsync(dto.AccessToken);
-                if (string.IsNullOrEmpty(email))
-                    return Result.Failure<TokenResultDto>(Error.Failure("External.InvalidToken", "Unable to retrieve email from GitHub"));
-            }
-            else
-            {
-                return Result.Failure<TokenResultDto>(Error.Failure("External.ProviderNotSupported", "Unsupported provider"));
-            }
-
-            var user = await _userManager.FindByEmailAsync(email);
-            var info = new UserLoginInfo(dto.Provider, dto.IdToken, dto.Provider);
-
-            if (user == null)
-            {
-                user = new AppUser
-                {
-                    UserName = email,
-                    Email = email,
-                    FirstName = email,
-                    LastName = dto.Provider,
-                    IsActive = true,
-                    EmailConfirmed = true
-                };
-                var createResult = await _userManager.CreateAsync(user);
-                if (!createResult.Succeeded)
-                    return Result.Failure<TokenResultDto>(Error.Failure("External.RegisterFailed", string.Join(", ", createResult.Errors.Select(e => e.Description))));
-
-                await _userManager.AddLoginAsync(user, info);
-                await _userManager.AddToRoleAsync(user, "User");
-            }
-            else
-            {
-                var logins = await _userManager.GetLoginsAsync(user);
-                if (!logins.Any(l => l.LoginProvider == dto.Provider && l.ProviderKey == dto.IdToken))
-                    await _userManager.AddLoginAsync(user, info);
-            }
-
-            var token = await GenerateTokenAsync(user);
-            return Result.Success(token);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An unexpected error occurred during external login with provider {Provider}.", dto.Provider);
-            return Result.Failure<TokenResultDto>(Error.Problem("ExternalLogin.Exception", $"An unexpected error occurred during external login: {ex.Message}"));
-        }
-    }
-
+ 
     public async Task<Result<bool>> LinkExternalAccountAsync(ExternalLoginDto dto, Guid userId, CancellationToken cancellationToken = default)
     {
         try
@@ -695,6 +634,81 @@ public class AccountService : IAccountService
         {
             _logger.LogError(ex, "An unexpected error occurred while linking external account for user {UserId}.", userId);
             return Result.Failure<bool>(Error.Problem("LinkExternalAccount.Exception", $"An unexpected error occurred while linking external account: {ex.Message}"));
+        }
+    }
+
+    public async Task<Result<TokenResultDto>> ExternalLoginAsync(ExternalLoginDto dto, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            string? email = null;
+            string? providerKey = null;
+
+            var provider = dto.Provider.ToLower();
+
+            if (provider == "google")
+            {
+                var payload = await ValidateGoogleTokenAsync(dto.IdToken);
+                if (payload == null || string.IsNullOrEmpty(payload.Email))
+                    return Result.Failure<TokenResultDto>(Error.Failure("External.InvalidToken", "Invalid Google token"));
+
+                email = payload.Email;
+                providerKey = payload.Subject; // stable unique ID
+            }
+            else if (provider == "github")
+            {
+                if (string.IsNullOrEmpty(dto.AccessToken))
+                    return Result.Failure<TokenResultDto>(Error.Failure("External.MissingToken", "GitHub access token is required"));
+
+                email = await GetGithubEmailAsync(dto.AccessToken);
+                if (string.IsNullOrEmpty(email))
+                    return Result.Failure<TokenResultDto>(Error.Failure("External.InvalidToken", "Unable to retrieve email from GitHub"));
+
+                providerKey = await GetGithubUserIdAsync(dto.AccessToken);
+                if (string.IsNullOrEmpty(providerKey))
+                    return Result.Failure<TokenResultDto>(Error.Failure("External.InvalidToken", "Unable to retrieve GitHub user ID"));
+            }
+            else
+            {
+                return Result.Failure<TokenResultDto>(Error.Failure("External.ProviderNotSupported", "Unsupported provider"));
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            var info = new UserLoginInfo(dto.Provider, providerKey, dto.Provider);
+
+            if (user == null)
+            {
+                user = new AppUser
+                {
+                    UserName = email,
+                    Email = email,
+                    FirstName = email,
+                    LastName = dto.Provider,
+                    IsActive = true,
+                    EmailConfirmed = true
+                };
+
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                    return Result.Failure<TokenResultDto>(Error.Failure("External.RegisterFailed", string.Join(", ", createResult.Errors.Select(e => e.Description))));
+
+                await _userManager.AddLoginAsync(user, info);
+                await _userManager.AddToRoleAsync(user, "User");
+            }
+            else
+            {
+                var logins = await _userManager.GetLoginsAsync(user);
+                if (!logins.Any(l => l.LoginProvider == dto.Provider && l.ProviderKey == providerKey))
+                    await _userManager.AddLoginAsync(user, info);
+            }
+
+            var token = await GenerateTokenAsync(user);
+            return Result.Success(token);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error occurred during external login with provider {Provider}.", dto.Provider);
+            return Result.Failure<TokenResultDto>(Error.Problem("ExternalLogin.Exception", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -737,6 +751,32 @@ public class AccountService : IAccountService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An unexpected error occurred while retrieving GitHub email.");
+            return null;
+        }
+    }
+
+    private async Task<string?> GetGithubUserIdAsync(string accessToken)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ChatApp", "1.0"));
+
+            var response = await client.GetAsync("https://api.github.com/user");
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("GitHub API call failed with status code {StatusCode}.", response.StatusCode);
+                return null;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var user = JsonSerializer.Deserialize<GithubUser>(content);
+            return user?.Id.ToString();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error occurred while retrieving GitHub user ID.");
             return null;
         }
     }

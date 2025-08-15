@@ -20,6 +20,7 @@ internal static class APIConfigurations
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                
             })
             .AddJwtBearer(options =>
             {

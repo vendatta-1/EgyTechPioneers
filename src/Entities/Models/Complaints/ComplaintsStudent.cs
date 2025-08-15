@@ -23,11 +23,11 @@ public class ComplaintsStudent : Entity
     public Guid? StudentsDataId { get; set; }
 
     public DateOnly? Date { get; set; }
-    [MaxLength(500)]
+    [MaxLength(1000)]
+    [Required]
+    public string Description { get; set; }
 
-    public string? Description { get; set; }
-
-    [MaxLength(250)]
+    [MaxLength(2023)]
     public string? FilesAttach { get; set; }
 
     public virtual BranchData BranchesData { get; set; }

@@ -23,14 +23,14 @@ namespace Dtos.BasicInformation
         public Guid? CityCodeId { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 1)]
         public string ClaseNameL1 { get; set; }
 
-        [StringLength(50)]
+        [StringLength(100, MinimumLength = 1)]
         public string? ClaseNameL2 { get; set; }
 
         [Required]
-        [StringLength(150)]
+        [StringLength(200)]
         public string ClaseAddress { get; set; }
 
         [Required]
@@ -43,29 +43,28 @@ namespace Dtos.BasicInformation
 
         [Required]
         [Phone]
-        [StringLength(20)]
+        [StringLength(12)]
         public string OwnerMobil { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string CommunicationsOfficer { get; set; }
+        
+        [StringLength(100)]
+        public string? CommunicationsOfficer { get; set; }
 
-        [Required]
         [Phone]
-        [StringLength(20)]
-        public string CommunicationsMobil { get; set; }
+        [StringLength(12)]
+        public string? CommunicationsMobil { get; set; }
 
         [Required]
-        [EmailAddress]
+        [EmailAddress, MaxLength(150)]
         public string EmailClase { get; set; }
 
         [Required]
-        [EmailAddress]
+        [EmailAddress, StringLength(150)]
         public string EmailOwner { get; set; }
 
         public int? ClaseBranchNo { get; set; }
 
-        [StringLength(500)]
+        [StringLength(1000)]
         public string? Description { get; set; }
     }
    

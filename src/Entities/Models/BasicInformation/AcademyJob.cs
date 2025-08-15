@@ -22,7 +22,7 @@ public  class AcademyJob : Entity
     [MaxLength(500)]
     public string? Description { get; set; }
 
-    [MaxLength(255)]
+    [MaxLength(2084)]
     public string? JobLink { get; set; }
 
     public virtual BranchData BranchesData { get; set; }

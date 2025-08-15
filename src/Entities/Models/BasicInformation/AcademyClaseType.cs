@@ -9,7 +9,7 @@ namespace Entities.Models;
 
 public class AcademyClaseType : Entity
 { 
-    [MaxLength(70)]
+    [MaxLength(100)]
     public string ClassTypeNameId { get; set; }
 
 }

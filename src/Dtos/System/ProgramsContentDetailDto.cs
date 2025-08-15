@@ -25,7 +25,7 @@ namespace Dtos.System
 
         public IFormFile? SessionQuiz { get; set; }
         
-        [StringLength(500, MinimumLength = 10)]
+        [StringLength(500, MinimumLength = 3)]
         public string? Description { get; set; }
     }
 

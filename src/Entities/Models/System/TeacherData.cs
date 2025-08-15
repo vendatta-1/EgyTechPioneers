@@ -33,7 +33,7 @@ public class TeacherData : Entity
     [StringLength(12)] public string? TeacherWhatsapp { get; set; } = null!;
 
     [StringLength(150)] public string? TeacherEmail { get; set; } = null!;
-    [StringLength(250)] public string? ImageUrl { get; set; }
+    [StringLength(2024)] public string? ImageUrl { get; set; }
     [StringLength(500)] public string? Description { get; set; }
 
     public DateOnly? TeacherCancel { get; set; }

@@ -7,7 +7,7 @@ namespace Entities.Models.BasicInformation;
 public class GovernorateCode : Entity
 { 
 
-    public Guid? CountryCodeId { get; set; }
+    public Guid CountryCodeId { get; set; }
 
     [MaxLength(100)]
     public string GovernorateNameL1 { get; set; } = null!;

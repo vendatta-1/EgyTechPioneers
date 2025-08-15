@@ -12,6 +12,6 @@ public class StudentAttend : Entity
 
     public DateOnly? DateAttend { get; set; }
 
-    public bool? AttendAccept { get; set; }
+    public bool? AttendAccept { get; set; } = false;
     public virtual StudentData StudentData { get; set; }
 }

@@ -18,8 +18,8 @@ namespace Dtos.Complaints
         [StringLength(100, MinimumLength = 2)]
         public string StatusesNameL1 { get; set; } = null!;
 
-        [Required]
+        
         [StringLength(100, MinimumLength = 2)]
-        public string StatusesNameL2 { get; set; } = null!;
+        public string? StatusesNameL2 { get; set; } 
     }
 }

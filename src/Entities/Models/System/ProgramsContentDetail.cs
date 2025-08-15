@@ -9,19 +9,19 @@ public class ProgramsContentDetail : Entity
 
     public Guid? ProgramsContentMasterId { get; set; }
 
-    [MaxLength(250)]
+    [MaxLength(2023)]
     public string? SessionTasks { get; set; } 
 
-    [MaxLength(250)]
+    [MaxLength(2023)]
     public string? SessionProject { get; set; }  
 
-    [MaxLength(250)]
+    [MaxLength(2023)]
     public string? ScientificMaterial { get; set; }  
 
-    [MaxLength(255)]
+    [MaxLength(2023)]
     public string? SessionVideo { get; set; } 
 
-    [MaxLength(255)]
+    [MaxLength(2023)]
     public string? SessionQuiz { get; set; }
 
     [MaxLength(500)]

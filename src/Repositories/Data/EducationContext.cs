@@ -57,6 +57,14 @@ public class EducationContext(DbContextOptions<EducationContext> options) : DbCo
         modelBuilder.Entity<AcademyClaseMaster>()
             .Property(b => b.ClaseBranchNo)
             .HasDefaultValueSql("NEXT VALUE FOR AcademyClaseNo_Seq");
+        
+        modelBuilder.HasSequence<int>("StudentProfileCode")
+            .StartsAt(1)
+            .IncrementsBy(1);
+        
+        modelBuilder.Entity<StudentData>()
+            .Property(x=>x.ProfileCode)
+            .HasDefaultValueSql("NEXT VALUE FOR StudentProfileCode");
     }
 
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }

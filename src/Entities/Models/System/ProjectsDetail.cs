@@ -16,7 +16,7 @@ public class ProjectsDetail : Entity
     public string ProjectNameL1 { get; set; } = null!;
 
     [StringLength(70, MinimumLength = 2)]
-    public string ProjectNameL2 { get; set; } = null!;
+    public string? ProjectNameL2 { get; set; } 
 
     [StringLength(500, MinimumLength = 5)]
     public string? Description { get; set; }

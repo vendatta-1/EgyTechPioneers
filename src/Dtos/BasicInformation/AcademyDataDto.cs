@@ -27,16 +27,16 @@ namespace Dtos.BasicInformation
         [Required, Phone, StringLength(20)]
         public string AcademyMobil { get; set; }
 
-        [Phone, StringLength(20)]
+        [Phone, StringLength(20),Required]
         public string AcademyPhone { get; set; }
 
         [Phone, StringLength(20)]
-        public string AcademyWhatsapp { get; set; }
+        public string? AcademyWhatsapp { get; set; }
 
-        [Required, EmailAddress]
+        [Required, EmailAddress, StringLength(150)]
         public string AcademyEmail { get; set; }
 
-        [Url]
+        [Url, Required]
         public string AcademyWebSite { get; set; }
 
         [Url]
@@ -57,16 +57,17 @@ namespace Dtos.BasicInformation
         [Url]
         public string? AcademyYoutube { get; set; }
 
-        [Required, StringLength(50)]
+        [Required, StringLength(10) ]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Value must contain only digits.")]
         public string TaxRegistrationNumber { get; set; }
 
-        [Required, StringLength(100)]
+        [Required, StringLength(50)]
         public string TaxesErrand { get; set; }
 
         [Required, StringLength(50)]
         public string CommercialRegisterNumber { get; set; }
 
-        [StringLength(500)]
+        [StringLength(1000), Required]
         public string Description { get; set; }
 
         public IFormFile? Image { get; set; } 

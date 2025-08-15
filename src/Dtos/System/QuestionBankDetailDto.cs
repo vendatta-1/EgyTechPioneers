@@ -17,7 +17,7 @@ namespace Dtos.System
         public string AnswerNameL1 { get; set; } = null!;
         
         [StringLength(70 , MinimumLength = 1)]
-        public string  AnswerNameL2 { get; set; }
+        public string?  AnswerNameL2 { get; set; }
     }
 
 }

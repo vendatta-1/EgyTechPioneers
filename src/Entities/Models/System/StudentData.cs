@@ -17,19 +17,25 @@ public class StudentData : Entity
 
     public Guid? StudentBarCode { get; set; }
 
-    [StringLength(70, MinimumLength = 2),Required] public string StudentNameL1 { get; set; } = null!;
+    [StringLength(70, MinimumLength = 2),Required] 
+    public string StudentNameL1 { get; set; } = null!;
 
-    [StringLength(70, MinimumLength = 2), Required] public string StudentNameL2 { get; set; } = null!;
+    [StringLength(70, MinimumLength = 2), Required] 
+    public string StudentNameL2 { get; set; } = null!;
 
     public Guid? CountryCodeId { get; set; }
 
-    [ForeignKey(nameof(GovernorateCode))] public Guid? GovernorateCodeId { get; set; }
+    [ForeignKey(nameof(GovernorateCode))] 
+    public Guid? GovernorateCodeId { get; set; }
 
-    [ForeignKey(nameof(CityCode))] public Guid? CityCodeId { get; set; }
+    [ForeignKey(nameof(CityCode))] 
+    public Guid? CityCodeId { get; set; }
 
-    [StringLength(250, MinimumLength = 3)] public string StudentAddress { get; set; } = null!;
+    [StringLength(250, MinimumLength = 3)] 
+    public string StudentAddress { get; set; } = null!;
 
-    [StringLength(12, MinimumLength = 7)] public string StudentPhone { get; set; } = null!;
+    [StringLength(12, MinimumLength = 7)]
+    public string StudentPhone { get; set; } = null!;
 
     public DateTime? TrainingTime { get; set; }
 
@@ -40,9 +46,11 @@ public class StudentData : Entity
 
     [StringLength(100)] public string? RecommendJobProfile { get; set; }
 
-    [StringLength(50)] public string? GraduationStatus { get; set; }
+    [StringLength(50)] 
+    public string? GraduationStatus { get; set; }
 
-    [StringLength(100)] public string? Track { get; set; }
+    [StringLength(100)] 
+    public string? Track { get; set; }
 
     public int? ProfileCode { get; set; }
 
@@ -54,17 +62,19 @@ public class StudentData : Entity
 
     [StringLength(222)] public string? TrainingProvider { get; set; }
 
-    [StringLength(255)] public string? LinkedIn { get; set; }
+    [StringLength(2024)] public string? LinkedIn { get; set; }
 
-    [StringLength(255)] public string? Facebook { get; set; }
+    [StringLength(2024)] public string? Facebook { get; set; }
 
     [StringLength(50)] public string? Language { get; set; }
 
     [StringLength(200)] public string? CertificateName { get; set; }
 
-    [StringLength(12, MinimumLength = 7)] public string? StudentMobil { get; set; }
+    [StringLength(12, MinimumLength = 7)]
+    public string? StudentMobil { get; set; }
 
-    [StringLength(12, MinimumLength = 7)] public string? StudentWhatsapp { get; set; }
+    [StringLength(12, MinimumLength = 7)] 
+    public string? StudentWhatsapp { get; set; }
 
     [StringLength(150)] [EmailAddress] public string? StudentEmail { get; set; }
 

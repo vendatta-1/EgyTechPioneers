@@ -19,6 +19,6 @@ public class StudentContentDetailDto
     public IFormFile? SessionQuiz { get; set; }
   
 
-    [StringLength(500, MinimumLength = 5, ErrorMessage = "Description must be between 5 and 500 characters.")]
+    [StringLength(500, MinimumLength = 3, ErrorMessage = "Description must be between 3 and 500 characters.")]
     public string? Description { get; set; }
 }

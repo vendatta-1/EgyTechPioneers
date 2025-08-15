@@ -19,16 +19,16 @@ public class ProjectsMaster : Entity
     public string ProjectNameL1 { get; set; } = null!;
 
     [StringLength(70, MinimumLength = 2)]
-    public string ProjectNameL2 { get; set; } = null!;
+    public string? ProjectNameL2 { get; set; }  
 
     public DateOnly? ProjectStart { get; set; }
 
     public DateOnly? ProjectEnd { get; set; }
 
-    [StringLength(250)]
+    [StringLength(2023)]
     public string? ProjectResources { get; set; }
 
-    [StringLength(250)]
+    [StringLength(2023)]
     public string? ProjectFile { get; set; }
 
     [StringLength(500, MinimumLength = 3)]

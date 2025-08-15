@@ -11,10 +11,10 @@ namespace Dtos.BasicInformation
     {
         public Guid? Id { get; set; }
         [Required]
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string CountryNameL1 { get; set; } = null!;
 
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         [Required]
         public string CountryNameL2 { get; set; } = null!;
     }

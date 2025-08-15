@@ -27,15 +27,21 @@ namespace Dtos.BasicInformation
 
         [Required]
         [Phone]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Value must contain only digits.")]
         public string BranchMobile { get; set; }
 
         [Phone]
-        public string BranchPhone { get; set; }
+        [RegularExpression(@"^\d+$", ErrorMessage = "Value must contain only digits.")]
+        
+        public string? BranchPhone { get; set; }
 
         [Phone]
-        public string BranchWhatsapp { get; set; }
+        [RegularExpression(@"^\d+$", ErrorMessage = "Value must contain only digits.")]
+        
+        public string? BranchWhatsapp { get; set; }
 
         [EmailAddress]
+        [MaxLength(150)]
         public string BranchEmail { get; set; }
 
         public Guid? BranchManager { get; set; }

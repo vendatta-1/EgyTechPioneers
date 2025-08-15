@@ -24,6 +24,8 @@ namespace Repository.Migrations.Education
 
             modelBuilder.HasSequence<int>("AcademyClaseNo_Seq");
 
+            modelBuilder.HasSequence<int>("StudentProfileCode");
+
             modelBuilder.Entity("Entities.Models.AcademyClaseType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -31,8 +33,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ClassTypeNameId")
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("CreateDateTime")
                         .HasColumnType("datetime2");
@@ -105,7 +107,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -158,18 +161,17 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ClaseNameL2")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ClaseOwnerName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("CommunicationsMobil")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("CommunicationsOfficer")
                         .HasMaxLength(100)
@@ -229,8 +231,8 @@ namespace Repository.Migrations.Education
 
                     b.Property<string>("OwnerMobil")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.HasKey("Id");
 
@@ -260,12 +262,12 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("AcademyFacebook")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AcademyInstagram")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AcademyMobil")
                         .IsRequired()
@@ -283,37 +285,38 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("AcademyPhone")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("AcademySnapchat")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AcademyTiktok")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AcademyTwitter")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AcademyWebSite")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AcademyWhatsapp")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("AcademyYoutube")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("AttachFiles")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<Guid?>("CityCodeId")
                         .HasColumnType("uniqueidentifier");
@@ -351,8 +354,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -374,8 +377,8 @@ namespace Repository.Migrations.Education
 
                     b.Property<string>("TaxRegistrationNumber")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("TaxesErrand")
                         .IsRequired()
@@ -427,8 +430,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("bit");
 
                     b.Property<string>("JobLink")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2084)
+                        .HasColumnType("nvarchar(2084)");
 
                     b.Property<string>("JobNameL1")
                         .IsRequired()
@@ -465,13 +468,13 @@ namespace Repository.Migrations.Education
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AcademyDataId")
+                    b.Property<Guid>("AcademyDataId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BranchAddress")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("BranchEmail")
                         .IsRequired()
@@ -497,12 +500,12 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("BranchPhone")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("BranchWhatsapp")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("BranchesDataId")
                         .ValueGeneratedOnAdd()
@@ -619,7 +622,7 @@ namespace Repository.Migrations.Education
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CountryCodeId")
+                    b.Property<Guid>("CountryCodeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreateDateTime")
@@ -848,7 +851,6 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("StatusesNameL2")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -902,12 +904,13 @@ namespace Repository.Migrations.Education
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("FilesAttach")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -986,7 +989,6 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("TypeNameL2")
-                        .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
@@ -1082,8 +1084,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Attachment")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<DateTime?>("CreateDateTime")
                         .HasColumnType("datetime2");
@@ -1183,24 +1185,24 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ScientificMaterial")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionProject")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionQuiz")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionTasks")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionVideo")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.HasKey("Id");
 
@@ -1253,8 +1255,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ScientificMaterial")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionNameL1")
                         .IsRequired()
@@ -1262,7 +1264,6 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("SessionNameL2")
-                        .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
@@ -1325,7 +1326,6 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("ProgramNameL2")
-                        .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
@@ -1397,7 +1397,6 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("ProjectNameL2")
-                        .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
@@ -1461,8 +1460,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("date");
 
                     b.Property<string>("ProjectFile")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("ProjectNameL1")
                         .IsRequired()
@@ -1470,7 +1469,6 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("ProjectNameL2")
-                        .IsRequired()
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
@@ -1481,8 +1479,8 @@ namespace Repository.Migrations.Education
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectNo"));
 
                     b.Property<string>("ProjectResources")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<DateOnly?>("ProjectStart")
                         .HasColumnType("date");
@@ -1666,8 +1664,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("bit");
 
                     b.Property<string>("LinkVideo")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2024)
+                        .HasColumnType("nvarchar(2024)");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(100)
@@ -1794,16 +1792,16 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SessionProject")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionQuiz")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<string>("SessionTasks")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2023)
+                        .HasColumnType("nvarchar(2023)");
 
                     b.Property<Guid?>("StudentDataId")
                         .HasColumnType("uniqueidentifier");
@@ -1877,8 +1875,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Facebook")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2024)
+                        .HasColumnType("nvarchar(2024)");
 
                     b.Property<Guid?>("GovernorateCodeId")
                         .HasColumnType("uniqueidentifier");
@@ -1898,8 +1896,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LinkedIn")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(2024)
+                        .HasColumnType("nvarchar(2024)");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(100)
@@ -1909,7 +1907,9 @@ namespace Repository.Migrations.Education
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ProfileCode")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR StudentProfileCode");
 
                     b.Property<Guid?>("ProjectsDetailId")
                         .HasColumnType("uniqueidentifier");
@@ -2275,8 +2275,8 @@ namespace Repository.Migrations.Education
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(2024)
+                        .HasColumnType("nvarchar(2024)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2389,7 +2389,9 @@ namespace Repository.Migrations.Education
                 {
                     b.HasOne("Entities.Models.BasicInformation.AcademyData", "AcademyData")
                         .WithMany("BranchesData")
-                        .HasForeignKey("AcademyDataId");
+                        .HasForeignKey("AcademyDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Entities.Models.CityCode", "CityCode")
                         .WithMany("BranchesData")
@@ -2416,7 +2418,9 @@ namespace Repository.Migrations.Education
                 {
                     b.HasOne("Entities.Models.BasicInformation.CountryCode", "CountryCode")
                         .WithMany("GovernorateCodes")
-                        .HasForeignKey("CountryCodeId");
+                        .HasForeignKey("CountryCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CountryCode");
                 });

@@ -23,7 +23,7 @@ public class SkillDevelopment : Entity
     [StringLength(500, MinimumLength = 3)]
     public string? Description { get; set; }
 
-    [StringLength(250, MinimumLength = 20)]
+    [StringLength(2024, MinimumLength = 20)]
     public string? LinkVideo { get; set; }
 
     [StringLength(250)]

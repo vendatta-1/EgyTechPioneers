@@ -11,7 +11,7 @@ namespace Dtos.Security
         public string LastName { get; set; } = null!;
 
         [Required]
-        // [RegularExpression("(?i)^(User|Student|Instructor|SupportAgent)$", ErrorMessage = "Role must be one of: User, Student, Instructor, SupportAgent.")]
+        [RegularExpression("(?i)^(User|Student|Instructor|SupportAgent)$", ErrorMessage = "Role must be one of: User, Student, Instructor, SupportAgent.")]
         public string Role { get; set; } = null!;
         public Guid? AcademyDataId { get; set; }
         public Guid? BranchesDataId { get; set; }

@@ -15,6 +15,7 @@ namespace Dtos.System
 
         public DateOnly? DateAttend { get; set; }
 
-        public bool? AttendAccept { get; set; }
+        [Required]
+        public bool AttendAccept { get; set; }
     }
 }

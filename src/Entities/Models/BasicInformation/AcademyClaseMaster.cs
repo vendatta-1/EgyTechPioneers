@@ -16,25 +16,25 @@ public class AcademyClaseMaster : Entity
     [Required, MaxLength(100)]
     public string ClaseNameL1 { get; set; }
 
-    [Required, MaxLength(100)]
+    [MaxLength(100)]
     public string? ClaseNameL2 { get; set; }
 
     [Required, MaxLength(200)]
     public string ClaseAddress { get; set; }
 
-    [Required, MaxLength(100)]
+    [MaxLength(100)]
     public string Location { get; set; }
 
-    [Required, MaxLength(100)]
+    [Required, MaxLength(150)]
     public string ClaseOwnerName { get; set; }
 
-    [Required, MaxLength(20)]
+    [Required, MaxLength(12)]
     public string OwnerMobil { get; set; }
 
     [MaxLength(100)]
     public string? CommunicationsOfficer { get; set; }
 
-    [MaxLength(20)]
+    [MaxLength(12)]
     public string? CommunicationsMobil { get; set; }
 
     [Required, EmailAddress, MaxLength(150)]

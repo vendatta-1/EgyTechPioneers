@@ -11,13 +11,14 @@ public class BranchData : Entity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int BranchesDataId { get; set; }
 
-    public Guid? AcademyDataId { get; set; }
+    [Required]
+    public Guid AcademyDataId { get; set; }
 
     [Required, MaxLength(100)]
     public string BranchNameL1 { get; set; }
 
     [Required, MaxLength(100)]
-    public string? BranchNameL2 { get; set; }
+    public string BranchNameL2 { get; set; }
 
     public Guid? CountryCodeId { get; set; }
 
@@ -25,16 +26,16 @@ public class BranchData : Entity
 
     public Guid? CityCodeId { get; set; }
 
-    [Required, MaxLength(200)]
+    [Required, MaxLength(250)]
     public string BranchAddress { get; set; }
 
     [Required, MaxLength(20)]
     public string BranchMobile { get; set; }
 
-    [MaxLength(20)]
+    [MaxLength(12)]
     public string? BranchPhone { get; set; }
 
-    [MaxLength(20)]
+    [MaxLength(12)]
     public string? BranchWhatsapp { get; set; }
 
     [Required, EmailAddress, MaxLength(150)]

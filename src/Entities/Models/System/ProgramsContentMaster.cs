@@ -18,7 +18,7 @@ public class ProgramsContentMaster : Entity
     [MaxLength(70)]
 
     public string? SessionNameL2 { get; set; } = null!;
-    [MaxLength(250)]
+    [MaxLength(2023)]
 
     public string? ScientificMaterial { get; set; }
 

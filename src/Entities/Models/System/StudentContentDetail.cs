@@ -11,13 +11,13 @@ public class StudentContentDetail : Entity
 
     public Guid? StudentDataId { get; set; }
 
-    [StringLength(250, MinimumLength = 10)]
+    [StringLength(2023, MinimumLength = 10)]
     public string? SessionTasks { get; set; }
 
-    [StringLength(250, MinimumLength = 10)]
+    [StringLength(2023, MinimumLength = 10)]
     public string? SessionProject { get; set; }
 
-    [StringLength(250, MinimumLength = 10)]
+    [StringLength(2023, MinimumLength = 10)]
     public string? SessionQuiz { get; set; }
 
     [StringLength(500, MinimumLength = 10)]

@@ -14,11 +14,11 @@ namespace Dtos.BasicInformation
         public Guid CountryCodeId { get; set; }
 
         [Required]
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string GovernorateNameL1 { get; set; } = null!;
 
         [Required]
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string GovernorateNameL2 { get; set; } = null!;
     }
 }

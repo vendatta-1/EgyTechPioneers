@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Common;
 using Entities.Models.System;
 
@@ -13,7 +14,7 @@ public  class AcademyClaseDetail : Entity
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ClaseNumber { get; set; }
-
+    [MaxLength(2084)]
     public string? ImageUrl { get; set; }
 
     public virtual AcademyClaseMaster AcademyClaseMaster { get; set; }

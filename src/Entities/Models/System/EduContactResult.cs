@@ -21,7 +21,7 @@ public  class EduContactResult : Entity
 
     public string? Description { get; set; }
 
-    [MaxLength(250)]
+    [MaxLength(2023)]
     public string? Attachment { get; set; }
 
     
