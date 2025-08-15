@@ -572,6 +572,10 @@ public class AccountService : IAccountService
                 return Result.Failure<bool>(Error.NotFound("User.NotFound", "User not found"));
 
             user.ProfilePicture =  await _fileService.SaveAsync<AppUser>(file);
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return Result.Failure<bool>(Error.Problem("User.UpdateFailed",
+                    "can not update user-profile image please see logs"));
             return Result.Success(true);
         }
         catch (Exception ex)

@@ -24,7 +24,7 @@ public class ChatMessageLogic(
             SenderId = request.SenderId,
             SenderDisplayName = request.SenderDisplayName,
             ReceiverId = request.ReceiverId,
-            ReceiverDisplayName = request.ReceiverDisplayName,
+            ReceiverDisplayName = request.ReceiverDisplayName??"System",
             Text = request.Text,
             MessageType = request.MessageType,
             SentAt = DateTime.UtcNow,
@@ -38,14 +38,21 @@ public class ChatMessageLogic(
         
         if (request.File is not null && request.File.Length > 0)
         {
-            using var memStream = new MemoryStream(request.File); 
-            var formFile = new FormFile(memStream,0,memStream.Length, "file", request.FileName);
-            
-            string fileId = await fileService.SaveAsync<ChatMessage>(formFile);
+            string fileId = await fileService.SaveAsync<ChatMessage>(request.File);
             entity.FilePath = fileId;
+
             if (request.MessageType == ChatMessageType.Text)
-                request.MessageType = ChatMessageType.File; 
-        } 
+            {
+               
+                var extension = Path.GetExtension(request.File.FileName).ToLower();
+                if (extension == ".mp3" || extension == ".wav" || extension == ".ogg" || extension == ".wma" || extension ==".mp4a")
+                    request.MessageType = ChatMessageType.Voice;
+                else
+                    request.MessageType = ChatMessageType.File;
+            }
+        }
+
+
         
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -123,7 +130,7 @@ public class ChatMessageLogic(
             SenderId = request.SenderId,
             SenderDisplayName = request.SenderDisplayName,
             ReceiverId = request.ReceiverId,
-            ReceiverDisplayName = request.ReceiverDisplayName,
+            ReceiverDisplayName = request.ReceiverDisplayName??throw new ArgumentNullException(nameof(ChatMessage.ReceiverDisplayName), "ReceiverDisplayName can not be null"),
             Text = request.Text,
             MessageType = request.MessageType,
             SentAt = DateTime.UtcNow,
