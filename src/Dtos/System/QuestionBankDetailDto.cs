@@ -13,7 +13,7 @@ namespace Dtos.System
         [Required]
         public Guid QuestionBankMasterId { get; set; }
         
-        [StringLength(70 , MinimumLength = 1)]
+        [StringLength(70 , MinimumLength = 1), Required]
         public string AnswerNameL1 { get; set; } = null!;
         
         [StringLength(70 , MinimumLength = 1)]

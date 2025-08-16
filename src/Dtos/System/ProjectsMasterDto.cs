@@ -18,7 +18,7 @@ namespace Dtos.System
         [Required]
         public Guid BranchesDataId { get; set; }
 
-        [StringLength(70, MinimumLength = 2)]
+        [StringLength(70, MinimumLength = 2), Required]
         public string ProjectNameL1 { get; set; }
 
         [StringLength(70, MinimumLength = 2)]

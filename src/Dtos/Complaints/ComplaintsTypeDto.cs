@@ -16,7 +16,7 @@ namespace Dtos.Complaints
         [Required]
         public Guid BranchesDataId { get; set; }
 
-        [StringLength(70, MinimumLength = 3)]
+        [StringLength(70, MinimumLength = 3), Required]
         public string TypeNameL1 { get; set; } = null!;
         [StringLength(70, MinimumLength = 3)]
       

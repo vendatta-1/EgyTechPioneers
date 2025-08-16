@@ -21,7 +21,7 @@ namespace Dtos.System
          
         public int? SkillNo { get; set; }
         
-        [StringLength(70,  MinimumLength = 1)]
+        [StringLength(70,  MinimumLength = 1), Required]
         public string SkillNameL1 { get; set; } = null!;
         
         [StringLength(70, MinimumLength = 1)]

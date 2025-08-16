@@ -15,7 +15,7 @@ namespace Dtos.System
 
         public int? QuestionNo { get; set; }
         
-        [StringLength(70, MinimumLength = 1)]
+        [StringLength(70, MinimumLength = 1), Required]
         public string QuestionNameL1 { get; set; } = null!;
         
         [StringLength(70, MinimumLength = 1)]

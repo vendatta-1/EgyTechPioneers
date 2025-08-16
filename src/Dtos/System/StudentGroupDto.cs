@@ -11,7 +11,7 @@ namespace Dtos.System
         [Required]
         public Guid BranchDataId { get; set; }
 
-        [StringLength(maximumLength: 70)]
+        [StringLength(maximumLength: 70), Required]
         public string GroupNameL1 { get; set; } = null!;
 
         [StringLength(maximumLength: 70)]
