@@ -52,7 +52,7 @@ public class ProjectsMasterController(IProjectsMaster service) : ControllerBase
     {
         var result = await service.GetProjectFileAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.File, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 
     [HttpGet("{id:guid}/resource")]
@@ -60,7 +60,7 @@ public class ProjectsMasterController(IProjectsMaster service) : ControllerBase
     {
         var result = await service.GetProjectResourcesAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.File, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 
 

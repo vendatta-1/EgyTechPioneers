@@ -54,7 +54,7 @@ public class StudentContentDetailController(IStudentContentDetail service) : Con
     {
         var result = await service.GetSessionTasksAsync(id, ct);
         return result.Match(
-            data => Results.File(data.Item1!, data.Item2 ?? "application/octet-stream"),
+            data => Results.File(data.Stream!, data.ContentType ?? "application/octet-stream", data.FileName),
             ApiResults.Problem
         );
     }
@@ -64,7 +64,7 @@ public class StudentContentDetailController(IStudentContentDetail service) : Con
     {
         var result = await service.GetSessionProjectAsync(id, ct);
         return result.Match(
-            data => Results.File(data.Item1!, data.Item2 ?? "application/octet-stream"),
+            data => Results.File(data.Stream!, data.ContentType ?? "application/octet-stream",data.FileName),
             ApiResults.Problem
         );
     }
@@ -74,7 +74,7 @@ public class StudentContentDetailController(IStudentContentDetail service) : Con
     {
         var result = await service.GetSessionQuizAsync(id, ct);
         return result.Match(
-            data => Results.File(data.Item1!, data.Item2 ?? "application/octet-stream"),
+            data => Results.File(data.Stream!, data.ContentType ?? "application/octet-stream", data.FileName),
             ApiResults.Problem
         );
     }

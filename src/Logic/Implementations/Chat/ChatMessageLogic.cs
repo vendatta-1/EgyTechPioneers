@@ -75,13 +75,16 @@ public class ChatMessageLogic(
         return Result.Success(list);
     }
 
-    public Task<Result<(FileStream?, string?)>> GetFileAsync(string fileId)
+    public Task<Result<(FileStream? file, string? fileName, string? contentType)>> GetFileAsync(string fileId)
     {
-        var file = fileService.Get<ChatMessage>(fileId);
-        return Task.FromResult(file.Stream is not null
-            ? Result.Success((file.Stream, file.RealExtension))
-            : Result.Failure<(FileStream?, string?)>(Error.NotFound("Chat.FileNotFound", "File not found")));
+        var (stream, fileName) = fileService.Get<ChatMessage>(fileId);
+        if (stream is null || fileName is null)
+            return Task.FromResult(Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("Chat.FileNotFound", "File not found")));
+
+        var contentType = fileService.GetMimeType(Path.GetExtension(fileName));
+        return Task.FromResult(Result.Success((stream, fileName, contentType)));
     }
+
 
     public async Task<Result<List<MessageResponseDto>>> GetAllConversationsAsync(CancellationToken cancellationToken)
     {

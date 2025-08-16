@@ -585,40 +585,28 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<Result<(FileStream? File, string? ContentType)>> GetProfilePictureAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<Result<(FileStream? File, string? FileName, string? ContentType)>> GetProfilePictureAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         try
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
-                return Result.Failure<(FileStream?, string?)>(Error.NotFound("User.NotFound", "User not found"));
+                return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("User.NotFound", "User not found"));
 
-            var (fileStream, realExtension) = _fileService.Get<AppUser>(user.ProfilePicture);
-            if (fileStream == null || realExtension == null)
-                return Result.Failure<(FileStream?, string?)>(Error.NotFound("File.NotFound", "Profile picture not found."));
+            var (fileStream, fileName) = _fileService.Get<AppUser>(user.ProfilePicture);
+            if (fileStream == null || fileName == null)
+                return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("File.NotFound", "Profile picture not found."));
 
-            var contentType = GetContentType(realExtension);
-            return Result.Success((fileStream, contentType));
+            var contentType = _fileService.GetMimeType(Path.GetExtension(fileName));
+            return Result.Success((fileStream, fileName, contentType));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An unexpected error occurred while retrieving profile picture for user {UserId}.", userId);
-            return Result.Failure<(FileStream?, string?)>(Error.Problem("GetProfilePicture.Exception", $"An unexpected error occurred while retrieving profile picture: {ex.Message}"));
+            return Result.Failure<(FileStream?, string?, string?)>(Error.Problem("GetProfilePicture.Exception", $"An unexpected error occurred while retrieving profile picture: {ex.Message}"));
         }
     }
-
-    private string GetContentType(string extension)
-    {
-        return extension switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            _ => "application/octet-stream"
-        };
-    }
     
- 
     public async Task<Result<bool>> LinkExternalAccountAsync(ExternalLoginDto dto, Guid userId, CancellationToken cancellationToken = default)
     {
         try

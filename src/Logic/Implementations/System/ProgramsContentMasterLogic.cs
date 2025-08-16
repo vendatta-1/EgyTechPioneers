@@ -86,18 +86,18 @@ public class ProgramsContentMasterLogic(
         return Result.Success(true);
     }
 
-    public async Task<Result<(FileStream Stream, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<(FileStream Stream, string? FileName, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var entity = await repository.GetByIdAsync(id, cancellationToken);
-        if(entity.IsFailure)
-            return Result.Failure<(FileStream, string?)>(entity.Error);
-        
-        var (stream, ext) = fileService.Get<ProgramsContentMaster>(entity.Value.ScientificMaterial!);
-        
-        if (stream is null)
-            return Result.Failure<(FileStream, string?)>(Error.NotFound("FileNotFound", $"No material for session with ID: {id}"));
+        if (entity.IsFailure)
+            return Result.Failure<(FileStream, string?, string?)>(entity.Error);
 
-        return await Task.FromResult(Result.Success((stream, GetMimeType(ext))));
+        var (stream, fileName) = fileService.Get<ProgramsContentMaster>(entity.Value.ScientificMaterial!);
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream, string?, string?)>(Error.NotFound("FileNotFound", $"No material for session with ID: {id}"));
+
+        var contentType = GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
 
     private string? GetMimeType(string? ext) 

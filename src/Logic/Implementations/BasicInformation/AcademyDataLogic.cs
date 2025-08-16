@@ -105,41 +105,41 @@ public class AcademyDataLogic(
 
         return Result.Success(result.Value);
     }
-
-    public async Task<Result<(byte[]? file, string? contentType)>> GetImageAsync(Guid id,
+    public async Task<Result<(byte[]? file, string? fileName, string? contentType)>> GetImageAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
         var entity = await _repository.GetAsync(x => x.Id == id && x.ImageUrl != null, cancellationToken);
-        if (!entity.IsSuccess) return Result.Failure<(byte[]?, string?)>(entity.Error);
+        if (!entity.IsSuccess) return Result.Failure<(byte[]?, string?, string?)>(entity.Error);
 
-        var (stream, extension) = _fileService.Get<AcademyData>(entity.Value.ImageUrl);
-
-        if (stream is null) return Result.Success<(byte[]?, string?)>((null, null));
+        var (stream, fileName) = _fileService.Get<AcademyData>(entity.Value.ImageUrl);
+        if (stream is null || fileName is null) return Result.Success<(byte[]?, string?, string?)>((null, null, null));
 
         using var ms = new MemoryStream();
-
         await stream.CopyToAsync(ms, cancellationToken);
 
-        return Result.Success<(byte[]?, string?)>((ms.ToArray(), GetMimeType(extension)));
+        var contentType = _fileService.GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((ms.ToArray(), fileName, contentType));
     }
 
-    public async Task<Result<(FileStream? file, string? contentType)>> GetAttachmentsAsync(Guid id,
+    public async Task<Result<(FileStream? file, string? fileName, string? contentType)>> GetAttachmentsAsync(Guid id,
         CancellationToken cancellationToken = default)
-    { 
+    {
         var entity = await _repository.GetByIdAsync(id, cancellationToken);
-        
-        if (!entity.IsSuccess) return Result.Failure<(FileStream?, string?)>(entity.Error);
-        if(entity.Value.AttachFiles is null)
-            return Result.Failure<(FileStream?, string?)>(Error.NotFound("AttachFiles.NotFound", "there is non attachments"));
-        var (stream, extension) = _fileService.Get<AcademyData>(entity.Value.AttachFiles, ".attach");
-        if (stream is null) return Result.Failure<(FileStream?, string?)>(Error.NotFound("AttachFiles.NotFound", "there is non attachments"));
-       
-        return Result.Success<(FileStream?, string?)>((stream, GetMimeType(extension)));
+        if (!entity.IsSuccess) return Result.Failure<(FileStream?, string?, string?)>(entity.Error);
+        if (entity.Value.AttachFiles is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("AttachFiles.NotFound", "No attachments found"));
+
+        var (stream, fileName) = _fileService.Get<AcademyData>(entity.Value.AttachFiles, ".attach");
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("AttachFiles.NotFound", "No attachments found"));
+
+        var contentType = _fileService.GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
 
     private string? GetMimeType(string? extension)
     {
-        return _fileService.GetMimeType(extension??"");
+        return _fileService.GetMimeType(extension ?? "");
     }
 
     private async Task<Result<bool>> ValidateRelationsAsync(AcademyDataDto dto, CancellationToken ct)

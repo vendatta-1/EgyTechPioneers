@@ -13,8 +13,8 @@ public interface IProgramsContentDetail
     Task<Result<bool>> UpdateAsync(Guid id, ProgramsContentDetailDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
  
-    Task<Result<(FileStream Stream, string? ContentType)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream Stream, string? ContentType)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream Stream, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream Stream, string? ContentType)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream Stream, string? FileName, string? ContentType)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream Stream, string? FileName, string? ContentType)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream Stream, string? FileName, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream Stream, string? FileName, string? ContentType)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default);
 }

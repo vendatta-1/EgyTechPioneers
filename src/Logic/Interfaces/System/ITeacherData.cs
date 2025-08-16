@@ -10,7 +10,10 @@ public interface ITeacherData
     Task<Result<TeacherDataDto>> CreateAsync(TeacherDataDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> UpdateAsync(Guid id, TeacherDataDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream?, string?)>> GetImageAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetImageAsync(Guid id,
+        CancellationToken cancellationToken = default);
+
     Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetNotActiveAsync(CancellationToken cancellationToken = default);
 
     Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetByBranchAsync(Guid branchId,

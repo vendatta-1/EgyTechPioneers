@@ -58,6 +58,6 @@ public class AcademyClaseDetailController(IAcademyClaseDetail service) : Control
         if (result.Value.Stream == null || result.Value.ContentType == null)
             return Results.NotFound();
 
-        return Results.File(result.Value.Stream, result.Value.ContentType);
+        return Results.File(result.Value.Stream, result.Value.ContentType, result.Value.FileName);
     }
 }

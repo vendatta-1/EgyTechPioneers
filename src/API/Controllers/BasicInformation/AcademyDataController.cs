@@ -64,6 +64,6 @@ public class AcademyDataController(IAcademyData service) : ControllerBase
         var result = await service.GetAttachmentsAsync(id, cancellationToken);
         return result.IsFailure
             ? NotFound()
-            : File(result.Value.file, result.Value.contentType ?? "application/octet-stream");
+            : File(result.Value.file!, result.Value.contentType ?? "application/octet-stream", result.Value.fileName);
     }
 }

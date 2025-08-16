@@ -105,42 +105,45 @@ public class StudentContentDetailLogic(
         return Result.Success(true);
     }
 
-    public async Task<Result<(FileStream?, string?)>> GetSessionTasksAsync(Guid id,
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetSessionTasksAsync(Guid id,
         CancellationToken cancellationToken = default)
-        => await GetFileResult(id,nameof(StudentContentDetail.SessionTasks) ,cancellationToken);
+        => await GetFileResult(id, nameof(StudentContentDetail.SessionTasks), cancellationToken);
 
-    public async Task<Result<(FileStream?, string?)>> GetSessionProjectAsync(Guid id,
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetSessionProjectAsync(Guid id,
         CancellationToken cancellationToken = default)
-        => await GetFileResult(id, nameof(StudentContentDetail.SessionProject),cancellationToken);
+        => await GetFileResult(id, nameof(StudentContentDetail.SessionProject), cancellationToken);
 
-    public async Task<Result<(FileStream?, string?)>> GetSessionQuizAsync(Guid id,
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetSessionQuizAsync(Guid id,
         CancellationToken cancellationToken = default)
-        => await GetFileResult(id,nameof(StudentContentDetail.SessionQuiz), cancellationToken);
+        => await GetFileResult(id, nameof(StudentContentDetail.SessionQuiz), cancellationToken);
 
-    private async Task<Result<(FileStream?, string?)>> GetFileResult(Guid id,string name, CancellationToken cancellationToken)
+    private async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetFileResult(Guid id, string propertyName, CancellationToken cancellationToken)
     {
         var result = await repository.GetByIdAsync(id, cancellationToken);
         if (result.IsFailure)
-            return Result.Failure<(FileStream?, string?)>(result.Error);
+            return Result.Failure<(FileStream?, string?, string?)>(result.Error);
 
-        var property = result.Value.GetType().GetProperty(name);
+        var property = result.Value.GetType().GetProperty(propertyName);
         if (property == null)
-            return Result.Failure<(FileStream?, string?)>(Error.Failure("Property.NotFound", $"Property '{name}' not found on StudentContentDetail"));
+            return Result.Failure<(FileStream?, string?, string?)>(Error.Failure("Property.NotFound", $"Property '{propertyName}' not found on StudentContentDetail"));
 
         var fileId = property.GetValue(result.Value) as string;
-        var (stream, ext) = fileService.Get<StudentContentDetail>(fileId);
-    
-        if (stream is null)
-            return Result.Failure<(FileStream?, string?)>(Error.NotFound("FileNotFound", $"No file found for ID: {id}"));
+        var (stream, fileName) = fileService.Get<StudentContentDetail>(fileId);
 
-        return Result.Success((stream, GetMimeType(ext)));
+        if (stream is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound", $"No file found for ID: {id}"));
+
+        var contentType = GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
 
     private string? GetMimeType(string? ext)
     {
-        return fileService.GetMimeType(ext ?? "");
+        return fileService.GetMimeType(ext ?? "application/octet-stream");
     }
 
+
+ 
     private async Task<Result> ValidateRelationsAsync(StudentContentDetailDto dto, CancellationToken ct)
     {
         if (dto.ProgramsContentDetailsId is not null)

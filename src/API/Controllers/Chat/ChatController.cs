@@ -73,11 +73,11 @@ public class ChatController(IChatMessage chatService, ICurrentUserService curren
         return result.Match(
             tuple =>
             {
-                var (stream, ext) = tuple;
+                var (stream, fileName,contentType) = tuple;
                 if (stream is null)
                     return Results.NotFound();
 
-                return Results.File(stream, "application/octet-stream", $"attachment{ext ?? ".dat"}");
+                return Results.File(stream, contentType, fileName);
             },
             ApiResults.Problem
         );

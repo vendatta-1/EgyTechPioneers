@@ -7,7 +7,7 @@ public interface IChatMessage
 {
     Task<Result<MessageResponseDto>> SendMessageAsync(SendMessageRequestDto request, CancellationToken cancellationToken);
     Task<Result<List<MessageResponseDto>>> GetConversationAsync(Guid userIdA, Guid userIdB, CancellationToken cancellationToken);
-    Task<Result<(FileStream?, string?)>> GetFileAsync(string fileId);
+    Task<Result<(FileStream? file, string? fileName, string? contentType)>> GetFileAsync(string fileId);
     Task<Result<List<MessageResponseDto>>> GetAllConversationsAsync(CancellationToken cancellationToken);
     Task<Result<List<MessageResponseDto>>> GetUnreadConversationsAsync(CancellationToken cancellationToken);
     Task<Result<bool>> MarkAsReadAsync(Guid messageId, CancellationToken cancellationToken);

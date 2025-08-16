@@ -11,5 +11,8 @@ public interface IProgramsContentMaster
     Task<Result<ProgramsContentMasterDto>> CreateAsync(ProgramsContentMasterDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> UpdateAsync(Guid id, ProgramsContentMasterDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream Stream, string? ContentType)>> GetScientificMaterialAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<Result<(FileStream Stream, string? FileName, string? ContentType)>> GetScientificMaterialAsync(Guid id,
+        CancellationToken cancellationToken = default);
+
 }

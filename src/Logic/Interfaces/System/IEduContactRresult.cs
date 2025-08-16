@@ -15,5 +15,7 @@ public interface IEduContactResult
    
     Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetByStudentIdAsync(Guid studentId, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetByDateRangeAsync(DateTime from, DateTime to, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream? Stream, string? ContentType)>> GetAttachmentAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetAttachmentAsync(Guid id,
+        CancellationToken cancellationToken = default);
 }

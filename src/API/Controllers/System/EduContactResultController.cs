@@ -70,6 +70,6 @@ public class EduContactResultController(IEduContactResult service) : ControllerB
     {
         var result = await _service.GetAttachmentAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream",result.Value.FileName);
     }
 }

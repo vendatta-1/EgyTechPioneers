@@ -5,7 +5,7 @@ namespace Logic.Interfaces.Helpers
     public interface IFileService
     {
         Task<string> SaveAsync<T>(IFormFile file, string fakeExtension = ".dat");
-        (FileStream? Stream, string? RealExtension) Get<T>(string? fileId, string fakeExtension = ".dat");
+        (FileStream? Stream, string? FileName) Get<T>(string? fileId, string fakeExtension = ".dat");
         bool Delete<T>(string? fileId, string fakeExtension = ".dat");
         byte[]? Read<T>(string? fileId, string fakeExtension = ".dat");
         bool Exists<T>(string? fileId, string fakeExtension = ".dat");

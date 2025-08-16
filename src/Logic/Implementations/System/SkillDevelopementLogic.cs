@@ -98,21 +98,19 @@ public class SkillDevelopmentLogic(
         return Result.Success(true);
     }
 
-    public async Task<Result<(byte[]? File, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var entity = await repository.GetByIdAsync(id, cancellationToken);
-        if(entity.IsFailure)
-            return Result.Failure<(byte[]?, string?)>(entity.Error);
-        
-        var (stream, ext) = fileService.Get<SkillDevelopment>(entity.Value.FilesAttach);
-        
+        if (entity.IsFailure)
+            return Result.Failure<(FileStream?, string?, string?)>(entity.Error);
+
+        var (stream, fileName) = fileService.Get<SkillDevelopment>(entity.Value.FilesAttach);
         if (stream is null)
-            return Result.Failure<(byte[]?, string?)>(Error.NotFound("FileNotFound", $"There is no attachment for this item with ID: {id}"));
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound", $"There is no attachment for this item with ID: {id}"));
+ 
+        var contentType = GetMimeType(Path.GetExtension(fileName));
 
-        await using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms, cancellationToken);
-
-        return Result.Success((ms.ToArray(), GetMimeType(ext)));
+        return Result.Success((stream, fileName, contentType));
     }
 
     private async Task<Result> ValidateRelationsAsync(SkillDevelopmentDto dto, CancellationToken ct)

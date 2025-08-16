@@ -50,5 +50,8 @@ public interface IAccountService
     Task<Result<DateTime?>> GetLastLoginTimeAsync(Guid userId, CancellationToken cancellationToken = default);
  
     Task<Result<bool>> UploadProfilePictureAsync(Guid userId, IFormFile file, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream? File, string? ContentType)>> GetProfilePictureAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    Task<Result<(FileStream? File, string? FileName, string? ContentType)>> GetProfilePictureAsync(Guid userId,
+        CancellationToken cancellationToken = default);
+
 }

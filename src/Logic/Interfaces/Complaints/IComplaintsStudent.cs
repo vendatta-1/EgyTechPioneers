@@ -14,5 +14,8 @@ public interface IComplaintsStudent
     Task<Result<IReadOnlyCollection<ComplaintsStudentDto>>> GetByStatusIdAsync(Guid statusId, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyCollection<ComplaintsStudentDto>>> GetByDateRangeAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken = default);
     Task<Result<int>> CountByStatusAsync(Guid statusId, CancellationToken cancellationToken = default);
-    Task<Result<(byte[]? File, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<Result<(FileStream? File, string? FileName, string? ContentType)>> GetAttachmentsAsync(Guid id,
+        CancellationToken cancellationToken = default);
+
 }

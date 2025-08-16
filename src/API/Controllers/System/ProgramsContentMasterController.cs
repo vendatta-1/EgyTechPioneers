@@ -54,6 +54,6 @@ public class ProgramsContentMasterController(IProgramsContentMaster service) : C
     {
         var result = await service.GetScientificMaterialAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream",result.Value.FileName);
     }
 }

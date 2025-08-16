@@ -107,7 +107,7 @@ public class StudentDataLogic(
     public async Task<Result<IReadOnlyCollection<StudentDataDto>>> GetGraduatedStudentsAsync(
         CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetFilteredAsync(x => x.GraduationStatus != null, cancellationToken);
+        var result = await _repository.GetFilteredAsync(x => x.GraduationStatus=="Graduated", cancellationToken);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<StudentDataDto>>())
             : Result.Failure<IReadOnlyCollection<StudentDataDto>>(result.Error);

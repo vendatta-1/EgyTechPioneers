@@ -40,24 +40,21 @@ public class TeacherDataLogic(
             : Result.Failure<IReadOnlyCollection<TeacherDataDto>>(result.Error);
     }
 
-    public async Task<Result<(FileStream?, string?)>> GetImageAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetImageAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var entity = await _repository.GetByIdAsync(id, cancellationToken);
-        if (entity.IsFailure )
-        {
-            return Result.Failure<(FileStream?, string?)>(entity.Error);
-        }
+        if (entity.IsFailure)
+            return Result.Failure<(FileStream?, string?, string?)>(entity.Error);
 
         if (string.IsNullOrEmpty(entity.Value.ImageUrl))
-        { 
-            return Result.Failure<(FileStream?, string?)>(Error.NotFound("Image.NotFound", "there is non image for teacher"));
-        }
-        var (stream, ext) = fileService.Get<TeacherData>(entity.Value.ImageUrl!);
-        
-        if (stream is null)
-            return Result.Failure<(FileStream?, string?)>(Error.NotFound("FileNotFound", $"No material for session with ID: {id}"));
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("Image.NotFound", "No image found for this teacher"));
 
-        return await Task.FromResult(Result.Success((stream, GetMimeType(ext))));
+        var (stream, fileName) = fileService.Get<TeacherData>(entity.Value.ImageUrl!);
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound", $"No file found for ID: {id}"));
+
+        var contentType = GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
 
     public async Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetNotActiveAsync(CancellationToken ct = default)

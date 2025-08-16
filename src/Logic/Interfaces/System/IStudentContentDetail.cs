@@ -12,7 +12,7 @@ public interface IStudentContentDetail
     Task<Result<bool>> UpdateAsync(Guid id, StudentContentDetailDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<Result<(FileStream? File, string? ContentType)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream? File, string? ContentType)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream? File, string? ContentType)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetSessionTasksAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetSessionProjectAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetSessionQuizAsync(Guid id, CancellationToken cancellationToken = default);
 }

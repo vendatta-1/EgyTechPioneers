@@ -105,40 +105,42 @@ public class ProjectsMasterLogic(
         return Result.Success(true);
     }
 
-    public async Task<Result<(FileStream? File, string? ContentType)>> GetProjectFileAsync(Guid id,
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetProjectFileAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
         var result = await repository.GetAsync(
             x => x.Id == id && EF.Property<string?>(x, nameof(ProjectsMaster.ProjectFile)) != null, cancellationToken);
         if (result.IsFailure)
-            return Result.Failure<(FileStream?, string?)>(result.Error);
+            return Result.Failure<(FileStream?, string?, string?)>(result.Error);
 
-        var (stream, ext) = fileService.Get<ProjectsMaster>(result.Value.ProjectFile, "file.dat");
-
-        if (stream is null)
-            return Result.Failure<(FileStream?, string?)>(
+        var (stream, fileName) = fileService.Get<ProjectsMaster>(result.Value.ProjectFile, "file.dat");
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream?, string?, string?)>(
                 Error.NotFound("File", $"Project file not found for ID: {id}"));
 
-        return await Task.FromResult((stream, GetMimeType(ext)));
+        var contentType = GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
 
-    public async Task<Result<(FileStream? File, string? ContentType)>> GetProjectResourcesAsync(Guid id,
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetProjectResourcesAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
         var result = await repository.GetAsync(
             x => x.Id == id && EF.Property<string?>(x, nameof(ProjectsMaster.ProjectResources)) != null,
             cancellationToken);
         if (result.IsFailure)
-            return Result.Failure<(FileStream?, string?)>(result.Error);
+            return Result.Failure<(FileStream?, string?, string?)>(result.Error);
 
-        var (stream, ext) = fileService.Get<ProjectsMaster>(result.Value.ProjectResources, "resource.dat");
-
-        if (stream is null)
-            return Result.Failure<(FileStream?, string?)>(Error.NotFound("Resource",
+        var (stream, fileName) = fileService.Get<ProjectsMaster>(result.Value.ProjectResources, "resource.dat");
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("Resource",
                 $"Project resource not found for ID: {id}"));
 
-        return await Task.FromResult((stream, GetMimeType(ext)));
+        var contentType = GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
+
+ 
 
     public async Task<Result<IReadOnlyCollection<ProjectsMasterDto>>> GetByAcademyIdAsync(Guid academyId,
         CancellationToken cancellationToken = default)

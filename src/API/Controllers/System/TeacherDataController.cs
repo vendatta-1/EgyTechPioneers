@@ -104,7 +104,7 @@ public class TeacherDataController(ITeacherData service) : ControllerBase
     {
         var result = await service.GetImageAsync(id);
         return result.Match(
-            data => Results.File(data.Item1!, data.Item2 ?? "application/octet-stream"),
+            data => Results.File(data.Stream!, data.ContentType ?? "application/octet-stream", data.FileName),
             ApiResults.Problem
         );
     }

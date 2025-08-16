@@ -84,7 +84,7 @@ public class ComplaintsStudentController(IComplaintsStudent service) : Controlle
     {
         var result = await _service.GetAttachmentsAsync(id, cancellationToken);
         return result.Match(
-            data => Results.File(data.File, data.ContentType ?? "application/octet-stream"),
+            data => Results.File(data.File!, data.ContentType ?? "application/octet-stream", data.FileName),
             ApiResults.Problem
         );
     }

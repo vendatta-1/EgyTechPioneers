@@ -54,7 +54,7 @@ public class ProgramsContentDetailController(IProgramsContentDetail service) : C
     {
         var result = await service.GetSessionTasksAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 
     [HttpGet("{id:guid}/project")]
@@ -62,7 +62,7 @@ public class ProgramsContentDetailController(IProgramsContentDetail service) : C
     {
         var result = await service.GetSessionProjectAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 
     [HttpGet("{id:guid}/material")]
@@ -70,7 +70,7 @@ public class ProgramsContentDetailController(IProgramsContentDetail service) : C
     {
         var result = await service.GetScientificMaterialAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 
     [HttpGet("{id:guid}/quiz")]
@@ -78,6 +78,6 @@ public class ProgramsContentDetailController(IProgramsContentDetail service) : C
     {
         var result = await service.GetSessionQuizAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 }

@@ -118,18 +118,20 @@ public class ComplaintsStudentLogic(
         return await _repository.CountAsync(x => x.ComplaintsStatusesId == statusId, cancellationToken);
     }
 
-    public async Task<Result<(byte[]? File, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<(FileStream? File, string? FileName, string? ContentType)>> GetAttachmentsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _repository.GetAsync(x=>x.Id == id && x.FilesAttach!=null, cancellationToken);
-        if(result.IsFailure)
-            return Result.Failure<(byte[]?, string?)>(result.Error);
-        var (stream, ext) = _fileService.Get<ComplaintsStudent>(result.Value.FilesAttach);
-        if (stream is null) return Result.Failure<(byte[]?, string?)>(Error.NotFound("FileNotFound", $"there is non attachment for this complaints with id: {id}"));
+        var result = await _repository.GetAsync(x => x.Id == id && x.FilesAttach != null, cancellationToken);
+        if (result.IsFailure)
+            return Result.Failure<(FileStream?, string?, string?)>(result.Error);
 
-        await using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms, cancellationToken);
-        return Result.Success(((byte[]?)ms.ToArray(), GetMimeType(ext)));
+        var (stream, fileName) = _fileService.Get<ComplaintsStudent>(result.Value.FilesAttach);
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound", $"No attachment found for complaint with id: {id}"));
+
+        var contentType = _fileService.GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
+
 
     private  string? GetMimeType(string? ext)
     {

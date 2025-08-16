@@ -120,24 +120,18 @@ public class AcademyClaseDetailLogic(
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(true);
     }
-
-    public async Task<Result<(FileStream? Stream, string? ContentType)>> GetImageByIdAsync(Guid id)
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetImageByIdAsync(Guid id)
     {
-        var entity = await _repository.GetAsync(x => x.Id == id && x.ImageUrl!=null, CancellationToken.None);
-        if(entity.IsFailure)
-            return Result.Failure<(FileStream?, string?)>(entity.Error);
-        
-        var (stream, ext) = _fileService.Get<AcademyClaseDetail>(entity.Value.ImageUrl);
-        
-        var contentType = ext?.ToLower() switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            ".bmp" => "image/bmp",
-            _ => "application/octet-stream"
-        };
+        var entityResult = await _repository.GetAsync(x => x.Id == id && x.ImageUrl != null, CancellationToken.None);
+        if (entityResult.IsFailure)
+            return Result.Failure<(FileStream?, string?, string?)>(entityResult.Error);
 
-        return await Task.FromResult(Result.Success((stream, contentType)));
+        var (stream, fileName) = _fileService.Get<AcademyClaseDetail>(entityResult.Value.ImageUrl);
+        if (stream is null) 
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("Image.NotFound", "Image not found."));
+
+        var contentType = _fileService.GetMimeType(Path.GetExtension(fileName ?? ""));
+
+        return Result.Success((stream, fileName, contentType));
     }
 }

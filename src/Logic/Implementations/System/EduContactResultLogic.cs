@@ -115,20 +115,20 @@ public class EduContactResultLogic(
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<EduContactResultDto>>())
             : Result.Failure<IReadOnlyCollection<EduContactResultDto>>(result.Error);
     }
-
-    public async Task<Result<(FileStream? Stream, string? ContentType)>> GetAttachmentAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetAttachmentAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var entity = await repository.GetAsync(x=>x.Id == id && x.Attachment != null, cancellationToken);
-        if(entity.IsFailure)
-            return Result.Failure<(FileStream?, string?)>(entity.Error);
-        
-        var (stream, ext) = await Task.FromResult(fileService.Get<EduContactResult>(entity.Value.Attachment!));
-        
-        if (stream is null)
-            return Result.Failure<(FileStream?, string?)>(Error.NotFound("FileNotFound", $"No file for EduContactResult with ID {id}"));
+        var entity = await repository.GetAsync(x => x.Id == id && x.Attachment != null, cancellationToken);
+        if (entity.IsFailure)
+            return Result.Failure<(FileStream?, string?, string?)>(entity.Error);
 
-        return Result.Success(((FileStream?)stream, GetMimeType(ext)));
+        var (stream, fileName) = fileService.Get<EduContactResult>(entity.Value.Attachment!);
+        if (stream is null || fileName is null)
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound", $"No file for EduContactResult with ID {id}"));
+
+        var contentType = fileService.GetMimeType(Path.GetExtension(fileName));
+        return Result.Success((stream, fileName, contentType));
     }
+
 
     private async Task<Result> ValidateRelationsAsync(EduContactResultDto dto, CancellationToken ct)
     {

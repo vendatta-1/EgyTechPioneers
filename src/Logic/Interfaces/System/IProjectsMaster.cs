@@ -11,8 +11,8 @@ public interface IProjectsMaster
     Task<Result<bool>> UpdateAsync(Guid id, ProjectsMasterDto dto, CancellationToken cancellationToken = default);
     Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
  
-    Task<Result<(FileStream? File, string? ContentType)>> GetProjectFileAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<(FileStream? File, string? ContentType)>> GetProjectResourcesAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetProjectFileAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetProjectResourcesAsync(Guid id, CancellationToken cancellationToken = default);
     
     public Task<Result<IReadOnlyCollection<ProjectsMasterDto>>> GetByAcademyIdAsync(Guid academyId, CancellationToken cancellationToken = default);
     public Task<Result<IReadOnlyCollection<ProjectsMasterDto>>> GetByBranchIdAsync(Guid branchId, CancellationToken cancellationToken = default);

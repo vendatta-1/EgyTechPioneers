@@ -58,7 +58,7 @@ app.UseSerilogRequestLogging();
 
 app.UseExceptionHandler();
 
-app.UseMiddleware<MimeExtensionMiddleware>();
+// app.UseMiddleware<MimeExtensionMiddleware>();
 app.MapControllers();
 
 app.MapHub<ChatHub>("/chathub");

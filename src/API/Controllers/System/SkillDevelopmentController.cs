@@ -59,6 +59,6 @@ public class SkillDevelopmentController(ISkillDevelopment service) : ControllerB
     {
         var result = await service.GetAttachmentsAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.File!, result.Value.ContentType ?? "application/octet-stream");
+        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
     }
 }
