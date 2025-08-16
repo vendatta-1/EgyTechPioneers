@@ -53,18 +53,16 @@ public class AcademyDataController(IAcademyData service) : ControllerBase
     public async Task<IActionResult> GetImage(Guid id, CancellationToken cancellationToken)
     {
         var result = await service.GetImageAsync(id, cancellationToken);
-        return result.Value.file is null
+        return result.IsFailure
             ? NotFound()
             : File(result.Value.file, result.Value.contentType ?? "application/octet-stream");
     }
 
     [HttpGet("{id:guid}/attachment")]
-    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
-    [Produces("application/pdf")]
     public async Task<IActionResult> GetAttachment(Guid id, CancellationToken cancellationToken)
     {
         var result = await service.GetAttachmentsAsync(id, cancellationToken);
-        return result.Value.file is null
+        return result.IsFailure
             ? NotFound()
             : File(result.Value.file, result.Value.contentType ?? "application/octet-stream");
     }
