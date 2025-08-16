@@ -102,7 +102,7 @@ public class AccountService : IAccountService
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
             if (!result.Succeeded)
-                return Result.Failure<TokenResultDto>(Error.Failure("Auth.Failed", "Invalid credentials"));
+                return Result.Failure<TokenResultDto>(Error.Problem("Auth.Failed", "Invalid credentials"));
 
             user.LastLoginTime = DateTime.UtcNow;
             await _userManager.UpdateAsync(user);
