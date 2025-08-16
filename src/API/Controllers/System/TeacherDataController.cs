@@ -98,4 +98,14 @@ public class TeacherDataController(ITeacherData service) : ControllerBase
             ApiResults.Problem
         );
     }
+
+    [HttpGet("{id:guid}/image")]
+    public async Task<IResult> GetImage(Guid id)
+    {
+        var result = await service.GetImageAsync(id);
+        return result.Match(
+            data => Results.File(data.Item1!, data.Item2 ?? "application/octet-stream"),
+            ApiResults.Problem
+        );
+    }
 }

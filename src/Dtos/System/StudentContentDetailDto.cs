@@ -7,7 +7,7 @@ public class StudentContentDetailDto
 {
     public Guid? Id { get; set; }
     
-    public Guid? ProgramContentDetailsId { get; set; }
+    public Guid? ProgramsContentDetailsId { get; set; }
 
     [Required]
     public Guid StudentDataId { get; set; }

@@ -174,19 +174,8 @@ public class ProjectsMasterLogic(
         return await repository.CountAsync(x => x.AcademyDataId == academyId, cancellationToken);
     }
 
-    private static string? GetMimeType(string? ext)
+    private  string? GetMimeType(string? ext)
     {
-        if (string.IsNullOrWhiteSpace(ext)) return null;
-
-        return ext.ToLower() switch
-        {
-            ".pdf" => "application/pdf",
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".doc" => "application/msword",
-            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            ".txt" => "text/plain",
-            _ => "application/octet-stream"
-        };
+       return fileService.GetMimeType(ext ?? "");
     }
 }

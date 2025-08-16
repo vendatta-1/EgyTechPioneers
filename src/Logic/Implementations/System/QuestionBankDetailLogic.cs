@@ -51,7 +51,6 @@ public class QuestionBankDetailLogic(
         var entity = dto.Adapt<QuestionBankDetail>();
         var insert = await repository.InsertAsync(entity, cancellationToken);
         if (!insert.IsSuccess) return Result.Failure<QuestionBankDetailDto>(insert.Error);
-
         await unit.SaveChangesAsync(cancellationToken);
         return Result.Success(insert.Value.Adapt<QuestionBankDetailDto>());
     }

@@ -5,6 +5,7 @@ namespace Dtos.System
 {
     public class EduContactResultDto
     {
+        public Guid? Id { get; set; }
         [Required]
         public Guid AcademyDataId { get; set; }
 

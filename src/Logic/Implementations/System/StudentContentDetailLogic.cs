@@ -136,26 +136,16 @@ public class StudentContentDetailLogic(
         return Result.Success((stream, GetMimeType(ext)));
     }
 
-    private static string? GetMimeType(string? ext)
+    private string? GetMimeType(string? ext)
     {
-        if (string.IsNullOrWhiteSpace(ext)) return null;
-        return ext.ToLower() switch
-        {
-            ".pdf" => "application/pdf",
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".doc" => "application/msword",
-            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            ".txt" => "text/plain",
-            _ => "application/octet-stream"
-        };
+        return fileService.GetMimeType(ext ?? "");
     }
 
     private async Task<Result> ValidateRelationsAsync(StudentContentDetailDto dto, CancellationToken ct)
     {
-        if (dto.ProgramContentDetailsId is not null)
+        if (dto.ProgramsContentDetailsId is not null)
         {
-            var exists = await programsContentDetailRepo.AnyAsync(x => x.Id == dto.ProgramContentDetailsId, ct);
+            var exists = await programsContentDetailRepo.AnyAsync(x => x.Id == dto.ProgramsContentDetailsId, ct);
             if (!exists)
                 return Result.Failure(Error.NotFound("ProgramsContentDetail.NotFound",
                     "ProgramsContentDetail ID not found"));

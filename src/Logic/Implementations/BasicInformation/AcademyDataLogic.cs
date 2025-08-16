@@ -137,18 +137,9 @@ public class AcademyDataLogic(
         return Result.Success<(FileStream?, string?)>((stream, GetMimeType(extension)));
     }
 
-    private static string? GetMimeType(string? extension)
+    private string? GetMimeType(string? extension)
     {
-        return extension?.ToLowerInvariant() switch
-        {
-            ".jpg" or ".jpeg" => "image/jpeg",
-            ".png" => "image/png",
-            ".gif" => "image/gif",
-            ".pdf" => "application/pdf",
-            ".doc" or ".docx" => "application/msword",
-            ".xls" or ".xlsx" => "application/vnd.ms-excel",
-            _ => "application/octet-stream"
-        };
+        return _fileService.GetMimeType(extension??"");
     }
 
     private async Task<Result<bool>> ValidateRelationsAsync(AcademyDataDto dto, CancellationToken ct)

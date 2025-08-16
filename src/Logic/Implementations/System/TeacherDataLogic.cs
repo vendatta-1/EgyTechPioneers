@@ -40,6 +40,26 @@ public class TeacherDataLogic(
             : Result.Failure<IReadOnlyCollection<TeacherDataDto>>(result.Error);
     }
 
+    public async Task<Result<(FileStream?, string?)>> GetImageAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _repository.GetByIdAsync(id, cancellationToken);
+        if (entity.IsFailure )
+        {
+            return Result.Failure<(FileStream?, string?)>(entity.Error);
+        }
+
+        if (string.IsNullOrEmpty(entity.Value.ImageUrl))
+        { 
+            return Result.Failure<(FileStream?, string?)>(Error.NotFound("Image.NotFound", "there is non image for teacher"));
+        }
+        var (stream, ext) = fileService.Get<TeacherData>(entity.Value.ImageUrl!);
+        
+        if (stream is null)
+            return Result.Failure<(FileStream?, string?)>(Error.NotFound("FileNotFound", $"No material for session with ID: {id}"));
+
+        return await Task.FromResult(Result.Success((stream, GetMimeType(ext))));
+    }
+
     public async Task<Result<IReadOnlyCollection<TeacherDataDto>>> GetNotActiveAsync(CancellationToken ct = default)
     {
         var result = await _repository.GetFilteredAsync(x => x.IsNotActive == true, ct);
@@ -174,5 +194,9 @@ public class TeacherDataLogic(
         }
 
         return Result.Success();
+    }
+    private string? GetMimeType(string? ext)
+    {
+        return fileService.GetMimeType(ext ?? "");
     }
 }

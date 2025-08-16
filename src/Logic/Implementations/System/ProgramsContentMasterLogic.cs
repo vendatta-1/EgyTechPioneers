@@ -74,7 +74,7 @@ public class ProgramsContentMasterLogic(
         var entity = await repository.GetByIdAsync(id, cancellationToken); 
         var deleteResult = await repository.DeleteByIdAsync(id, cancellationToken);
         if (deleteResult.IsFailure) return Result.Failure<bool>(deleteResult.Error);
-        if (string.IsNullOrWhiteSpace(entity.Value.ScientificMaterial))
+        if (!string.IsNullOrWhiteSpace(entity.Value.ScientificMaterial))
         {
              var deleted = fileService.Delete<ProgramsContentMaster>(entity.Value.ScientificMaterial);
              if (!deleted)
@@ -100,16 +100,10 @@ public class ProgramsContentMasterLogic(
         return await Task.FromResult(Result.Success((stream, GetMimeType(ext))));
     }
 
-    private static string? GetMimeType(string? ext) => ext?.ToLower() switch
+    private string? GetMimeType(string? ext) 
     {
-        ".pdf" => "application/pdf",
-        ".jpg" or ".jpeg" => "image/jpeg",
-        ".png" => "image/png",
-        ".doc" => "application/msword",
-        ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ".txt" => "text/plain",
-        _ => "application/octet-stream"
-    };
+       return fileService.GetMimeType(ext??"application/octet-stream");
+    }
 
     private async Task<Result> ValidateRelationsAsync(ProgramsContentMasterDto dto, CancellationToken ct)
     {

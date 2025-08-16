@@ -11,6 +11,7 @@ namespace Logic.Interfaces.Helpers
         bool Exists<T>(string? fileId, string fakeExtension = ".dat");
         string? GetAttachmentUrl<T>(string? fileId, string endpointRoute, string fakeExtension = ".dat");
         string? GetPhysicalPath<T>(string? fileId, string fakeExtension = ".dat");
+        public string GetMimeType(string fileName);
     }
 
 }
