@@ -23,6 +23,14 @@ public static class UserSeed
                 throw new Exception(
                     $"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
+
+        }
+
+        var adminUser = userManager.FindByEmailAsync("Admin@admin.com").Result;
+        if (!userManager.GetRolesAsync(adminUser).Result
+            .Any(x => x.Equals("Admin", StringComparison.InvariantCultureIgnoreCase)))
+        {
+            userManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
         }
     }
 

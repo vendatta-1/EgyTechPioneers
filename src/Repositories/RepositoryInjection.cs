@@ -41,7 +41,7 @@ public static class RepositoryInjection
                 opt.Password.RequiredLength = 6;
                 opt.Password.RequireNonAlphanumeric = true;
                 opt.Password.RequireUppercase = true;
-                opt.SignIn.RequireConfirmedEmail = false;//for test, now become in production must confirmed
+                opt.SignIn.RequireConfirmedEmail = true; //for test, now become in production must confirmed
                 opt.Lockout.MaxFailedAccessAttempts = 5;
                 
                 opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(120);//for test

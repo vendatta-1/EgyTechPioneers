@@ -50,6 +50,7 @@ public static  class ApiResults
                 ErrorType.Conflict => error.Code,
                 ErrorType.NotFound => error.Code,
                 ErrorType.Failure => error.Code,
+                ErrorType.Problem=> error.Code,
                 _ => "Server Error"
             };
 

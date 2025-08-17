@@ -338,7 +338,7 @@ public class AccountController : ControllerBase
     {
         var result = await _accountService.GetProfilePictureAsync(userId, cancellationToken);
         return result.Match(
-            data => data.File != null ? Results.File(data.File, data.ContentType) : Results.NotFound(),
+            data => data.File != null ? Results.File(data.File, data.ContentType, result.Value.FileName) : Results.NotFound(),
             ApiResults.Problem
         );
     }
