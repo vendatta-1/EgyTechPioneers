@@ -95,7 +95,7 @@ public class AccountService : IAccountService
         }
     }
 
-    /*public async Task<Result<TokenResultDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
+    public async Task<Result<TokenResultDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -151,39 +151,6 @@ public class AccountService : IAccountService
             return Result.Failure<TokenResultDto>(Error.Problem("Login.Exception", $"Unexpected error: {ex.Message}"));
         }
     }
-*/
-public async Task<Result<TokenResultDto>> LoginAsync(LoginDto dto, CancellationToken cancellationToken = default)
-{
-    try
-    {
-        var user = await _userManager.FindByEmailAsync(dto.Email);
-
-        // Always check password to avoid revealing user existence and also ensure lockout
-        var passwordCheckResult = user == null 
-            ? SignInResult.Failed 
-            : await _signInManager.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
-
-        if (!passwordCheckResult.Succeeded)
-            return Result.Failure<TokenResultDto>(Error.Problem("Auth.Failed", "Invalid credentials"));
-
-        // Update last login safely
-        if (user != null)
-        {
-            user.LastLoginTime = DateTime.UtcNow;
-            await _userManager.UpdateAsync(user);
-        }
-
-        var token = await GenerateTokenAsync(user!); // user! is safe here
-        _logger.LogInformation("User logged in successfully: {Email}", dto.Email);
-
-        return Result.Success(token);
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "Unexpected error during login for email {Email}.", dto.Email);
-        return Result.Failure<TokenResultDto>(Error.Problem("Login.Exception", $"Unexpected error: {ex.Message}"));
-    }
-}
 
     public async Task<Result<AppUserDto>> GetUserAsync(Guid userId, CancellationToken cancellationToken = default)
     {
