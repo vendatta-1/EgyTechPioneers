@@ -40,6 +40,7 @@ public class EduContactResultController(IEduContactResult service) : ControllerB
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] EduContactResultDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await _service.UpdateAsync(id, dto, ct);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

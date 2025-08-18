@@ -42,6 +42,7 @@ public class StudentGroupController(IStudentGroup service) : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] StudentGroupDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(
             Results.NoContent,

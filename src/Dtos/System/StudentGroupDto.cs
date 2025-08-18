@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Common.CustomAttributes;
 
 namespace Dtos.System
 {
@@ -20,11 +21,11 @@ namespace Dtos.System
         public Guid? AcademyClaseDetailsId { get; set; }
 
         public DateOnly? StartDate { get; set; }
-
+        [CompareWith(nameof(StartDate), ComparisonType.GreaterThan)]
         public DateOnly? DataFinch { get; set; }
 
         public DateTime? StartTime { get; set; }
-
+        [CompareWith(nameof(StartTime), ComparisonType.GreaterThan)]
         public DateTime? EndTime { get; set; }
 
         public bool? Saturday { get; set; }

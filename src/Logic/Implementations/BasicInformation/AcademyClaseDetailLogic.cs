@@ -93,8 +93,14 @@ public class AcademyClaseDetailLogic(
 
         if (dto.Image is not null)
         {
+           var deleted = _fileService.HardDelete<AcademyClaseDetail>(entityResult.Value.ImageUrl); //apply hard delete
+           if (!deleted)
+           {
+               return Result.Failure<bool>(Error.Problem("Delete.Failed", "For some reasons the file not deleted mean there no file in the server for that entity"));
+           }
            var imagePath = await _fileService.SaveAsync<AcademyClaseDetail>(dto.Image);
            entityResult.Value.ImageUrl = imagePath;
+           
         }
         
         var updateResult = await _repository.UpdateAsync(entityResult.Value, cancellationToken);
@@ -115,7 +121,7 @@ public class AcademyClaseDetailLogic(
 
         if (!result.IsSuccess) return Result.Failure<bool>(result.Error);
 
-        _fileService.Delete<AcademyClaseDetail>(entity.Value.ImageUrl);
+        _fileService.HardDelete<AcademyClaseDetail>(entity.Value.ImageUrl);
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(true);

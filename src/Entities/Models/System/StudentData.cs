@@ -25,10 +25,10 @@ public class StudentData : Entity
 
     public Guid? CountryCodeId { get; set; }
 
-    [ForeignKey(nameof(GovernorateCode))] 
+  
     public Guid? GovernorateCodeId { get; set; }
 
-    [ForeignKey(nameof(CityCode))] 
+   
     public Guid? CityCodeId { get; set; }
 
     [StringLength(250, MinimumLength = 3)] 

@@ -72,7 +72,10 @@ public class SkillDevelopmentLogic(
         dto.Adapt(entity);
 
         if (dto.AttachedFiles is not null)
+        {
+            fileService.HardDelete<SkillDevelopment>(entity.FilesAttach);
             entity.FilesAttach = await fileService.SaveAsync<SkillDevelopment>(dto.AttachedFiles);
+        }
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -89,7 +92,7 @@ public class SkillDevelopmentLogic(
 
         if (!string.IsNullOrWhiteSpace(entity.Value.FilesAttach))
         {
-            var deleted = fileService.Delete<SkillDevelopment>(entity.Value.FilesAttach);
+            var deleted = fileService.HardDelete<SkillDevelopment>(entity.Value.FilesAttach);
             if (!deleted)
                 return Result.Failure<bool>(Error.Problem("Delete.Failed", $"Error while delete the file for entity: {id}"));
         }

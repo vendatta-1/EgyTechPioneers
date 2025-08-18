@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Common.Constants;
+using Common.CustomAttributes;
 
 namespace Dtos.System
 {
@@ -53,6 +55,7 @@ namespace Dtos.System
         [StringLength(80, MinimumLength = 10, ErrorMessage = "Email must be between 10 and 80 characters.")]
         public string TeacherEmail { get; set; } = null!;
 
+        [AllowedExtensions(FileGroupType.Images)]
         public IFormFile? ImageFile { get; set; }
 
         [StringLength(500, ErrorMessage = "Description can't exceed 500 characters.")]

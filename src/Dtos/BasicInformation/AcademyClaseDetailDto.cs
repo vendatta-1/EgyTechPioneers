@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Constants;
+using Common.CustomAttributes;
 
 namespace Dtos.BasicInformation
 {
@@ -18,6 +20,7 @@ namespace Dtos.BasicInformation
 
         public int? ClaseNumber { get; set; }
 
+        [AllowedExtensions(FileGroupType.Images)]
         public IFormFile? Image { get; set; } 
     }
 

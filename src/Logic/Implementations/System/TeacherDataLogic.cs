@@ -124,6 +124,7 @@ public class TeacherDataLogic(
         {
             if (dto.ImageFile is not null)
             {
+                fileService.HardDelete<TeacherData>(existing.Value.ImageUrl);
                 existing.Value.ImageUrl = await fileService.SaveAsync<TeacherData>(dto.ImageFile);
             }
         }
@@ -149,7 +150,7 @@ public class TeacherDataLogic(
         {
             if (entity.Value.ImageUrl is not null)
             {
-                fileService.Delete<TeacherData>(entity.Value.ImageUrl);
+                fileService.HardDelete<TeacherData>(entity.Value.ImageUrl);
             }
             
         }

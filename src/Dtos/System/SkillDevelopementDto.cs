@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Constants;
+using Common.CustomAttributes;
 using Microsoft.AspNetCore.Http;
 
 namespace Dtos.System
@@ -34,6 +36,7 @@ namespace Dtos.System
         [Url]
         public string? LinkVideo { get; set; }
         
+        [AllowedExtensions(FileGroupType.Documents, FileGroupType.Archives)]
         public IFormFile? AttachedFiles { get; set; }
       
     }

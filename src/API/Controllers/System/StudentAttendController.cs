@@ -36,6 +36,7 @@ public class StudentAttendController(IStudentAttend service) : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] StudentAttendDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(Results.Ok, ApiResults.Problem);
     }

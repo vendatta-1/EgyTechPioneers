@@ -38,6 +38,7 @@ public class ProgramsContentDetailController(IProgramsContentDetail service) : C
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] ProgramsContentDetailDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

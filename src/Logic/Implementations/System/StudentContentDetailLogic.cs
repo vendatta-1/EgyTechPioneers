@@ -70,13 +70,25 @@ public class StudentContentDetailLogic(
         dto.Adapt(entity);
 
         if (dto.SessionTasks is not null)
+        {
+            fileService.HardDelete<StudentContentDetail>(entity.SessionTasks);
+            
             entity.SessionTasks = await fileService.SaveAsync<StudentContentDetail>(dto.SessionTasks);
+        }
 
         if (dto.SessionProject is not null)
+        {
+            fileService.HardDelete<StudentContentDetail>(entity.SessionProject);
+            
             entity.SessionProject = await fileService.SaveAsync<StudentContentDetail>(dto.SessionProject);
+        }
 
         if (dto.SessionQuiz is not null)
+        {
+            fileService.HardDelete<StudentContentDetail>(entity.SessionQuiz);
+            
             entity.SessionQuiz = await fileService.SaveAsync<StudentContentDetail>(dto.SessionQuiz);
+        }
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -93,13 +105,13 @@ public class StudentContentDetailLogic(
         if (deleteResult.IsFailure) return Result.Failure<bool>(deleteResult.Error);
 
         if (entity.Value.SessionProject is not null)
-            fileService.Delete<StudentContentDetail>(entity.Value.SessionProject);
+            fileService.HardDelete<StudentContentDetail>(entity.Value.SessionProject);
         
         if (entity.Value.SessionQuiz is not null)
-            fileService.Delete<StudentContentDetail>(entity.Value.SessionQuiz);
+            fileService.HardDelete<StudentContentDetail>(entity.Value.SessionQuiz);
         
         if (entity.Value.SessionTasks is not null)
-            fileService.Delete<StudentContentDetail>(entity.Value.SessionTasks);
+            fileService.HardDelete<StudentContentDetail>(entity.Value.SessionTasks);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(true);

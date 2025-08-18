@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Constants;
+using Common.CustomAttributes;
 
 namespace Dtos.System
 {
@@ -19,6 +21,7 @@ namespace Dtos.System
         public string? SessionNameL2 { get; set; }
 
         public int? SessionNo { get; set; }
+        [AllowedExtensions(FileGroupType.Documents, FileGroupType.Archives)]
         public IFormFile? ScientificMaterial { get; set; }
  
 

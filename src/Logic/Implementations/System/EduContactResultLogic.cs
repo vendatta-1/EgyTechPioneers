@@ -14,7 +14,7 @@ namespace Logic.Implementations.System;
 public class EduContactResultLogic(
     IRepository<EduContactResult> repository,
     IRepository<StudentData> studentRepository,
-    IRepository<AcademyData> academyRepository, 
+    IRepository<AcademyData> academyRepository,
     IFileService fileService,
     IUnitOfWork unitOfWork
 ) : IEduContactResult
@@ -27,7 +27,8 @@ public class EduContactResultLogic(
             : Result.Failure<EduContactResultDto>(result.Error);
     }
 
-    public async Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetAllAsync(
+        CancellationToken cancellationToken = default)
     {
         var result = await repository.GetAllAsync(cancellationToken);
         return result.IsSuccess
@@ -35,7 +36,8 @@ public class EduContactResultLogic(
             : Result.Failure<IReadOnlyCollection<EduContactResultDto>>(result.Error);
     }
 
-    public async Task<Result<EduContactResultDto>> CreateAsync(EduContactResultDto dto, CancellationToken cancellationToken = default)
+    public async Task<Result<EduContactResultDto>> CreateAsync(EduContactResultDto dto,
+        CancellationToken cancellationToken = default)
     {
         var check = await ValidateRelationsAsync(dto, cancellationToken);
         if (check.IsFailure) return Result.Failure<EduContactResultDto>(check.Error);
@@ -46,15 +48,17 @@ public class EduContactResultLogic(
             var path = await fileService.SaveAsync<EduContactResult>(dto.Attachment);
             entity.Attachment = path;
         }
+
         var insertResult = await repository.InsertAsync(entity, cancellationToken);
         if (insertResult.IsFailure) return Result.Failure<EduContactResultDto>(insertResult.Error);
-       
+
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(entity.Adapt<EduContactResultDto>());
     }
 
-    public async Task<Result<bool>> UpdateAsync(Guid id, EduContactResultDto dto, CancellationToken cancellationToken = default)
+    public async Task<Result<bool>> UpdateAsync(Guid id, EduContactResultDto dto,
+        CancellationToken cancellationToken = default)
     {
         var getResult = await repository.GetByIdAsync(id, cancellationToken);
         if (!getResult.IsSuccess) return Result.Failure<bool>(getResult.Error);
@@ -66,6 +70,7 @@ public class EduContactResultLogic(
 
         if (dto.Attachment is not null)
         {
+            fileService.HardDelete<EduContactResult>(entity.Attachment);
             var path = await fileService.SaveAsync<EduContactResult>(dto.Attachment);
             entity.Attachment = path;
         }
@@ -85,22 +90,25 @@ public class EduContactResultLogic(
         {
             if (!string.IsNullOrWhiteSpace(entity.Value.Attachment))
             {
-                var deleted = fileService.Delete<EduContactResult>(entity.Value.Attachment);
-                if(!deleted)
-                    return Result.Failure<bool>(Error.Problem("Delete.Failed",$"Delete file of entity with id {id} has been failed."));
+                var deleted = fileService.HardDelete<EduContactResult>(entity.Value.Attachment);
+
+                if (!deleted)
+                    return Result.Failure<bool>(Error.Problem("Delete.Failed",
+                        $"Delete file of entity with id {id} has been failed."));
             }
-            
         }
+
         var result = await repository.DeleteByIdAsync(id, cancellationToken);
-        
+
         if (result.IsFailure) return Result.Failure<bool>(result.Error);
-        
+
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         return Result.Success(true);
     }
 
-    public async Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetByStudentIdAsync(Guid studentId, CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetByStudentIdAsync(Guid studentId,
+        CancellationToken cancellationToken = default)
     {
         var result = await repository.GetFilteredAsync(x => x.StudentDataId == studentId, cancellationToken);
         return result.IsSuccess
@@ -108,14 +116,18 @@ public class EduContactResultLogic(
             : Result.Failure<IReadOnlyCollection<EduContactResultDto>>(result.Error);
     }
 
-    public async Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetByDateRangeAsync(DateTime from, DateTime to, CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyCollection<EduContactResultDto>>> GetByDateRangeAsync(DateTime from, DateTime to,
+        CancellationToken cancellationToken = default)
     {
-        var result = await repository.GetFilteredAsync(x => x.DateResult >= from && x.DateResult <= to, cancellationToken);
+        var result =
+            await repository.GetFilteredAsync(x => x.DateResult >= from && x.DateResult <= to, cancellationToken);
         return result.IsSuccess
             ? Result.Success(result.Value.Adapt<IReadOnlyCollection<EduContactResultDto>>())
             : Result.Failure<IReadOnlyCollection<EduContactResultDto>>(result.Error);
     }
-    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetAttachmentAsync(Guid id, CancellationToken cancellationToken = default)
+
+    public async Task<Result<(FileStream? Stream, string? FileName, string? ContentType)>> GetAttachmentAsync(Guid id,
+        CancellationToken cancellationToken = default)
     {
         var entity = await repository.GetAsync(x => x.Id == id && x.Attachment != null, cancellationToken);
         if (entity.IsFailure)
@@ -123,7 +135,8 @@ public class EduContactResultLogic(
 
         var (stream, fileName) = fileService.Get<EduContactResult>(entity.Value.Attachment!);
         if (stream is null || fileName is null)
-            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound", $"No file for EduContactResult with ID {id}"));
+            return Result.Failure<(FileStream?, string?, string?)>(Error.NotFound("FileNotFound",
+                $"No file for EduContactResult with ID {id}"));
 
         var contentType = fileService.GetMimeType(Path.GetExtension(fileName));
         return Result.Success((stream, fileName, contentType));
@@ -132,14 +145,13 @@ public class EduContactResultLogic(
 
     private async Task<Result> ValidateRelationsAsync(EduContactResultDto dto, CancellationToken ct)
     {
-     
         {
             var companyExists = await academyRepository.AnyAsync(x => x.Id == dto.AcademyDataId, ct);
             if (!companyExists)
                 return Result.Failure(Error.NotFound("Company.NotFound", $"Company ID {dto.AcademyDataId} not found"));
         }
 
-       
+
         {
             var studentExists = await studentRepository.AnyAsync(x => x.Id == dto.StudentDataId, ct);
             if (!studentExists)

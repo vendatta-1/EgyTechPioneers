@@ -40,6 +40,7 @@ public class ComplaintsStudentController(IComplaintsStudent service) : Controlle
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] ComplaintsStudentDto dto, CancellationToken cancellationToken)
     {
+        dto.Id = id;
         var result = await _service.UpdateAsync(id, dto, cancellationToken);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

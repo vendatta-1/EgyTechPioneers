@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Common.Chat;
+using Common.Constants;
+using Common.CustomAttributes;
 using Microsoft.AspNetCore.Http;
 
 namespace Dtos.Chat;
@@ -51,6 +53,7 @@ public class SendMessageRequestDto
     /// <summary>
     /// Send byte files but with max size 10 Mg
     /// </summary>
+    [AllowedExtensions(FileGroupType.Images, FileGroupType.Documents, FileGroupType.Audio)]
     public IFormFile? File { get; set; }
     
     public string? FileName { get; set; }

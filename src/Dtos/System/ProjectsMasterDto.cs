@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Constants;
+using Common.CustomAttributes;
 
 namespace Dtos.System
 {
@@ -27,7 +29,9 @@ namespace Dtos.System
         public DateOnly? ProjectStart { get; set; }
 
         public DateOnly? ProjectEnd { get; set; }
+        [AllowedExtensions(FileGroupType.Documents, FileGroupType.Archives)]
         public IFormFile? ProjectResources { get; set; }
+        [AllowedExtensions(FileGroupType.SourceCode, FileGroupType.Archives)]
         public IFormFile? ProjectFiles { get; set; }
         
         [StringLength(500, MinimumLength = 3)]

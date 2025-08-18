@@ -37,6 +37,7 @@ public class AcademyClaseDetailController(IAcademyClaseDetail service) : Control
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] AcademyClaseDetailDto dto, CancellationToken cancellationToken)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, cancellationToken);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

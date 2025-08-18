@@ -23,12 +23,7 @@ public class SkillDevelopmentController(ISkillDevelopment service) : ControllerB
         return result.Match(Results.Ok, ApiResults.Problem);
     }
 
-    // [HttpGet("notactive")]
-    // public async Task<IResult> GetNotActive(CancellationToken ct)
-    // {
-    //     var result = await service.GetNotActiveAsync(ct);
-    //     return result.Match(Results.Ok, ApiResults.Problem);
-    // }
+ 
 
     [HttpPost]
     public async Task<IResult> Create([FromForm] SkillDevelopmentDto dto, CancellationToken ct)
@@ -43,6 +38,7 @@ public class SkillDevelopmentController(ISkillDevelopment service) : ControllerB
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] SkillDevelopmentDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(Results.Ok, ApiResults.Problem);
     }

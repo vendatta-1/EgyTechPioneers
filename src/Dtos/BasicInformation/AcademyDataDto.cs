@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Common.Constants;
+using Common.CustomAttributes;
 
 namespace Dtos.BasicInformation
 {
@@ -70,7 +72,9 @@ namespace Dtos.BasicInformation
         [StringLength(1000), Required]
         public string Description { get; set; }
 
+        [AllowedExtensions(FileGroupType.Images)]
         public IFormFile? Image { get; set; } 
+        [AllowedExtensions(FileGroupType.Archives, FileGroupType.Documents)]
         public IFormFile? Attachments { get; set; } 
     }
 }

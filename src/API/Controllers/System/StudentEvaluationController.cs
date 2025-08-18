@@ -42,6 +42,7 @@ public class StudentEvaluationController(IStudentEvaluation service) : Controlle
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] StudentEvaluationDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(
             Results.NoContent,

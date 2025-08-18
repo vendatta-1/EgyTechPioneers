@@ -68,7 +68,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("AcademyClaseTypes");
+                    b.ToTable("AcademyClaseTypes", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseDetail", b =>
@@ -127,7 +127,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("AcademyClaseMasterId");
 
-                    b.ToTable("AcademyClaseDetails");
+                    b.ToTable("AcademyClaseDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseMaster", b =>
@@ -242,7 +242,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("GovernorateCodeId");
 
-                    b.ToTable("AcademyClaseMasters");
+                    b.ToTable("AcademyClaseMasters", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.AcademyData", b =>
@@ -387,7 +387,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("AcademyData");
+                    b.ToTable("AcademyData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.AcademyJob", b =>
@@ -459,7 +459,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("BranchesDataId");
 
-                    b.ToTable("AcademyJobs");
+                    b.ToTable("AcademyJobs", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.BranchData", b =>
@@ -562,7 +562,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("GovernorateCodeId");
 
-                    b.ToTable("BranchesData");
+                    b.ToTable("BranchesData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.CountryCode", b =>
@@ -613,7 +613,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("CountryCodes");
+                    b.ToTable("CountryCodes", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.GovernorateCode", b =>
@@ -669,7 +669,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("CountryCodeId");
 
-                    b.ToTable("GovernorateCodes");
+                    b.ToTable("GovernorateCodes", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.Chat.ChatMessage", b =>
@@ -746,7 +746,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatMessages");
+                    b.ToTable("ChatMessages", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.CityCode", b =>
@@ -800,7 +800,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("GovernorateCodeId");
 
-                    b.ToTable("CityCodes");
+                    b.ToTable("CityCodes", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.Complaints.ComplaintsStatus", b =>
@@ -856,7 +856,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("ComplaintsStatuses");
+                    b.ToTable("ComplaintsStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.Complaints.ComplaintsStudent", b =>
@@ -938,7 +938,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("StudentsDataId");
 
-                    b.ToTable("ComplaintsStudents");
+                    b.ToTable("ComplaintsStudents", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.Complaints.ComplaintsType", b =>
@@ -994,7 +994,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("ComplaintsTypes");
+                    b.ToTable("ComplaintsTypes", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.PermissionUser", b =>
@@ -1071,7 +1071,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("PermissionUsers");
+                    b.ToTable("PermissionUsers", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.EduContactResult", b =>
@@ -1138,7 +1138,7 @@ namespace Repository.Migrations.Education
 
                     b.HasKey("Id");
 
-                    b.ToTable("EduContactResults");
+                    b.ToTable("EduContactResults", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProgramsContentDetail", b =>
@@ -1208,7 +1208,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("ProgramsContentMasterId");
 
-                    b.ToTable("ProgramsContentDetails");
+                    b.ToTable("ProgramsContentDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProgramsContentMaster", b =>
@@ -1277,7 +1277,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("ProgramsDetailsId");
 
-                    b.ToTable("ProgramsContentMasters");
+                    b.ToTable("ProgramsContentMasters", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProgramsDetail", b =>
@@ -1342,7 +1342,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("ProjectsDetailsId");
 
-                    b.ToTable("ProgramsDetails");
+                    b.ToTable("ProgramsDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProjectsDetail", b =>
@@ -1407,7 +1407,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("ProjectsMasterId");
 
-                    b.ToTable("ProjectsDetails");
+                    b.ToTable("ProjectsDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.ProjectsMaster", b =>
@@ -1491,7 +1491,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("BranchesDataId");
 
-                    b.ToTable("ProjectsMasters");
+                    b.ToTable("ProjectsMasters", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.QuestionBankDetail", b =>
@@ -1552,7 +1552,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("QuestionBankMasterId");
 
-                    b.ToTable("QuestionBankDetails");
+                    b.ToTable("QuestionBankDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.QuestionBankMaster", b =>
@@ -1617,7 +1617,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("ProgramsDetailsId");
 
-                    b.ToTable("QuestionBankMasters");
+                    b.ToTable("QuestionBankMasters", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.SkillDevelopment", b =>
@@ -1693,7 +1693,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("BranchesDataId");
 
-                    b.ToTable("SkillDevelopments");
+                    b.ToTable("SkillDevelopments", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.StudentAttend", b =>
@@ -1745,7 +1745,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("StudentDataId");
 
-                    b.ToTable("StudentAttends");
+                    b.ToTable("StudentAttends", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.StudentContentDetail", b =>
@@ -1812,7 +1812,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("StudentDataId");
 
-                    b.ToTable("StudentContentDetails");
+                    b.ToTable("StudentContentDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.StudentData", b =>
@@ -2011,7 +2011,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("TrainingGovernorateId");
 
-                    b.ToTable("StudentData");
+                    b.ToTable("StudentData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.StudentEvaluation", b =>
@@ -2069,7 +2069,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("StudentDataId");
 
-                    b.ToTable("StudentEvaluations");
+                    b.ToTable("StudentEvaluations", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.StudentGroup", b =>
@@ -2226,7 +2226,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("BranchesDataId");
 
-                    b.ToTable("StudentGroups");
+                    b.ToTable("StudentGroups", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.System.TeacherData", b =>
@@ -2343,7 +2343,7 @@ namespace Repository.Migrations.Education
 
                     b.HasIndex("GovernorateCodeId");
 
-                    b.ToTable("TeacherData");
+                    b.ToTable("TeacherData", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Models.BasicInformation.AcademyClaseDetail", b =>

@@ -52,6 +52,7 @@ public class QuestionBankMasterController(IQuestionBankMaster service) : Control
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] QuestionBankMasterDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(
             Results.NoContent,

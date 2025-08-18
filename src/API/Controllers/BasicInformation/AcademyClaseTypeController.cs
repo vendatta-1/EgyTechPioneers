@@ -38,6 +38,7 @@ public class AcademyClaseTypeController(IAcademyClaseType service) : ControllerB
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] AcademyClaseTypeDto dto, CancellationToken cancellationToken)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, cancellationToken);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

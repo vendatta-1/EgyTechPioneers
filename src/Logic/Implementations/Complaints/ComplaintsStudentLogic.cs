@@ -71,7 +71,11 @@ public class ComplaintsStudentLogic(
         dto.Adapt(existing.Value);
 
         if (dto.FilesAttach is not null)
+        {
+            _fileService.HardDelete<ComplaintsStudent>(existing.Value.FilesAttach);
             existing.Value.FilesAttach = await _fileService.SaveAsync<ComplaintsStudent>(dto.FilesAttach);
+
+        }
 
         var updated = await _repository.UpdateAsync(existing.Value, cancellationToken);
         if (updated.IsFailure) return Result.Failure<bool>(updated.Error);
@@ -82,9 +86,10 @@ public class ComplaintsStudentLogic(
 
     public async Task<Result<bool>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
+        var existing = await _repository.GetByIdAsync(id, cancellationToken);
         var result = await _repository.DeleteByIdAsync(id, cancellationToken);
         if (result.IsFailure) return Result.Failure<bool>(result.Error);
-
+        _fileService.HardDelete<ComplaintsStudent>(existing.Value.FilesAttach);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result.Success(true);
     }

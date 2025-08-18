@@ -52,6 +52,7 @@ public class ProjectsDetailController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, ProjectsDetailDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await _service.UpdateAsync(id, dto, ct);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

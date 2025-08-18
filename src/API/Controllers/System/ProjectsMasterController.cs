@@ -36,6 +36,7 @@ public class ProjectsMasterController(IProjectsMaster service) : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] ProjectsMasterDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(Results.Ok, ApiResults.Problem);
     }
@@ -52,7 +53,10 @@ public class ProjectsMasterController(IProjectsMaster service) : ControllerBase
     {
         var result = await service.GetProjectFileAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
+        return File(
+            result.Value.Stream!,
+            result.Value.ContentType ?? "application/octet-stream",
+            result.Value.FileName??""); 
     }
 
     [HttpGet("{id:guid}/resource")]
@@ -60,7 +64,9 @@ public class ProjectsMasterController(IProjectsMaster service) : ControllerBase
     {
         var result = await service.GetProjectResourcesAsync(id, ct);
         if (result.IsFailure) return NotFound(result.Error.Description);
-        return File(result.Value.Stream!, result.Value.ContentType ?? "application/octet-stream", result.Value.FileName);
+        return File(result.Value.Stream!,
+            result.Value.ContentType ?? "application/octet-stream", 
+            result.Value.FileName??"");
     }
 
 
@@ -92,3 +98,5 @@ public class ProjectsMasterController(IProjectsMaster service) : ControllerBase
         return result.Match(Results.Ok, ApiResults.Problem);
     }
 }
+
+

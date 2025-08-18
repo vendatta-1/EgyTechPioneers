@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Common.Constants;
+using Common.CustomAttributes;
 
 namespace Dtos.Complaints
 {
@@ -26,7 +28,7 @@ namespace Dtos.Complaints
         [Required]
         [MaxLength(1000)]
         public string Description { get; set; } = null!;
-
+        [AllowedExtensions(FileGroupType.Images, FileGroupType.Documents)]
         public IFormFile? FilesAttach { get; set; } 
     }
 }

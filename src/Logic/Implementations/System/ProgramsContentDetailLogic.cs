@@ -75,18 +75,30 @@ public class ProgramsContentDetailLogic(
         dto.Adapt(entity);
 
         if (dto.SessionTasksFile is not null)
+        {
+            fileService.HardDelete<ProgramsContentDetail>(entity.SessionTasks, "_tasks");
             entity.SessionTasks = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionTasksFile, "_tasks");
+        }
 
         if (dto.SessionProjectFile is not null)
+        {
+            fileService.HardDelete<ProgramsContentDetail>(entity.SessionProject, "_project");
             entity.SessionProject =
                 await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionProjectFile, "_project");
+        }
 
         if (dto.ScientificMaterialFile is not null)
+        {
+            fileService.HardDelete<ProgramsContentDetail>(entity.ScientificMaterial, "_material");
             entity.ScientificMaterial =
                 await fileService.SaveAsync<ProgramsContentDetail>(dto.ScientificMaterialFile, "_material");
+        }
 
         if (dto.SessionQuiz is not null)
+        {
+            fileService.HardDelete<ProgramsContentDetail>(entity.SessionQuiz, "_quiz");
             entity.SessionQuiz = await fileService.SaveAsync<ProgramsContentDetail>(dto.SessionQuiz, "_quiz");
+        }
 
         var updateResult = await repository.UpdateAsync(entity, cancellationToken);
         if (updateResult.IsFailure) return Result.Failure<bool>(updateResult.Error);
@@ -106,19 +118,19 @@ public class ProgramsContentDetailLogic(
         var failedDeletes = new List<string>();
 
         if (!string.IsNullOrWhiteSpace(entity.SessionTasks) &&
-            !fileService.Delete<ProgramsContentDetail>(entity.SessionTasks, "_tasks"))
+            !fileService.HardDelete<ProgramsContentDetail>(entity.SessionTasks, "_tasks"))
             failedDeletes.Add("_tasks");
 
         if (!string.IsNullOrWhiteSpace(entity.SessionProject) &&
-            !fileService.Delete<ProgramsContentDetail>(entity.SessionProject, "_project"))
+            !fileService.HardDelete<ProgramsContentDetail>(entity.SessionProject, "_project"))
             failedDeletes.Add("_project");
 
         if (!string.IsNullOrWhiteSpace(entity.ScientificMaterial) &&
-            !fileService.Delete<ProgramsContentDetail>(entity.ScientificMaterial, "_material"))
+            !fileService.HardDelete<ProgramsContentDetail>(entity.ScientificMaterial, "_material"))
             failedDeletes.Add("_material");
 
         if (!string.IsNullOrWhiteSpace(entity.SessionQuiz) &&
-            !fileService.Delete<ProgramsContentDetail>(entity.SessionQuiz, "_quiz"))
+            !fileService.HardDelete<ProgramsContentDetail>(entity.SessionQuiz, "_quiz"))
             failedDeletes.Add("_quiz");
 
         if (failedDeletes.Count > 0)

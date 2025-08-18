@@ -38,6 +38,7 @@ public class ProgramsContentMasterController(IProgramsContentMaster service) : C
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] ProgramsContentMasterDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

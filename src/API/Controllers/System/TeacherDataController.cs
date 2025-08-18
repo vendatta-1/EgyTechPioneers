@@ -29,15 +29,7 @@ public class TeacherDataController(ITeacherData service) : ControllerBase
         );
     }
 
-    // [HttpGet("not-active")]
-    // public async Task<IResult> GetNotActive(CancellationToken ct)
-    // {
-    //     var result = await service.GetNotActiveAsync(ct);
-    //     return result.Match(
-    //         data => Results.Ok(data),
-    //         ApiResults.Problem
-    //     );
-    // }
+    
 
     [HttpGet("by-branch/{branchId:guid}")]
     public async Task<IResult> GetByBranch(Guid branchId, CancellationToken ct)
@@ -82,6 +74,7 @@ public class TeacherDataController(ITeacherData service) : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromForm] TeacherDataDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(
             Results.NoContent,

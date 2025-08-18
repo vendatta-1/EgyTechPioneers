@@ -1,6 +1,6 @@
 using API.Extensions;
-using API.Filters;
-using API.Hubs;
+ 
+using API.Hubs; 
 using Common;
 using Infrastructure;
 using Logic;
@@ -18,12 +18,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.WebHost.ConfigureKestrel(opt =>
 {
-    opt.Limits.MaxRequestBodySize = int.MaxValue;
+    opt.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
 });
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = long.MaxValue; // Allow very large files
-    options.MemoryBufferThreshold = int.MaxValue;
+    options.MultipartBodyLengthLimit = 50 *1024 *1024; // Allow very large files --> updated to max (50Mg)
+    options.MemoryBufferThreshold = 150 * 1024 * 1024;
 });
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -50,6 +50,8 @@ if (app.Environment.IsDevelopment())
 
 app.UserCreate();
 app.UseCors("AllowAll");
+// app.UseMiddleware<ThrottledInlineFileMiddleware>();
+app.UseInlineFileMiddleware();
 app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();

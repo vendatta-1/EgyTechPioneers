@@ -45,6 +45,7 @@ public class CityCodeController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] CityCodeDto dto, CancellationToken cancellationToken)
     {
+        dto.Id = id;
         var result = await _service.UpdateAsync(id, dto, cancellationToken);
         return result.Match(Results.NoContent, ApiResults.Problem);
     }

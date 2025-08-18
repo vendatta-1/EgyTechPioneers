@@ -72,12 +72,15 @@ public class AcademyDataLogic(
 
         if (dto.Image is not null)
         {
+            _fileService.HardDelete<AcademyData>(existing.Value.ImageUrl);
+            
             var imagePath = await _fileService.SaveAsync<AcademyData>(dto.Image);
             existing.Value.ImageUrl = imagePath;
         }
 
         if (dto.Attachments is not null)
         {
+            _fileService.HardDelete<AcademyData>(existing.Value.AttachFiles , ".attach");
             var path = await _fileService.SaveAsync<AcademyData>(dto.Attachments, ".attach");
             existing.Value.AttachFiles = path;
         }
@@ -98,8 +101,8 @@ public class AcademyDataLogic(
         var result = await _repository.DeleteAsync(entity.Value, cancellationToken);
 
         if (result.IsFailure) return Result.Failure<bool>(result.Error);
-        _fileService.Delete<AcademyData>(entity.Value.ImageUrl);
-        _fileService.Delete<AcademyData>(entity.Value.AttachFiles, ".attach");
+        _fileService.HardDelete<AcademyData>(entity.Value.ImageUrl);
+        _fileService.HardDelete<AcademyData>(entity.Value.AttachFiles, ".attach");
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

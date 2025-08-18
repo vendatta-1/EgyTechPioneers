@@ -34,6 +34,7 @@ public class MapsterConfig : IRegister
         config.NewConfig<AcademyClaseMaster, AcademyClaseMasterDto>();
         config.NewConfig<AcademyClaseMasterDto, AcademyClaseMaster>()
             .Ignore(x => x.ClaseBranchNo);
+        
         config.NewConfig<AcademyClaseType, AcademyClaseTypeDto>().TwoWays();
         config.NewConfig<AcademyClaseDetail, AcademyClaseDetailDto>();
         config.NewConfig<AcademyClaseDetailDto, AcademyClaseDetail>()

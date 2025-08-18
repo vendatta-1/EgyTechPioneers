@@ -29,15 +29,7 @@ public class StudentDataController(IStudentData service) : ControllerBase
         );
     }
 
-    // [HttpGet("not-active")]
-    // public async Task<IResult> GetNotActive(CancellationToken ct)
-    // {
-    //     var result = await service.GetNotActiveAsync(ct);
-    //     return result.Match(
-    //         Results.Ok,
-    //         ApiResults.Problem
-    //     );
-    // }
+ 
 
     [HttpGet("by-email/{email}")]
     public async Task<IResult> GetByEmail(string email, CancellationToken ct)
@@ -82,6 +74,7 @@ public class StudentDataController(IStudentData service) : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IResult> Update(Guid id, [FromBody] StudentDataDto dto, CancellationToken ct)
     {
+        dto.Id = id;
         var result = await service.UpdateAsync(id, dto, ct);
         return result.Match(
             Results.NoContent,

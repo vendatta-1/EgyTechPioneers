@@ -6,10 +6,11 @@ namespace Dtos.Security
     public class AppUserDto
     {
         public Guid? Id { get; set; }
+        [Required]
+        public Guid AcademyDataId { get; set; }
 
-        public Guid? AcademyDataId { get; set; }
-
-        public Guid? BranchesDataId { get; set; }
+        [Required]
+        public Guid BranchesDataId { get; set; }
 
         [Required, MaxLength(60)] public string FirstName { get; set; } = null!;
 
@@ -19,8 +20,6 @@ namespace Dtos.Security
 
         [Phone] 
         public string? PhoneNumber { get; set; }
-
-        public string? ProfilePicture { get; set; }
         
         public bool IsActive { get; set; }
         

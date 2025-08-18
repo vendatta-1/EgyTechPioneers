@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using Common.Constants;
+using Common.CustomAttributes;
 using Microsoft.AspNetCore.Http;
 
 namespace Dtos.System;
@@ -12,10 +14,13 @@ public class StudentContentDetailDto
     [Required]
     public Guid StudentDataId { get; set; }
 
+    [AllowedExtensions(FileGroupType.Documents, FileGroupType.Archives, FileGroupType.Images)]
     public IFormFile? SessionTasks { get; set; }
- 
+    
+    [AllowedExtensions(FileGroupType.Documents, FileGroupType.Archives)]
     public IFormFile? SessionProject { get; set; }
- 
+    
+    [AllowedExtensions(FileGroupType.Documents, FileGroupType.Archives, FileGroupType.Images)]
     public IFormFile? SessionQuiz { get; set; }
   
 
